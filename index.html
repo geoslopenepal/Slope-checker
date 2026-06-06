@@ -4,106 +4,80 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Roadside Slope Stabilization — Bagmati Province Field Tool</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ── RESET & TOKENS ──────────────────────────────────────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --c-earth:#2C3E2D;--c-earth-l:#3d5c3f;--c-earth-ll:#4f7452;
-  --c-sage:#7a9e7e;--c-sage-l:#a8c5ab;--c-sage-ll:#d4e8d6;
-  --c-clay:#c0603a;--c-clay-l:#d4825f;--c-amber:#e8a03c;
-  --c-sky:#4a7fa5;--c-sky-l:#6b9dbf;
+  --c-earth:#2C3E2D;--c-earth-l:#3d5c3f;--c-sage:#7a9e7e;--c-sage-ll:#d4e8d6;
+  --c-clay:#c0603a;--c-amber:#e8a03c;--c-sky:#4a7fa5;
   --c-bg:#f5f3ee;--c-bg2:#eceae4;--c-bg3:#fff;
   --c-text:#1a1f1a;--c-text2:#4a5a4c;--c-text3:#7a8c7c;
-  --c-border:#d0cec8;--c-border2:#b8b5ad;
+  --c-border:#d0cec8;
   --c-success:#2d7a4f;--c-success-l:#e8f4ec;
   --c-warn:#b07020;--c-warn-l:#fdf3e0;
   --c-danger:#a03020;--c-danger-l:#fdecea;
   --c-info:#2a5f8a;--c-info-l:#e8f0f8;
-  --r:8px;--r-lg:14px;--r-xl:20px;
+  --r:8px;--r-lg:14px;
   --shadow:0 2px 8px rgba(44,62,45,.10);
-  --shadow-lg:0 6px 24px rgba(44,62,45,.14);
   font-family:'DM Sans',sans-serif;
 }
 body{background:var(--c-bg);color:var(--c-text);min-height:100vh;font-size:14px;line-height:1.6}
-
-/* ── HEADER ──────────────────────────────────────────────────────────────── */
-.app-header{background:var(--c-earth);color:#fff;padding:0}
-.header-inner{max-width:900px;margin:0 auto;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem}
-.header-logo{width:44px;height:44px;border-radius:50%;background:var(--c-sage-l);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.header-logo svg{width:24px;height:24px;fill:#fff}
-.header-text h1{font-family:'DM Serif Display',serif;font-size:1.25rem;font-weight:400;letter-spacing:.01em;line-height:1.2}
+.app-header{background:var(--c-earth);color:#fff}
+.header-inner{max-width:920px;margin:0 auto;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.header-logo{width:44px;height:44px;border-radius:50%;background:var(--c-sage-ll);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.header-logo svg{width:24px;height:24px;fill:var(--c-earth)}
+.header-text h1{font-family:'DM Serif Display',serif;font-size:1.25rem;font-weight:400;line-height:1.2}
 .header-text p{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px;letter-spacing:.03em}
-.header-badge{margin-left:auto;background:var(--c-sage);color:#fff;font-size:10px;padding:3px 10px;border-radius:20px;font-weight:500;letter-spacing:.04em;white-space:nowrap}
-
-/* ── STEP NAV ─────────────────────────────────────────────────────────────── */
-.step-nav{background:var(--c-earth-l);padding:.5rem 0}
-.step-nav-inner{max-width:900px;margin:0 auto;padding:0 1.5rem;display:flex;gap:4px}
+.header-badge{margin-left:auto;background:var(--c-sage);color:#fff;font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.step-nav{background:var(--c-earth-l)}
+.step-nav-inner{max-width:920px;margin:0 auto;padding:.5rem 1.5rem;display:flex;gap:4px;overflow-x:auto}
 .sn-item{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--r);cursor:pointer;font-size:12px;color:rgba(255,255,255,.55);transition:all .2s;white-space:nowrap}
 .sn-item:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
-.sn-item.active{background:rgba(255,255,255,.15);color:#fff;font-weight:500}
-.sn-item.done{color:var(--c-sage-l)}
-.sn-num{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;flex-shrink:0}
+.sn-item.active{background:rgba(255,255,255,.15);color:#fff;font-weight:600}
+.sn-item.done{color:var(--c-sage-ll)}
+.sn-num{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
 .sn-item.active .sn-num{background:var(--c-sage);color:#fff}
 .sn-item.done .sn-num{background:var(--c-success);color:#fff}
-
-/* ── MAIN LAYOUT ─────────────────────────────────────────────────────────── */
-.main{max-width:900px;margin:0 auto;padding:1.5rem}
-
-/* ── SECTION PAGES ───────────────────────────────────────────────────────── */
+.main{max-width:920px;margin:0 auto;padding:1.5rem}
 .page{display:none}
 .page.active{display:block}
-
-/* ── CARDS ───────────────────────────────────────────────────────────────── */
 .card{background:var(--c-bg3);border:1px solid var(--c-border);border-radius:var(--r-lg);padding:1.25rem;margin-bottom:1rem;box-shadow:var(--shadow)}
 .card-hdr{display:flex;align-items:center;gap:10px;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--c-border)}
-.card-icon{width:28px;height:28px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-weight:600}
+.card-icon{width:28px;height:28px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;font-weight:700}
 .card-icon.green{background:var(--c-success-l);color:var(--c-success)}
 .card-icon.amber{background:var(--c-warn-l);color:var(--c-warn)}
 .card-icon.red{background:var(--c-danger-l);color:var(--c-danger)}
 .card-icon.blue{background:var(--c-info-l);color:var(--c-info)}
 .card-icon.earth{background:var(--c-sage-ll);color:var(--c-earth)}
-.card-title{font-size:14px;font-weight:600;color:var(--c-text)}
+.card-title{font-size:14px;font-weight:600}
 .card-sub{font-size:11px;color:var(--c-text3);margin-top:1px}
-
-/* ── FORM ELEMENTS ───────────────────────────────────────────────────────── */
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .g4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
 .fld{display:flex;flex-direction:column;gap:4px}
 .fld label{font-size:11px;font-weight:600;color:var(--c-text2);text-transform:uppercase;letter-spacing:.04em}
-.fld input,.fld select{height:36px;border:1px solid var(--c-border);border-radius:var(--r);padding:0 10px;font-size:13px;background:var(--c-bg);color:var(--c-text);font-family:inherit;transition:border .15s}
+.fld input,.fld select{height:36px;border:1px solid var(--c-border);border-radius:var(--r);padding:0 10px;font-size:13px;background:var(--c-bg);color:var(--c-text);font-family:inherit}
 .fld input:focus,.fld select:focus{outline:none;border-color:var(--c-earth-l);background:#fff}
-.fld textarea{border:1px solid var(--c-border);border-radius:var(--r);padding:8px 10px;font-size:13px;background:var(--c-bg);color:var(--c-text);font-family:inherit;resize:vertical;min-height:60px}
-
-/* ── RADIO / CHECKBOX GROUPS ─────────────────────────────────────────────── */
 .radio-grp,.chk-grp{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
-.radio-opt,.chk-opt{display:flex;align-items:center;gap:5px;padding:5px 11px;border:1px solid var(--c-border);border-radius:var(--r);cursor:pointer;font-size:12px;color:var(--c-text2);transition:all .15s;user-select:none}
-.radio-opt input,.chk-opt input{display:none}
-.radio-opt.sel,.chk-opt.sel{border-color:var(--c-earth-l);background:var(--c-sage-ll);color:var(--c-earth);font-weight:500}
-
-/* ── BUTTONS ─────────────────────────────────────────────────────────────── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 20px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.01em}
+.radio-opt,.chk-opt{padding:6px 13px;border:1px solid var(--c-border);border-radius:var(--r);cursor:pointer;font-size:12px;color:var(--c-text2);transition:all .15s;user-select:none}
+.radio-opt:hover,.chk-opt:hover{border-color:var(--c-earth-l)}
+.radio-opt.sel,.chk-opt.sel{border-color:var(--c-earth);background:var(--c-sage-ll);color:var(--c-earth);font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:40px;padding:0 20px;border-radius:var(--r);border:none;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
 .btn-primary{background:var(--c-earth);color:#fff;width:100%}
 .btn-primary:hover{background:var(--c-earth-l)}
-.btn-success{background:var(--c-success);color:#fff;width:100%}
-.btn-success:hover{background:#238c45}
+.btn-success{background:var(--c-success);color:#fff}
+.btn-success:hover{opacity:.9}
 .btn-danger{background:var(--c-clay);color:#fff;width:100%}
-.btn-danger:hover{background:var(--c-clay-l)}
+.btn-danger:hover{opacity:.9}
 .btn-nav{background:var(--c-bg2);color:var(--c-text2);border:1px solid var(--c-border)}
-.btn-nav:hover{background:var(--c-border);color:var(--c-text)}
+.btn-nav:hover{background:var(--c-border)}
 .btn-sm{height:32px;padding:0 14px;font-size:12px}
-.btn-disabled{opacity:.4;pointer-events:none}
-
-/* ── NOTES / ALERTS ─────────────────────────────────────────────────────── */
 .nb{padding:.7rem 1rem;border-radius:var(--r);font-size:12px;line-height:1.7;margin-top:.75rem;border-left:3px solid}
 .nb.info{background:var(--c-info-l);border-color:var(--c-info);color:var(--c-info)}
 .nb.success{background:var(--c-success-l);border-color:var(--c-success);color:var(--c-success)}
 .nb.warn{background:var(--c-warn-l);border-color:var(--c-warn);color:var(--c-warn)}
 .nb.danger{background:var(--c-danger-l);border-color:var(--c-danger);color:var(--c-danger)}
 .nb.earth{background:var(--c-sage-ll);border-color:var(--c-earth);color:var(--c-earth)}
-
-/* ── DECISION BANNERS ────────────────────────────────────────────────────── */
 .decision{border-radius:var(--r-lg);padding:1.25rem;margin-top:.75rem;border:2px solid}
 .decision.green{background:var(--c-success-l);border-color:var(--c-success)}
 .decision.amber{background:var(--c-warn-l);border-color:var(--c-amber)}
@@ -113,1247 +87,1389 @@ body{background:var(--c-bg);color:var(--c-text);min-height:100vh;font-size:14px;
 .decision.amber .d-title{color:var(--c-warn)}
 .decision.red .d-title{color:var(--c-clay)}
 .d-body{font-size:12px;line-height:1.8}
-.decision.green .d-body{color:#2a5c3c}
-.decision.amber .d-body{color:#7a5010}
-.decision.red .d-body{color:#7a2010}
-
-/* ── METRIC CARDS ────────────────────────────────────────────────────────── */
+.decision.green .d-body{color:#2a5c3c}.decision.amber .d-body{color:#7a5010}.decision.red .d-body{color:#7a2010}
 .mc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .mc{background:var(--c-bg2);border-radius:var(--r);padding:.75rem;text-align:center;border:1px solid var(--c-border)}
-.mc-lbl{font-size:10px;color:var(--c-text3);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
-.mc-val{font-size:18px;font-weight:600;color:var(--c-text);font-variant-numeric:tabular-nums}
+.mc-lbl{font-size:10px;color:var(--c-text3);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:3px}
+.mc-val{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
 .mc-unit{font-size:10px;color:var(--c-text3);margin-top:1px}
-.mc.ok .mc-val{color:var(--c-success)}
-.mc.warn .mc-val{color:var(--c-warn)}
-.mc.bad .mc-val{color:var(--c-clay)}
-
-/* ── RESULT ROWS ─────────────────────────────────────────────────────────── */
-.rrow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--c-border);font-size:12px}
-.rrow:last-child{border-bottom:none}
-.rlbl{color:var(--c-text2)}
-.rval{font-weight:600;color:var(--c-text);font-variant-numeric:tabular-nums}
-.rval.ok{color:var(--c-success)}.rval.warn{color:var(--c-warn)}.rval.bad{color:var(--c-clay)}
-
-/* ── FS BAR ──────────────────────────────────────────────────────────────── */
+.mc.ok .mc-val{color:var(--c-success)}.mc.warn .mc-val{color:var(--c-warn)}.mc.bad .mc-val{color:var(--c-clay)}
 .fs-bar-wrap{height:8px;background:var(--c-border);border-radius:4px;margin-top:4px;overflow:hidden}
-.fs-bar{height:100%;border-radius:4px;transition:width .5s ease}
-
-/* ── SLOPE COMPARE CARDS ─────────────────────────────────────────────────── */
+.fs-bar{height:100%;border-radius:4px;transition:width .5s}
 .sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:.75rem}
 .sc{border-radius:var(--r-lg);padding:1rem;border:1.5px solid}
 .sc.nat{border-color:var(--c-amber);background:#fffbf0}
 .sc.cut{border-color:var(--c-sage);background:#f4faf5}
 .sc-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
-.sc.nat .sc-lbl{color:var(--c-warn)}
-.sc.cut .sc-lbl{color:var(--c-earth)}
+.sc.nat .sc-lbl{color:var(--c-warn)}.sc.cut .sc-lbl{color:var(--c-earth)}
 .sc-ang{font-size:26px;font-weight:700;font-family:'DM Serif Display',serif}
-.sc.nat .sc-ang{color:var(--c-warn)}
-.sc.cut .sc-ang{color:var(--c-earth)}
+.sc.nat .sc-ang{color:var(--c-warn)}.sc.cut .sc-ang{color:var(--c-earth)}
 .sc-fs{font-size:16px;font-weight:700;margin-top:4px}
-
-/* ── WALL SELECTOR ───────────────────────────────────────────────────────── */
 .wall-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .wopt{border:1.5px solid var(--c-border);border-radius:var(--r-lg);padding:.75rem;cursor:pointer;text-align:center;transition:all .2s;background:var(--c-bg)}
 .wopt:hover{border-color:var(--c-earth-l)}
 .wopt.sel{border-color:var(--c-earth);background:var(--c-sage-ll)}
-.wopt .wn{font-size:11px;font-weight:700;color:var(--c-text);margin-bottom:2px}
+.wopt .wn{font-size:11px;font-weight:700;margin-bottom:2px}
 .wopt.sel .wn{color:var(--c-earth)}
 .wopt .wg{font-size:10px;color:var(--c-text3)}
-
-/* ── STABILITY CHECKS TABLE ──────────────────────────────────────────────── */
 .chk-table{width:100%;border-collapse:collapse;font-size:12px}
-.chk-table th{background:var(--c-bg2);padding:7px 10px;text-align:left;font-size:11px;font-weight:700;color:var(--c-text2);text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--c-border)}
+.chk-table th{background:var(--c-bg2);padding:7px 10px;text-align:left;font-size:11px;font-weight:700;color:var(--c-text2);text-transform:uppercase;border-bottom:1px solid var(--c-border)}
 .chk-table td{padding:8px 10px;border-bottom:1px solid var(--c-border);vertical-align:middle}
 .chk-table tr:last-child td{border-bottom:none}
 .bpass{background:var(--c-success-l);color:var(--c-success);padding:2px 10px;border-radius:12px;font-size:10px;font-weight:700;white-space:nowrap}
 .bfail{background:var(--c-danger-l);color:var(--c-clay);padding:2px 10px;border-radius:12px;font-size:10px;font-weight:700;white-space:nowrap}
-
-/* ── TECHNIQUE CARDS ─────────────────────────────────────────────────────── */
+.sbc-sel{background:var(--c-sage-ll)!important;outline:2px solid var(--c-earth);outline-offset:-1px}
 .tech-card{border:1.5px solid var(--c-border);border-radius:var(--r-lg);padding:1rem;margin-bottom:.75rem;background:var(--c-bg)}
 .tech-card.primary{border-color:var(--c-earth);background:var(--c-sage-ll)}
 .tech-rank{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;background:var(--c-bg2);color:var(--c-text2)}
 .tech-rank.r1{background:var(--c-earth);color:#fff}
-.tech-name{font-size:13px;font-weight:700;color:var(--c-text)}
-.tech-fn{font-size:10px;color:var(--c-earth);background:var(--c-sage-ll);padding:2px 8px;border-radius:10px;display:inline-block;margin:.3rem 0;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.tech-name{font-size:13px;font-weight:700}
+.tech-fn{font-size:10px;color:var(--c-earth);background:var(--c-sage-ll);padding:2px 8px;border-radius:10px;display:inline-block;margin:.3rem 0;font-weight:600;text-transform:uppercase}
 .tech-desc{font-size:12px;color:var(--c-text2);line-height:1.7;margin-bottom:.4rem}
-.tech-steps{font-size:12px;color:var(--c-text);line-height:1.9;padding-left:1.2rem}
-
-/* ── SPECIES TABLE ───────────────────────────────────────────────────────── */
 .sp-table{width:100%;border-collapse:collapse;font-size:11px}
-.sp-table th{background:var(--c-earth);color:#fff;padding:6px 8px;text-align:left;font-weight:600;letter-spacing:.02em}
-.sp-table td{padding:5px 8px;border-bottom:1px solid var(--c-border);color:var(--c-text)}
-.sp-table tr.grp-hdr td{background:var(--c-sage-ll);font-weight:700;color:var(--c-earth);font-size:10px;text-transform:uppercase;letter-spacing:.05em;padding:5px 8px}
+.sp-table th{background:var(--c-earth);color:#fff;padding:6px 8px;text-align:left;font-weight:600}
+.sp-table td{padding:5px 8px;border-bottom:1px solid var(--c-border)}
+.sp-table tr.grp-hdr td{background:var(--c-sage-ll);font-weight:700;color:var(--c-earth);font-size:10px;text-transform:uppercase}
 .sp-table tr:last-child td{border-bottom:none}
-
-/* ── PARAM DISPLAY ───────────────────────────────────────────────────────── */
 .param-box{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:var(--c-sage-ll);border-radius:var(--r);padding:.75rem;margin-top:.5rem;border:1px solid var(--c-earth-l)}
-.param-item .param-lbl{font-size:10px;font-weight:700;color:var(--c-earth);text-transform:uppercase;letter-spacing:.04em}
-.param-item .param-val{font-size:20px;font-weight:700;color:var(--c-earth);font-family:'DM Serif Display',serif}
-
-/* ── TAYLOR CANVAS ───────────────────────────────────────────────────────── */
+.param-lbl{font-size:10px;font-weight:700;color:var(--c-earth);text-transform:uppercase}
+.param-val{font-size:20px;font-weight:700;color:var(--c-earth);font-family:'DM Serif Display',serif}
 canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-border);background:var(--c-bg)}
-
-/* ── SECTION DIVIDER ─────────────────────────────────────────────────────── */
 .dvd{height:1px;background:var(--c-border);margin:.75rem 0}
 .sub{background:var(--c-bg2);border-radius:var(--r);padding:.85rem;margin-top:.75rem;border:1px solid var(--c-border)}
-.sub-title{font-size:11px;font-weight:700;color:var(--c-text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem;display:flex;align-items:center;gap:5px}
-
-/* ── FOOTER NAV ──────────────────────────────────────────────────────────── */
-.page-nav{display:flex;gap:8px;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--c-border)}
-.page-nav-note{font-size:11px;color:var(--c-text3);margin-left:auto;display:flex;align-items:center}
-
-/* ── HIDDEN ──────────────────────────────────────────────────────────────── */
+.sub-title{font-size:11px;font-weight:700;color:var(--c-text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem}
+.page-nav{display:flex;gap:8px;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--c-border);flex-wrap:wrap}
 .hidden{display:none!important}
-
-/* ── SITE SUMMARY BAR ────────────────────────────────────────────────────── */
 .summary-bar{background:var(--c-earth);color:#fff;border-radius:var(--r-lg);padding:.75rem 1rem;margin-bottom:1rem;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .sb-item{font-size:11px;display:flex;flex-direction:column;gap:1px}
-.sb-lbl{opacity:.55;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.sb-lbl{opacity:.55;font-size:10px;text-transform:uppercase}
 .sb-val{font-weight:600;font-size:12px}
 .sb-sep{width:1px;background:rgba(255,255,255,.2);align-self:stretch}
-
-/* ── PROGRESS DOTS ───────────────────────────────────────────────────────── */
 .progress{display:flex;align-items:center;gap:4px;margin-bottom:1.25rem}
-.pdot{width:8px;height:8px;border-radius:50%;background:var(--c-border);transition:all .2s}
+.pdot{width:8px;height:8px;border-radius:50%;background:var(--c-border)}
 .pdot.done{background:var(--c-success)}
 .pdot.active{background:var(--c-earth);width:24px;border-radius:4px}
 .plbl{font-size:11px;color:var(--c-text3);margin-left:6px}
-
-/* ── SPECIAL BOX ─────────────────────────────────────────────────────────── */
 .special-box{background:#f5f3ff;border:1px solid #9a95d4;border-radius:var(--r);padding:.75rem;margin-top:.5rem;font-size:12px;color:#3a3580;line-height:1.6}
-
-/* ── TAG PILLS ───────────────────────────────────────────────────────────── */
 .tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.75rem}
-.tag{padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.tag{padding:3px 10px;border-radius:12px;font-size:10px;font-weight:700;text-transform:uppercase}
 .tag.angle{background:var(--c-danger-l);color:var(--c-clay)}
 .tag.len{background:var(--c-warn-l);color:var(--c-warn)}
 .tag.drain{background:var(--c-info-l);color:var(--c-info)}
 .tag.moist{background:var(--c-success-l);color:var(--c-success)}
 .tag.prob{background:#f5f3ff;color:#3a3580}
-
-/* ── CROSS SECTION ───────────────────────────────────────────────────────── */
 .xs-wrap{border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;margin-bottom:.75rem;background:var(--c-bg)}
-
-/* ── RESPONSIVE ──────────────────────────────────────────────────────────── */
-@media(max-width:600px){
-  .g2,.g3,.g4{grid-template-columns:1fr}
-  .sc-grid{grid-template-columns:1fr}
-  .wall-grid{grid-template-columns:1fr 1fr}
-  .mc-grid{grid-template-columns:1fr 1fr}
-}
+@media(max-width:600px){.g2,.g3,.g4{grid-template-columns:1fr}.sc-grid{grid-template-columns:1fr}.wall-grid{grid-template-columns:1fr 1fr}.mc-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
-
-<!-- ══ HEADER ══════════════════════════════════════════════════════════════ -->
 <header class="app-header">
   <div class="header-inner">
-    <div class="header-logo">
-      <svg viewBox="0 0 24 24"><path d="M3 20l6-12 4 6 3-4 5 10H3z"/><path d="M20 8a2 2 0 100-4 2 2 0 000 4z" opacity=".6"/></svg>
-    </div>
+    <div class="header-logo"><svg viewBox="0 0 24 24"><path d="M3 20l6-12 4 6 3-4 5 10H3z"/><circle cx="20" cy="6" r="2" opacity=".6"/></svg></div>
     <div class="header-text">
       <h1>Roadside Slope Stabilization</h1>
-      <p>FIELD ASSESSMENT &amp; DESIGN TOOL &nbsp;·&nbsp; BAGMATI PROVINCE, NEPAL</p>
+      <p>FIELD ASSESSMENT &amp; DESIGN TOOL · BAGMATI PROVINCE, NEPAL</p>
     </div>
-    <div class="header-badge">DoR / TID 2082</div>
+    <div class="header-badge">TID 2082</div>
   </div>
 </header>
-
-<!-- ══ STEP NAV ════════════════════════════════════════════════════════════ -->
 <nav class="step-nav">
   <div class="step-nav-inner">
-    <div class="sn-item active" id="sn1" onclick="goPage(1)">
-      <div class="sn-num">1</div><span>Site Characterization</span>
-    </div>
-    <div class="sn-item" id="sn2" onclick="goPage(2)">
-      <div class="sn-num">2</div><span>Slope Stability</span>
-    </div>
-    <div class="sn-item" id="sn3" onclick="goPage(3)">
-      <div class="sn-num">3</div><span>Retaining Wall</span>
-    </div>
-    <div class="sn-item" id="sn4" onclick="goPage(4)">
-      <div class="sn-num">4</div><span>Bioengineering</span>
-    </div>
+    <div class="sn-item active" id="sn1" onclick="goPage(1)"><div class="sn-num">1</div><span>Site</span></div>
+    <div class="sn-item" id="sn2" onclick="goPage(2)"><div class="sn-num">2</div><span>Stability</span></div>
+    <div class="sn-item" id="sn3" onclick="goPage(3)"><div class="sn-num">3</div><span>Retaining Wall</span></div>
+    <div class="sn-item" id="sn4" onclick="goPage(4)"><div class="sn-num">4</div><span>Bioengineering</span></div>
+    <div class="sn-item" id="sn5" onclick="goPage(5)"><div class="sn-num">5</div><span>Drainage</span></div>
   </div>
 </nav>
-
 <main class="main">
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     PAGE 1 — SITE CHARACTERIZATION
-══════════════════════════════════════════════════════════════════════════ -->
+<!-- PAGE 1 -->
 <div class="page active" id="page1">
-  <div class="progress">
-    <div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div>
-    <span class="plbl">Step 1 of 4 — Site Characterization</span>
-  </div>
-
-  <!-- SITE IDENTIFICATION -->
+  <div class="progress"><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><span class="plbl">Step 1 of 5 — Site Characterization</span></div>
   <div class="card">
-    <div class="card-hdr">
-      <div class="card-icon earth">📍</div>
-      <div><div class="card-title">Site Identification</div><div class="card-sub">Basic location and environmental parameters</div></div>
-    </div>
+    <div class="card-hdr"><div class="card-icon earth">📍</div><div><div class="card-title">Site Identification</div></div></div>
     <div class="g3">
-      <div class="fld"><label>Altitude (m asl)</label><input type="number" id="s1-alt" placeholder="e.g. 1400" min="0" max="5000"></div>
-      <div class="fld"><label>Aspect</label>
-        <select id="s1-aspect">
-          <option value="">Select</option>
-          <option>North (N)</option><option>North-East (NE)</option><option>East (E)</option>
-          <option>South-East (SE)</option><option>South (S)</option><option>South-West (SW)</option>
-          <option>West (W)</option><option>North-West (NW)</option>
-        </select>
-      </div>
-      <div class="fld"><label>Land use</label>
-        <select id="s1-land">
-          <option value="">Select</option>
-          <option>Forest</option><option>Scrubland / degraded forest</option>
-          <option>Cultivated / terraced</option><option>Barren / eroded</option>
-          <option>Settlement</option><option>Pasture / grassland</option>
-        </select>
-      </div>
+      <div class="fld"><label>Altitude (m asl)</label><input type="number" id="s1-alt" placeholder="e.g. 1400"></div>
+      <div class="fld"><label>Aspect</label><select id="s1-aspect"><option value="">Select</option><option>North (N)</option><option>North-East (NE)</option><option>East (E)</option><option>South-East (SE)</option><option>South (S)</option><option>South-West (SW)</option><option>West (W)</option><option>North-West (NW)</option></select></div>
+      <div class="fld"><label>Land use</label><select id="s1-land"><option value="">Select</option><option>Forest</option><option>Scrubland / degraded forest</option><option>Cultivated / terraced</option><option>Barren / eroded</option><option>Settlement</option><option>Pasture / grassland</option></select></div>
     </div>
-    <div class="g3" style="margin-top:10px">
-      <div class="fld"><label>Site moisture</label>
-        <select id="s1-moist" onchange="syncMoisture()">
-          <option value="">Select</option>
-          <option value="dry">Dry – no visible seepage</option>
-          <option value="moist">Moist – damp, some seepage</option>
-          <option value="wet">Wet – active seepage / springs</option>
-        </select>
-      </div>
+    <div class="g2" style="margin-top:10px">
+      <div class="fld"><label>Site moisture</label><select id="s1-moist" onchange="syncMoisture()"><option value="">Select</option><option value="dry">Dry – no seepage</option><option value="moist">Moist – some seepage</option><option value="wet">Wet – active seepage</option></select></div>
       <div class="fld"><label>Rainfall category</label>
         <div class="radio-grp">
-          <label class="radio-opt" onclick="setRadio('s1-rain','Low',this)"><input type="radio" name="s1-rain">Low</label>
-          <label class="radio-opt" onclick="setRadio('s1-rain','Medium',this)"><input type="radio" name="s1-rain">Medium</label>
-          <label class="radio-opt" onclick="setRadio('s1-rain','High',this)"><input type="radio" name="s1-rain">High</label>
+          <div class="radio-opt" onclick="setRadio('rain','Low',this)">Low &lt;1500</div>
+          <div class="radio-opt" onclick="setRadio('rain','Medium',this)">Medium 1500–2500</div>
+          <div class="radio-opt" onclick="setRadio('rain','High',this)">High &gt;2500</div>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- LITHOLOGY -->
   <div class="card">
-    <div class="card-hdr">
-      <div class="card-icon earth">🪨</div>
-      <div><div class="card-title">Lithology &amp; Slope Material</div></div>
-    </div>
-    <div class="fld"><label>Primary slope problem material</label>
+    <div class="card-hdr"><div class="card-icon earth">🪨</div><div><div class="card-title">Lithology &amp; Slope Material</div></div></div>
+    <div class="fld"><label>Primary slope material</label>
       <div class="radio-grp">
-        <label class="radio-opt" onclick="setMat('soil',this)"><input type="radio" name="s1-mat">🟤 Soil slope</label>
-        <label class="radio-opt" onclick="setMat('rock',this)"><input type="radio" name="s1-mat">⛰ Rock slope</label>
+        <div class="radio-opt" onclick="setMat('soil',this)">🟤 Soil slope</div>
+        <div class="radio-opt" onclick="setMat('rock',this)">⛰ Rock slope</div>
       </div>
     </div>
-
-    <!-- SOIL PANEL -->
     <div id="soil-panel" class="hidden">
-      <div class="sub" style="margin-top:.75rem">
-        <div class="sub-title">Soil Characterization (Field Identification)</div>
+      <div class="sub">
+        <div class="sub-title">Soil Characterization</div>
         <div class="g2">
-          <div class="fld"><label>Soil type (USCS category)</label>
-            <select id="s1-soil" onchange="onSoilChange()">
-              <option value="">Select soil type</option>
-              <option value="CG">Coarse-grained (CG) — GW, SW, GP, SP</option>
-              <option value="CGNPF">Coarse-grained + non-plastic fines (CGNPF) — SM, GM</option>
-              <option value="CGPF">Coarse-grained + plastic fines (CGPF) — GC, SC</option>
-              <option value="ML">Silt (ML / MH)</option>
-              <option value="CL">Low plasticity clay (CL)</option>
-              <option value="CH">High plasticity clay (CH)</option>
-            </select>
-          </div>
-          <div class="fld"><label>Strength class</label>
-            <select id="s1-str" onchange="onSoilChange()">
-              <option value="I">Intermediate (default)</option>
-              <option value="L">Low (conservative)</option>
-              <option value="H">High (optimistic)</option>
-            </select>
-          </div>
+          <div class="fld"><label>Soil type (USCS)</label><select id="s1-soil" onchange="onSoilChange()"><option value="">Select</option><option value="CG">Coarse-grained (GW,SW,GP,SP)</option><option value="CGNPF">Coarse + non-plastic fines (SM,GM)</option><option value="CGPF">Coarse + plastic fines (GC,SC)</option><option value="ML">Silt (ML/MH)</option><option value="CL">Low-plasticity clay (CL)</option><option value="CH">High-plasticity clay (CH)</option></select></div>
+          <div class="fld"><label>Strength class</label><select id="s1-str" onchange="onSoilChange()"><option value="I">Intermediate</option><option value="L">Low (conservative)</option><option value="H">High (optimistic)</option></select></div>
         </div>
-        <div id="p1-soil-hint" class="nb earth hidden"></div>
-        <div id="p1-param-box" class="param-box hidden">
-          <div class="param-item"><div class="param-lbl">c' (kPa)</div><div class="param-val" id="p1-c">—</div></div>
-          <div class="param-item"><div class="param-lbl">φ' (°)</div><div class="param-val" id="p1-phi">—</div></div>
-          <div class="param-item"><div class="param-lbl">γ (kN/m³)</div><div class="param-val" id="p1-g">—</div></div>
+        <div id="p1-hint" class="nb earth hidden"></div>
+        <div id="p1-param" class="param-box hidden">
+          <div><div class="param-lbl">c' (kPa)</div><div class="param-val" id="p1-c">—</div></div>
+          <div><div class="param-lbl">φ' (°)</div><div class="param-val" id="p1-phi">—</div></div>
+          <div><div class="param-lbl">γ (kN/m³)</div><div class="param-val" id="p1-g">—</div></div>
         </div>
         <div class="g2" style="margin-top:10px">
-          <div class="fld"><label>Natural slope angle β (°)</label><input type="number" id="s1-beta" placeholder="e.g. 32" min="5" max="75" step="1"></div>
-          <div class="fld"><label>Proposed cut slope angle α (°)</label><input type="number" id="s1-alpha" placeholder="e.g. 55" min="15" max="85" step="1"></div>
+          <div class="fld"><label>Natural slope β (°)</label><input type="number" id="s1-beta" placeholder="e.g. 30"></div>
+          <div class="fld"><label>Proposed cut slope α (°)</label><input type="number" id="s1-alpha" placeholder="e.g. 55"></div>
         </div>
         <div class="g2" style="margin-top:10px">
-          <div class="fld"><label>Cut height H (m)</label><input type="number" id="s1-H" placeholder="e.g. 5" min="0.5" max="30" step="0.5"></div>
-          <div class="fld"><label>Groundwater condition</label>
-            <select id="s1-gw">
-              <option value="0">Dry / fully drained (ru = 0)</option>
-              <option value="0.25">Partial saturation — hw = H/2 (ru = 0.25)</option>
-              <option value="0.5">Fully saturated — hw = H (ru = 0.50)</option>
-            </select>
-          </div>
+          <div class="fld"><label>Cut height H (m)</label><input type="number" id="s1-H" placeholder="e.g. 5"></div>
+          <div class="fld"><label>Groundwater</label><select id="s1-gw"><option value="0">Dry / drained (ru=0)</option><option value="0.25">Partial (ru=0.25)</option><option value="0.5">Fully saturated (ru=0.50)</option></select></div>
         </div>
-        <div class="fld" style="margin-top:10px"><label>Soil depth / depth to rock (m)</label><input type="number" id="s1-depth" placeholder="e.g. 3.5" min="0" step="0.5"></div>
+        <div class="fld" style="margin-top:10px"><label>Soil depth / depth to rock (m)</label><input type="number" id="s1-depth" placeholder="e.g. 4"></div>
       </div>
     </div>
-
-    <!-- ROCK PANEL -->
     <div id="rock-panel" class="hidden">
-      <div class="sub" style="margin-top:.75rem">
+      <div class="sub">
         <div class="sub-title">Rock Mass Characterization</div>
         <div class="g2">
-          <div class="fld"><label>Rock type group</label>
-            <select id="s1-rg">
-              <option value="">Select</option>
-              <option value="G1">G1 — Gneiss, Granite, Granodiorite</option>
-              <option value="G2">G2 — Quartzite, Diorite, Gabbro</option>
-              <option value="G3">G3 — Sandstone, Basalt, Rhyolite, Tuff</option>
-              <option value="G4">G4 — Siltstone, Mudstone, Schist, Slate, Phyllite</option>
-            </select>
-          </div>
-          <div class="fld"><label>Rock mass condition</label>
-            <select id="s1-rm">
-              <option value="">Select</option>
-              <option value="blocky">Blocky / very blocky (3 joint sets)</option>
-              <option value="disturbed">Blocky / disturbed (many joint sets)</option>
-              <option value="disintegrated">Disintegrated (heavily broken)</option>
-            </select>
-          </div>
+          <div class="fld"><label>Rock group</label><select id="s1-rg"><option value="">Select</option><option value="G1">G1 — Gneiss, Granite</option><option value="G2">G2 — Quartzite, Diorite</option><option value="G3">G3 — Sandstone, Basalt, Tuff</option><option value="G4">G4 — Siltstone, Schist, Slate, Phyllite</option></select></div>
+          <div class="fld"><label>Mass condition</label><select id="s1-rm"><option value="">Select</option><option value="blocky">Blocky / very blocky</option><option value="disturbed">Blocky / disturbed</option><option value="disintegrated">Disintegrated</option></select></div>
         </div>
         <div class="g2" style="margin-top:10px">
-          <div class="fld"><label>Discontinuity roughness</label>
-            <select id="s1-dr">
-              <option value="">Select</option>
-              <option value="very_rough">Very rough (fresh, unweathered)</option>
-              <option value="rough">Rough (slightly weathered, iron stained)</option>
-              <option value="smooth">Smooth (moderately weathered, altered)</option>
-              <option value="slickensided">Slickensided (highly weathered, coatings)</option>
-            </select>
-          </div>
-          <div class="fld"><label>Cut height H (m)</label><input type="number" id="s1-rH" placeholder="e.g. 8" min="1" max="30" step="0.5"></div>
+          <div class="fld"><label>Discontinuity roughness</label><select id="s1-dr"><option value="">Select</option><option value="very_rough">Very rough</option><option value="rough">Rough</option><option value="smooth">Smooth</option><option value="slickensided">Slickensided</option></select></div>
+          <div class="fld"><label>Cut height H (m)</label><input type="number" id="s1-rH" placeholder="e.g. 8"></div>
         </div>
         <div class="dvd"></div>
-        <div class="sub-title">Structural Failure Assessment</div>
+        <div class="sub-title">Structural Assessment</div>
         <div class="g3">
-          <div class="fld"><label>Bedding plane dip (°)</label><input type="number" id="s1-bdip" placeholder="e.g. 35" min="0" max="90"></div>
-          <div class="fld"><label>Bedding dip direction</label>
-            <select id="s1-bdir">
-              <option value="">Select</option>
-              <option value="out_steep">Dipping out of slope &gt;30° (adverse)</option>
-              <option value="out_gentle">Dipping out of slope &lt;30° (mod. adverse)</option>
-              <option value="into">Dipping into slope (favourable)</option>
-            </select>
-          </div>
-          <div class="fld"><label>Slope face angle (°)</label><input type="number" id="s1-sfa" placeholder="e.g. 60" min="20" max="90"></div>
+          <div class="fld"><label>Bedding dip (°)</label><input type="number" id="s1-bdip" placeholder="e.g. 35"></div>
+          <div class="fld"><label>Dip direction</label><select id="s1-bdir"><option value="">Select</option><option value="out_steep">Out of slope &gt;30°</option><option value="out_gentle">Out of slope &lt;30°</option><option value="into">Into slope</option></select></div>
+          <div class="fld"><label>Slope face (°)</label><input type="number" id="s1-sfa" placeholder="e.g. 60"></div>
         </div>
         <div class="g2" style="margin-top:10px">
-          <div class="fld"><label>Number of joint sets</label>
-            <select id="s1-js">
-              <option value="">Select</option><option value="1">1 joint set</option>
-              <option value="2">2 joint sets</option><option value="3">3 or more</option>
-            </select>
-          </div>
-          <div class="fld"><label>Joint infill condition</label>
-            <select id="s1-ji">
-              <option value="">Select</option>
-              <option value="closed">Closed / tight</option>
-              <option value="infilled">Clay/silt infilled</option>
-            </select>
-          </div>
+          <div class="fld"><label>Joint sets</label><select id="s1-js"><option value="">Select</option><option value="1">1</option><option value="2">2</option><option value="3">3+</option></select></div>
+          <div class="fld"><label>Joint infill</label><select id="s1-ji"><option value="">Select</option><option value="closed">Closed / tight</option><option value="infilled">Clay/silt infilled</option></select></div>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="page-nav">
-    <button class="btn btn-primary" style="width:auto;padding:0 28px" onclick="validateAndGo2()">Continue to Slope Stability →</button>
-  </div>
+  <div id="p1-errors" class="nb danger hidden"></div>
+  <div class="page-nav"><button class="btn btn-primary" style="width:auto;padding:0 28px" onclick="validateAndGo2()">Continue to Slope Stability →</button></div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     PAGE 2 — SLOPE STABILITY (TAYLOR)
-══════════════════════════════════════════════════════════════════════════ -->
+<!-- PAGE 2 -->
 <div class="page" id="page2">
-  <div class="progress">
-    <div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div>
-    <span class="plbl">Step 2 of 4 — Taylor Slope Stability Analysis</span>
-  </div>
+  <div class="progress"><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><div class="pdot"></div><span class="plbl">Step 2 of 5 — Taylor Slope Stability</span></div>
   <div id="p2-summary" class="summary-bar hidden"></div>
-
   <div class="card">
-    <div class="card-hdr">
-      <div class="card-icon blue">📈</div>
-      <div><div class="card-title">Taylor (1937) Stability Analysis</div>
-      <div class="card-sub">Stability number Sn = c/(F·γ·H) | DoR RMDP Annex B7.3</div></div>
-    </div>
+    <div class="card-hdr"><div class="card-icon blue">📈</div><div><div class="card-title">Taylor (1937) Stability Analysis</div><div class="card-sub">Iterative FoS · Sn = c/(F·γ·H) · DoR RMDP Annex B7.3</div></div></div>
+    <div id="p2-nodata" class="nb warn hidden">⚠ No soil data. Complete Step 1 (soil type, α, H) then return.<br><button class="btn btn-nav btn-sm" style="margin-top:.5rem" onclick="goPage(1)">← Back to Step 1</button></div>
     <canvas id="taylor-canvas" width="840" height="320"></canvas>
+    <button class="btn btn-primary" id="p2-run-btn" style="margin-top:.75rem" onclick="runStability()">📈 Run Taylor Stability Analysis</button>
     <div id="p2-results" class="hidden">
-      <div class="sub" style="margin-top:.75rem">
-        <div class="sub-title">Stability Numbers &amp; Factor of Safety</div>
-        <div class="mc-grid" id="p2-mc"></div>
-      </div>
+      <div class="sub"><div class="sub-title">Stability Numbers &amp; Factor of Safety</div><div class="mc-grid" id="p2-mc"></div></div>
       <div class="sc-grid">
-        <div class="sc nat">
-          <div class="sc-lbl">🏔 Natural slope (β)</div>
-          <div class="sc-ang" id="p2-nat-ang">—</div>
-          <div style="font-size:11px;color:var(--c-warn);margin-top:1px" id="p2-nat-ratio"></div>
-          <div class="dvd" style="margin:.4rem 0"></div>
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--c-warn);letter-spacing:.04em">FS (Taylor)</div>
-          <div class="sc-fs" id="p2-nat-fs" style="color:var(--c-warn)">—</div>
-          <div class="fs-bar-wrap"><div class="fs-bar" id="p2-nat-bar" style="width:0%;background:var(--c-amber)"></div></div>
-        </div>
-        <div class="sc cut">
-          <div class="sc-lbl">✂ Proposed cut slope (α)</div>
-          <div class="sc-ang" id="p2-cut-ang">—</div>
-          <div style="font-size:11px;color:var(--c-earth);margin-top:1px" id="p2-cut-ratio"></div>
-          <div class="dvd" style="margin:.4rem 0"></div>
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--c-earth);letter-spacing:.04em">FS (Taylor)</div>
-          <div class="sc-fs" id="p2-cut-fs">—</div>
-          <div class="fs-bar-wrap"><div class="fs-bar" id="p2-cut-bar" style="width:0%"></div></div>
-        </div>
+        <div class="sc nat"><div class="sc-lbl">🏔 Natural slope (β)</div><div class="sc-ang" id="p2-nat-ang">—</div><div style="font-size:11px;color:var(--c-warn)" id="p2-nat-ratio"></div><div class="dvd" style="margin:.4rem 0"></div><div style="font-size:10px;font-weight:700;color:var(--c-warn)">FS</div><div class="sc-fs" id="p2-nat-fs" style="color:var(--c-warn)">—</div><div class="fs-bar-wrap"><div class="fs-bar" id="p2-nat-bar" style="width:0%;background:var(--c-amber)"></div></div></div>
+        <div class="sc cut"><div class="sc-lbl">✂ Proposed cut (α)</div><div class="sc-ang" id="p2-cut-ang">—</div><div style="font-size:11px;color:var(--c-earth)" id="p2-cut-ratio"></div><div class="dvd" style="margin:.4rem 0"></div><div style="font-size:10px;font-weight:700;color:var(--c-earth)">FS</div><div class="sc-fs" id="p2-cut-fs">—</div><div class="fs-bar-wrap"><div class="fs-bar" id="p2-cut-bar" style="width:0%"></div></div></div>
       </div>
       <div id="p2-decision"></div>
     </div>
     <div id="p2-rock-results" class="hidden"></div>
   </div>
-
   <div class="page-nav">
     <button class="btn btn-nav btn-sm" onclick="goPage(1)">← Back</button>
     <button class="btn btn-primary" style="width:auto;padding:0 28px" id="p2-next-btn" onclick="goPage(3)">Continue to Wall Design →</button>
-    <button class="btn btn-success" style="width:auto;padding:0 28px" id="p2-bio-btn" class="hidden" onclick="goPage(4)">Skip to Bioengineering →</button>
+    <button class="btn btn-success hidden" style="width:auto;padding:0 28px" id="p2-bio-btn" onclick="goPage(4)">Skip to Bioengineering →</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     PAGE 3 — RETAINING WALL
-══════════════════════════════════════════════════════════════════════════ -->
+<!-- PAGE 3 -->
 <div class="page" id="page3">
-  <div class="progress">
-    <div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div>
-    <span class="plbl">Step 3 of 4 — Retaining Wall Design</span>
-  </div>
+  <div class="progress"><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div><div class="pdot"></div><span class="plbl">Step 3 of 5 — Retaining Wall Design</span></div>
   <div id="p3-summary" class="summary-bar hidden"></div>
-
   <div id="p3-not-needed" class="hidden">
-    <div class="decision green">
-      <div class="d-title">✅ Retaining wall not required</div>
-      <div class="d-body">The factor of safety from Step 2 does not require a retaining wall. Proceed directly to bioengineering specification.</div>
-    </div>
-    <div class="page-nav">
-      <button class="btn btn-nav btn-sm" onclick="goPage(2)">← Back</button>
-      <button class="btn btn-success" style="width:auto;padding:0 28px" onclick="goPage(4)">Proceed to Bioengineering →</button>
-    </div>
+    <div class="decision green"><div class="d-title">✅ Retaining wall not required</div><div class="d-body">FS from Step 2 does not require a wall. Proceed to bioengineering.</div></div>
+    <div class="page-nav"><button class="btn btn-nav btn-sm" onclick="goPage(2)">← Back</button><button class="btn btn-success" style="width:auto;padding:0 28px" onclick="goPage(4)">Proceed to Bioengineering →</button></div>
   </div>
-
+  <div id="p3-marginal-section" class="hidden">
+    <div class="card"><div class="card-hdr"><div class="card-icon amber">🧱</div><div><div class="card-title">Prescriptive Toe Wall — Marginally Stable</div><div class="card-sub">FS 1.1–1.3 · Dry stone / banded masonry · no Rankine analysis</div></div></div><div id="p3-marginal-content"></div></div>
+    <div class="page-nav"><button class="btn btn-nav btn-sm" onclick="goPage(2)">← Back</button><button class="btn btn-success" style="width:auto;padding:0 28px" onclick="goPage(4)">Proceed to Bioengineering →</button></div>
+  </div>
   <div id="p3-design-section">
     <div class="card">
-      <div class="card-hdr">
-        <div class="card-icon red">🧱</div>
-        <div><div class="card-title">Wall Type &amp; Foundation</div></div>
-      </div>
-      <div class="sub-title" style="margin-bottom:.4rem">Select wall type</div>
+      <div class="card-hdr"><div class="card-icon red">🧱</div><div><div class="card-title">Wall Type &amp; Foundation</div></div></div>
+      <div class="sub-title">Wall type</div>
       <div class="wall-grid" id="wall-opts">
-        <div class="wopt sel" id="wt-dry" onclick="selWall('dry',this)"><div class="wn">Dry Stone Masonry</div><div class="wg">γ = 17–19 kN/m³</div></div>
-        <div class="wopt" id="wt-banded" onclick="selWall('banded',this)"><div class="wn">Banded Stone Masonry</div><div class="wg">γ = 18–20 kN/m³</div></div>
-        <div class="wopt" id="wt-cement" onclick="selWall('cement',this)"><div class="wn">Cement Stone (1:4)</div><div class="wg">γ = 22–24 kN/m³</div></div>
-        <div class="wopt" id="wt-gabion" onclick="selWall('gabion',this)"><div class="wn">Gabion Wall</div><div class="wg">γ = 16–18 kN/m³</div></div>
+        <div class="wopt sel" onclick="selWall('dry',this)"><div class="wn">Dry Stone</div><div class="wg">γ18 μ0.65</div></div>
+        <div class="wopt" onclick="selWall('banded',this)"><div class="wn">Banded Stone</div><div class="wg">γ19 μ0.65</div></div>
+        <div class="wopt" onclick="selWall('cement',this)"><div class="wn">Cement (1:4)</div><div class="wg">γ23 μ0.55</div></div>
+        <div class="wopt" onclick="selWall('gabion',this)"><div class="wn">Gabion</div><div class="wg">γ17 μ0.50</div></div>
       </div>
-      <div class="g2" style="margin-top:12px">
-        <div class="fld"><label>Foundation bearing material</label>
-          <select id="p3-bc" onchange="updBC()">
-            <option value="">Select</option>
-            <option value="1000">Well graded mix / glacial till (GW-GC) Very compact → 1000 kN/m²</option>
-            <option value="800">Gravel / gravel-sand — Very compact (GW,GP) → 800 kN/m²</option>
-            <option value="600">Gravel / gravel-sand — Medium to compact → 600 kN/m²</option>
-            <option value="400">Gravel / gravel-sand — Loose → 400 kN/m²</option>
-            <option value="400c">Coarse-medium sand — Very compact (SW,SP) → 400 kN/m²</option>
-            <option value="300a">Coarse-medium sand — Medium to compact → 300 kN/m²</option>
-            <option value="300b">Coarse-medium sand — Loose → 300 kN/m²</option>
-            <option value="300c">Fine-medium sand silty/clayey — Very compact (SW,SM,SC) → 300 kN/m²</option>
-            <option value="250">Fine-medium sand — Medium to compact → 250 kN/m²</option>
-            <option value="150a">Fine-medium sand — Loose → 150 kN/m²</option>
-            <option value="300d">Fine sand (SP,SM,SC) — Very compact → 300 kN/m²</option>
-            <option value="200">Fine sand — Medium to compact → 200 kN/m²</option>
-            <option value="150b">Fine sand — Loose → 150 kN/m²</option>
-            <option value="400d">Homogeneous clay (CL,CH) — Very stiff to hard → 400 kN/m²</option>
-            <option value="200c">Homogeneous clay — Medium to stiff → 200 kN/m²</option>
-            <option value="50a">Homogeneous clay — Soft → 50 kN/m²</option>
-            <option value="300e">Inorganic silt (ML,MH) — Very stiff to hard → 300 kN/m²</option>
-            <option value="150c">Inorganic silt — Medium to stiff → 150 kN/m²</option>
-            <option value="50b">Inorganic silt — Soft → 50 kN/m²</option>
-          </select>
-        </div>
-        <div class="fld"><label>Road / surcharge on retained soil q (kPa)</label>
-          <input type="number" id="p3-q" value="10" min="0" max="100" step="5">
-        </div>
-      </div>
+      <div class="fld" style="margin-top:12px"><label>Road / surcharge q (kPa)</label><input type="number" id="p3-q" value="10"></div>
       <div id="p3-sbc-disp" class="nb info hidden"></div>
-      <button class="btn btn-danger" style="margin-top:1rem" onclick="runWall()">🧱 Design Retaining Wall &amp; Check Stability</button>
+      <button class="btn btn-danger" style="margin-top:1rem" onclick="runWall()">🧱 Design Wall &amp; Check Stability</button>
     </div>
-    <div id="p3-wall-out" class="hidden">
-      <div class="card">
-        <div class="card-hdr">
-          <div class="card-icon red">📐</div>
-          <div><div class="card-title">Rankine Wall Design — Results &amp; Stability Checks</div></div>
-        </div>
-        <div id="p3-wall-content"></div>
-      </div>
-    </div>
+    <div id="p3-wall-out" class="hidden"><div class="card"><div class="card-hdr"><div class="card-icon red">📐</div><div><div class="card-title">Rankine Wall — Results &amp; Checks</div></div></div><div id="p3-wall-content"></div></div></div>
   </div>
-
-  <div class="page-nav" id="p3-nav">
-    <button class="btn btn-nav btn-sm" onclick="goPage(2)">← Back</button>
-    <button class="btn btn-success" style="width:auto;padding:0 28px" onclick="goPage(4)">Proceed to Bioengineering →</button>
-  </div>
+  <div class="page-nav" id="p3-nav"><button class="btn btn-nav btn-sm" onclick="goPage(2)">← Back</button><button class="btn btn-success" style="width:auto;padding:0 28px" onclick="goPage(4)">Proceed to Bioengineering →</button></div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     PAGE 4 — BIOENGINEERING
-══════════════════════════════════════════════════════════════════════════ -->
+<!-- PAGE 4 -->
 <div class="page" id="page4">
-  <div class="progress">
-    <div class="pdot done"></div><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div>
-    <span class="plbl">Step 4 of 4 — Bioengineering Technique Selection</span>
-  </div>
+  <div class="progress"><div class="pdot done"></div><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div><div class="pdot"></div><span class="plbl">Step 4 of 5 — Bioengineering</span></div>
   <div id="p4-summary" class="summary-bar hidden"></div>
 
+  <!-- SLOPE TYPE SELECTOR -->
   <div class="card">
-    <div class="card-hdr">
-      <div class="card-icon green">🌿</div>
-      <div><div class="card-title">Bioengineering Site Parameters</div>
-      <div class="card-sub">Additional data required for technique selection</div></div>
+    <div class="card-hdr"><div class="card-icon green">🌿</div><div><div class="card-title">Slope Type for Bioengineering</div><div class="card-sub">Select whether you are treating the cut slope or the fill slope</div></div></div>
+    <div class="radio-grp">
+      <div class="radio-opt sel" onclick="setBioType('cut',this)">✂ Cut Slope (uphill side of road)</div>
+      <div class="radio-opt" onclick="setBioType('fill',this)">🏔 Fill Slope (downhill / embankment side)</div>
     </div>
-    <div class="g3">
-      <div class="fld"><label>Slope length (m)</label><input type="number" id="p4-len" placeholder="e.g. 12" min="1" max="200" step="0.5"></div>
-      <div class="fld"><label>Material drainage</label>
-        <select id="p4-drain">
-          <option value="">Select</option>
-          <option value="Good">Good — free-draining, sandy/gravelly</option>
-          <option value="Poor">Poor — impeded, silty/clayey</option>
-        </select>
-      </div>
-      <div class="fld"><label>Site moisture</label>
-        <select id="p4-moist">
-          <option value="">Select</option>
-          <option value="Damp">Damp — visible moisture / seepage</option>
-          <option value="Dry">Dry — no visible moisture</option>
-          <option value="Any">Variable / both conditions</option>
-        </select>
-      </div>
-    </div>
-    <div class="fld" style="margin-top:12px"><label>Previous / potential problems (select all)</label>
-      <div class="chk-grp" id="p4-prob-grp">
-        <label class="chk-opt" onclick="togChk(this,'probs')"><input type="checkbox" value="Erosion"> Surface / rill erosion</label>
-        <label class="chk-opt" onclick="togChk(this,'probs')"><input type="checkbox" value="Slumping"> Slumping / shallow sliding</label>
-        <label class="chk-opt" onclick="togChk(this,'probs')"><input type="checkbox" value="Planar"> Planar sliding / shear failure</label>
-        <label class="chk-opt" onclick="togChk(this,'probs')"><input type="checkbox" value="Debris"> Debris fall / rockfall</label>
-        <label class="chk-opt" onclick="togChk(this,'probs')"><input type="checkbox" value="Gully"> Gully erosion (≤ 45°)</label>
-        <label class="chk-opt" onclick="togChk(this,'probs')"><input type="checkbox" value="LooseSand"> Loose sand surface</label>
-        <label class="chk-opt" onclick="togChk(this,'probs')"><input type="checkbox" value="RatoMato"> Rato mato (red clay residual)</label>
-      </div>
-    </div>
-    <div class="fld" style="margin-top:10px"><label>Special conditions</label>
-      <div class="chk-grp" id="p4-spec-grp">
-        <label class="chk-opt" onclick="togChk(this,'specs')"><input type="checkbox" value="BaseFail"> Base of slope — planar sliding</label>
-        <label class="chk-opt" onclick="togChk(this,'specs')"><input type="checkbox" value="Rocky"> Rocky material (&gt;30°)</label>
-        <label class="chk-opt" onclick="togChk(this,'specs')"><input type="checkbox" value="None"> None</label>
-      </div>
-    </div>
-    <button class="btn btn-success" style="margin-top:1rem" onclick="runBio()">🌿 Select Bioengineering Techniques &amp; Species</button>
   </div>
 
+  <!-- CUT SLOPE SUB-SECTION -->
+  <div id="p4-cut-section">
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon earth">✂</div><div><div class="card-title">Cut Slope — Bioengineering Parameters</div><div class="card-sub">Slope angle carried from stability analysis; enter additional data below</div></div></div>
+      <div class="nb earth" style="margin-top:0" id="p4-cut-context">Cut slope angle α and height H from Step 1 are used. Brush layering is NOT used on cut slopes — palisades are substituted automatically.</div>
+      <div class="g3" style="margin-top:.75rem">
+        <div class="fld"><label>Cut slope length (m)</label><input type="number" id="p4c-len" placeholder="e.g. 12"></div>
+        <div class="fld"><label>Material drainage</label><select id="p4c-drain"><option value="">Select</option><option value="Good">Good — free-draining</option><option value="Poor">Poor — impeded</option></select></div>
+        <div class="fld"><label>Site moisture</label><select id="p4c-moist"><option value="">Select</option><option value="Damp">Damp</option><option value="Dry">Dry</option><option value="Any">Variable</option></select></div>
+      </div>
+      <div class="fld" style="margin-top:12px"><label>Previous / potential problems (select all)</label>
+        <div class="chk-grp" id="p4c-prob-grp">
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Erosion">Surface / rill erosion</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Slumping">Slumping / shallow sliding</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Planar">Planar sliding / shear failure</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Debris">Debris fall / rockfall</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Gully">Gully erosion (≤45°)</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="LooseSand">Loose sand surface</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="RatoMato">Rato mato (red clay)</div>
+        </div>
+      </div>
+      <div class="fld" style="margin-top:10px"><label>Special conditions</label>
+        <div class="chk-grp" id="p4c-spec-grp">
+          <div class="chk-opt" onclick="togChk(this,'specs')" data-val="BaseFail">Base of slope — planar sliding</div>
+          <div class="chk-opt" onclick="togChk(this,'specs')" data-val="Rocky">Rocky material (&gt;30°)</div>
+          <div class="chk-opt" onclick="togChk(this,'specs')" data-val="None">None</div>
+        </div>
+      </div>
+      <button class="btn btn-success" style="width:100%;margin-top:1rem" onclick="runBio('cut')">🌿 Recommend Cut Slope Techniques</button>
+    </div>
+  </div>
+
+  <!-- FILL SLOPE SUB-SECTION -->
+  <div id="p4-fill-section" class="hidden">
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon amber">🏔</div><div><div class="card-title">Fill Slope — Bioengineering Parameters</div><div class="card-sub">Enter fill slope geometry and conditions below</div></div></div>
+      <div class="nb info" style="margin-top:0">Fill slopes (embankment / downhill side) allow brush layering. If fill slope length &gt; 5 m, a 1.0–1.5 m dry stone toe wall is recommended for toe protection.</div>
+      <div class="g3" style="margin-top:.75rem">
+        <div class="fld"><label>Fill slope angle (°)</label><input type="number" id="p4f-angle" placeholder="e.g. 35" min="5" max="85"></div>
+        <div class="fld"><label>Fill slope length (m)</label><input type="number" id="p4f-len" placeholder="e.g. 8"></div>
+        <div class="fld"><label>Fill height (m)</label><input type="number" id="p4f-H" placeholder="e.g. 4"></div>
+      </div>
+      <div class="g2" style="margin-top:10px">
+        <div class="fld"><label>Material drainage</label><select id="p4f-drain"><option value="">Select</option><option value="Good">Good — free-draining</option><option value="Poor">Poor — impeded</option></select></div>
+        <div class="fld"><label>Site moisture</label><select id="p4f-moist"><option value="">Select</option><option value="Damp">Damp</option><option value="Dry">Dry</option><option value="Any">Variable</option></select></div>
+      </div>
+      <div class="fld" style="margin-top:12px"><label>Previous / potential problems (select all)</label>
+        <div class="chk-grp" id="p4f-prob-grp">
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Erosion">Surface / rill erosion</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Slumping">Slumping / shallow sliding</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Planar">Planar sliding / shear failure</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="Gully">Gully erosion (≤45°)</div>
+          <div class="chk-opt" onclick="togChk(this,'probs')" data-val="RatoMato">Rato mato (red clay)</div>
+        </div>
+      </div>
+      <div class="fld" style="margin-top:10px"><label>Special conditions</label>
+        <div class="chk-grp" id="p4f-spec-grp">
+          <div class="chk-opt" onclick="togChk(this,'specs')" data-val="BaseFail">Base of slope — planar sliding</div>
+          <div class="chk-opt" onclick="togChk(this,'specs')" data-val="None">None</div>
+        </div>
+      </div>
+      <button class="btn btn-success" style="width:100%;margin-top:1rem" onclick="runBio('fill')">🌿 Recommend Fill Slope Techniques</button>
+    </div>
+  </div>
+
+  <!-- SHARED OUTPUT -->
   <div id="p4-output" class="hidden">
     <div class="card">
-      <div class="card-hdr">
-        <div class="card-icon green">✅</div>
-        <div><div class="card-title">Bioengineering Recommendation</div></div>
-      </div>
+      <div class="card-hdr"><div class="card-icon green">✅</div><div><div class="card-title">Bioengineering Recommendation</div></div></div>
       <div class="tag-row" id="p4-tags"></div>
-      <div id="p4-match-nb" class="nb earth" style="margin-top:0"></div>
+      <div id="p4-toewall-rec"></div>
+      <div id="p4-match-nb" class="nb earth"></div>
       <div id="p4-special-out"></div>
       <div id="p4-tech-list" style="margin-top:.75rem"></div>
-      <div class="sub" style="margin-top:1rem">
-        <div class="sub-title">🌱 Recommended Species — Altitude Zone &amp; Moisture</div>
-        <div id="p4-species"></div>
-      </div>
-      <div class="sub">
-        <div class="sub-title">📅 Planting Season &amp; Implementation</div>
-        <div id="p4-calendar"></div>
-      </div>
-      <div class="nb info" style="margin-top:.75rem">
-        <strong>References:</strong> Roadside Bioengineering Reference Manual (DoR/GESU Nepal 2076); Mercy Corps Slope Disaster Mitigation Training Manual; DRSP Success Cases in Bioengineering (SDC); Chapter 4 Bioengineering — Flash Flood Risk Management Module 3.
-      </div>
+      <div class="sub"><div class="sub-title">🌱 Recommended Species</div><div id="p4-species"></div></div>
+      <div class="sub"><div class="sub-title">📅 Planting Season</div><div id="p4-calendar"></div></div>
+      <div class="nb info"><strong>References:</strong> DoR Roadside Bioengineering Reference Manual (2076); Mercy Corps Slope Disaster Mitigation Manual; DRSP Bioengineering Success Cases; FRTC (2021).</div>
     </div>
   </div>
-
-  <div class="page-nav">
-    <button class="btn btn-nav btn-sm" onclick="goPage(3)">← Back</button>
-    <button class="btn btn-primary" style="width:auto;padding:0 28px" onclick="window.print()">🖨 Print / Save Report</button>
-  </div>
+  <div class="page-nav"><button class="btn btn-nav btn-sm" onclick="goPage(3)">← Back</button><button class="btn btn-primary" style="width:auto;padding:0 28px" onclick="goPage(5)">Continue to Drainage →</button><button class="btn btn-nav" style="width:auto;padding:0 20px" onclick="window.print()">🖨 Print</button></div>
 </div>
 
+<!-- PAGE 5 -->
+<div class="page" id="page5">
+  <div class="progress"><div class="pdot done"></div><div class="pdot done"></div><div class="pdot done"></div><div class="pdot done"></div><div class="pdot active"></div><span class="plbl">Step 5 of 5 — Drainage Design</span></div>
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon blue">🗺</div><div><div class="card-title">Catchment Area</div><div class="card-sub">Google Earth ridgeline delineation</div></div></div>
+    <div class="nb info" style="margin-top:0"><strong>Field method:</strong> Enable Terrain → 3D view → trace ridgelines with Add Polygon → verify downslope flow to drain inlet via Elevation Profile.</div>
+    <div class="g3" style="margin-top:.75rem">
+      <div class="fld"><label>Catchment area A (km²)</label><input type="number" id="d-area" placeholder="e.g. 0.05" step="0.001" oninput="calcDischarge()"></div>
+      <div class="fld"><label>Drain type</label><select id="d-dtype" onchange="calcDischarge()"><option value="catch">Catch drain (crest)</option><option value="side">Road side drain (toe)</option><option value="both">Both</option></select></div>
+      <div class="fld"><label>Return period</label><select id="d-return" onchange="calcDischarge()"><option value="10">10-year</option><option value="25">25-year (critical)</option><option value="50">50-year</option></select></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon amber">☔</div><div><div class="card-title">Weighted Runoff Coefficient</div><div class="card-sub">Enter % area per land-use; total must = 100%</div></div></div>
+    <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--c-earth);color:#fff"><th style="padding:7px 10px;text-align:left">Surface / Land Use</th><th style="padding:7px 10px;text-align:center;width:110px">% Area</th><th style="padding:7px 10px;text-align:center;width:90px">Contribution</th></tr></thead><tbody id="c-tbody"></tbody><tfoot><tr style="background:var(--c-sage-ll);font-weight:700"><td style="padding:7px 10px;color:var(--c-earth)">TOTAL</td><td style="padding:7px 10px;text-align:center;color:var(--c-earth)" id="c-total-pct">0 %</td><td style="padding:7px 10px;text-align:center;color:var(--c-earth)" id="c-total-cw">C_w = —</td></tr></tfoot></table></div>
+    <div id="c-warn" class="nb warn hidden"></div>
+    <div id="c-ok" class="nb success hidden"></div>
+  </div>
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon blue">⏱</div><div><div class="card-title">Time of Concentration &amp; Intensity</div><div class="card-sub">Kirpich: tc = 0.0195 × L^1.155 / H^0.385 (min)</div></div></div>
+    <div class="g2">
+      <div class="fld"><label>Flow path length L (m)</label><input type="number" id="d-L" placeholder="e.g. 300" oninput="calcTc()"></div>
+      <div class="fld"><label>Height difference H (m)</label><input type="number" id="d-Hd" placeholder="e.g. 45" oninput="calcTc()"></div>
+    </div>
+    <div id="tc-result" class="sub hidden"><div class="g3"><div class="mc"><div class="mc-lbl">tc (Kirpich)</div><div class="mc-val" id="tc-val">—</div><div class="mc-unit">min</div></div><div class="mc"><div class="mc-lbl">tc (design)</div><div class="mc-val" id="tc-used">—</div><div class="mc-unit">min</div></div><div class="mc"><div class="mc-lbl">Mountain range</div><div class="mc-val">5–20</div><div class="mc-unit">min</div></div></div><div id="tc-cs-note" class="nb info hidden" style="margin-top:.5rem"></div></div>
+    <div class="g2" style="margin-top:10px">
+      <div class="fld"><label>Rainfall intensity I (mm/hr)</label><input type="number" id="d-I" placeholder="e.g. 80" oninput="calcDischarge()"></div>
+      <div class="fld"><label>Intensity source</label><select id="d-Isrc" onchange="onIsrcChange()"><option value="manual">Manual (DHM IDF)</option><option value="typical">High zone (~125)</option><option value="typical_med">Medium zone (~80)</option><option value="typical_low">Low zone (~50)</option></select></div>
+    </div>
+    <div class="g2" style="margin-top:10px">
+      <div class="fld"><label>Antecedent moisture (AMC)</label><select id="d-amc" onchange="calcDischarge()"><option value="II">AMC-II Normal (×1.00)</option><option value="I">AMC-I Dry (×0.80)</option><option value="III">AMC-III Wet (×1.15)</option></select></div>
+      <div class="fld"><label>Catchment slope</label><select id="d-catslope" onchange="calcTc()"><option value="steep">Steep &gt;25%</option><option value="moderate">Moderate 5–25%</option><option value="gentle">Gentle &lt;5%</option></select></div>
+    </div>
+    <div id="I-note" class="nb earth hidden"></div>
+  </div>
+  <div id="discharge-card" class="card hidden">
+    <div class="card-hdr"><div class="card-icon blue">💧</div><div><div class="card-title">Peak Discharge — Rational Formula</div><div class="card-sub">Q = 0.278 × C × I × A (m³/s)</div></div></div>
+    <div class="mc-grid" id="d-mc-q"></div>
+    <div id="d-q-note" class="nb info"></div>
+  </div>
+  <div id="channel-card" class="card hidden">
+    <div class="card-hdr"><div class="card-icon green">📐</div><div><div class="card-title">Channel Design — Manning's Equation</div><div class="card-sub">V=(1/n)·R^(2/3)·S^(1/2) · Freeboard 0.20 m</div></div></div>
+    <div class="g3">
+      <div class="fld"><label>Channel shape</label><select id="d-shape" onchange="runChannelDesign()"><option value="rect">Rectangular (B=H/1.5)</option><option value="trap">Trapezoidal (1V:1.5H)</option><option value="tri">Triangular (V)</option><option value="semi">Semi-circular</option></select></div>
+      <div class="fld"><label>Lining</label><select id="d-lining" onchange="onLiningChange()"><option value="">Select</option><option value="concrete_smooth">Smooth concrete</option><option value="concrete_float">Float concrete</option><option value="cement_masonry">Cement stone masonry (1:4)</option><option value="dressed_stone">Dressed stone in mortar</option><option value="rough_stone">Rough stone / riprap</option><option value="gabion">Gabion</option><option value="turf">Dense turf</option><option value="bare_earth">Bare earth</option><option value="bitumen">Bituminous</option><option value="rock_smooth">Rock — smooth</option><option value="rock_jagged">Rock — jagged</option><option value="rock_soft">Rock — soft</option><option value="rock_hard">Rock — hard</option></select></div>
+      <div class="fld"><label>Bed slope S (m/m)</label><input type="number" id="d-slope" placeholder="e.g. 0.02" step="0.001" oninput="runChannelDesign()"></div>
+    </div>
+    <div id="lining-params" class="sub hidden"><div class="g3"><div class="mc"><div class="mc-lbl">Manning's n</div><div class="mc-val" id="d-n-val">—</div></div><div class="mc"><div class="mc-lbl">Max velocity</div><div class="mc-val" id="d-vmax-val">—</div><div class="mc-unit">m/s</div></div><div class="mc"><div class="mc-lbl">Min non-silting</div><div class="mc-val">0.30</div><div class="mc-unit">m/s</div></div></div></div>
+    <button class="btn btn-primary" style="margin-top:.75rem" onclick="runChannelDesign()">📐 Design Channel Section</button>
+  </div>
+  <div id="channel-results" class="card hidden"><div class="card-hdr"><div class="card-icon green">✅</div><div><div class="card-title">Channel Design Results</div></div></div><div id="ch-results-content"></div></div>
+  <div class="page-nav"><button class="btn btn-nav btn-sm" onclick="goPage(4)">← Back</button><button class="btn btn-primary" style="width:auto;padding:0 28px" onclick="window.print()">🖨 Print / Save Report</button></div>
+</div>
 </main>
-
 <script>
-// ═══════════════════════════════════════════════════════════════════════════
-//  GLOBAL STATE
-// ═══════════════════════════════════════════════════════════════════════════
-let ST={
-  alt:'',aspect:'',land:'',moist:'',rain:'',mat:'',
-  soil:'',str:'I',c:0,phi:0,gamma:0,
-  beta:0,alpha:0,H:0,ru:0,depth:0,
+// ════ STATE ════
+let ST={ alt:'',aspect:'',land:'',moist:'',rain:'',mat:'',
+  soil:'',str:'I',c:0,phi:0,gamma:0, beta:0,alpha:0,H:0,ru:0,depth:0,
   rg:'',rm:'',dr:'',rH:0,bdip:0,bdir:'',sfa:0,js:'',ji:'',
-  FS_cut:0,FS_nat:0,needsWall:false,
-  wallKey:'dry',SBC:null,q:10,
-  len:0,drain:'',bio_moist:'',probs:[],specs:[]
-};
-let curPage=1;
+  FS_cut:0,FS_nat:0,needsWall:false,needsMarginal:false,
+  wallKey:'dry',SBC:null,q:10, len:0,drain:'',bio_moist:'',probs:[],specs:[] };
+let curPage=1, selProbs=[], selSpecs=[], weightedC=0, peakQ=0;
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  SOIL DATA
-// ═══════════════════════════════════════════════════════════════════════════
+// ════ SOIL DATA ════
 const SD={
-  CG:   {c:{L:0,  I:1,  H:2 },phi:{L:35,I:40,H:45},g:{L:19,  I:19.5,H:20  },
-         hint:'No plasticity. Dry granular feel. No ribbon, no palm stain. Non-cohesive when moist.',safe:'0.5–1.0 m (dry/temporary only)'},
-  CGNPF:{c:{L:2,  I:4,  H:6 },phi:{L:29,I:35,H:40},g:{L:19,  I:20,  H:21  },
-         hint:'Silty fines, non-plastic. Stains wet palm slightly. No ribbon on plasticity test.',safe:'1.0–2.0 m'},
-  CGPF: {c:{L:3,  I:5.5,H:8 },phi:{L:25,I:32,H:40},g:{L:19,  I:20,  H:21  },
-         hint:'Plastic fines with coarse skeleton. Stains palm. Weak ribbon (<25 mm).',safe:'1.5–2.5 m'},
-  ML:   {c:{L:3,  I:10, H:17},phi:{L:20,I:26,H:32},g:{L:15,  I:17,  H:19  },
-         hint:'Silky/soapy feel. Dilatant when shaken. No ribbon. Highly erosion-susceptible.',safe:'0.5–1.5 m (dry season only)'},
-  CL:   {c:{L:5,  I:12, H:20},phi:{L:15,I:20,H:25},g:{L:18,  I:19,  H:20  },
-         hint:'Ribbon < 25 mm. Medium plasticity. Stiff when dry. Moderate swell.',safe:'2.0–4.5 m'},
-  CH:   {c:{L:10, I:25, H:40},phi:{L:5, I:12,H:20},g:{L:17,  I:18,  H:19  },
-         hint:'Ribbon > 25 mm. Sticky and plastic. Shiny failure surfaces. High swell. Monsoon pore pressure governs.',safe:'2.0–4.0 m (monsoon-governed)'}
+  CG:{c:{L:0,I:1,H:2},phi:{L:35,I:40,H:45},g:{L:19,I:19.5,H:20},hint:'No plasticity, granular feel, no ribbon.',safe:'0.5–1.0 m'},
+  CGNPF:{c:{L:2,I:4,H:6},phi:{L:29,I:35,H:40},g:{L:19,I:20,H:21},hint:'Silty non-plastic fines, slight palm stain.',safe:'1.0–2.0 m'},
+  CGPF:{c:{L:3,I:5.5,H:8},phi:{L:25,I:32,H:40},g:{L:19,I:20,H:21},hint:'Plastic fines, coarse skeleton, weak ribbon.',safe:'1.5–2.5 m'},
+  ML:{c:{L:3,I:10,H:17},phi:{L:20,I:26,H:32},g:{L:15,I:17,H:19},hint:'Silky feel, dilatant, erosion-prone.',safe:'0.5–1.5 m'},
+  CL:{c:{L:5,I:12,H:20},phi:{L:15,I:20,H:25},g:{L:18,I:19,H:20},hint:'Ribbon <25 mm, medium plasticity.',safe:'2.0–4.5 m'},
+  CH:{c:{L:10,I:25,H:40},phi:{L:5,I:12,H:20},g:{L:17,I:18,H:19},hint:'Ribbon >25 mm, sticky, high swell.',safe:'2.0–4.0 m'}
 };
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  TAYLOR CHART DATA
-// ═══════════════════════════════════════════════════════════════════════════
+// ════ TAYLOR CHART ════
 const TA=[15,20,25,30,35,40,45,50,55,60,65,70,75,80,85];
 const TP=[0,5,10,15,20,25,30,35,40];
 const TNS=[
-  [0.060,0.046,0.034,0.023,0.014,0.007,0.002,0.000,0.000],
-  [0.075,0.059,0.044,0.031,0.020,0.011,0.004,0.000,0.000],
-  [0.090,0.073,0.056,0.041,0.028,0.016,0.007,0.001,0.000],
-  [0.105,0.087,0.069,0.053,0.038,0.025,0.013,0.004,0.000],
-  [0.120,0.101,0.083,0.066,0.050,0.035,0.022,0.010,0.001],
-  [0.137,0.117,0.098,0.080,0.063,0.047,0.032,0.018,0.006],
-  [0.155,0.134,0.114,0.095,0.077,0.060,0.044,0.029,0.015],
-  [0.175,0.153,0.132,0.112,0.093,0.075,0.057,0.041,0.026],
-  [0.197,0.174,0.152,0.131,0.111,0.091,0.073,0.055,0.038],
-  [0.221,0.197,0.174,0.152,0.130,0.109,0.090,0.071,0.053],
-  [0.248,0.222,0.198,0.175,0.152,0.130,0.109,0.089,0.070],
-  [0.279,0.251,0.225,0.200,0.176,0.153,0.131,0.110,0.089],
-  [0.313,0.283,0.255,0.228,0.202,0.178,0.154,0.132,0.110],
-  [0.352,0.319,0.289,0.260,0.232,0.206,0.181,0.157,0.134],
-  [0.397,0.361,0.328,0.296,0.266,0.237,0.210,0.184,0.160]
-];
+[0.060,0.046,0.034,0.023,0.014,0.007,0.002,0.000,0.000],
+[0.075,0.059,0.044,0.031,0.020,0.011,0.004,0.000,0.000],
+[0.090,0.073,0.056,0.041,0.028,0.016,0.007,0.001,0.000],
+[0.105,0.087,0.069,0.053,0.038,0.025,0.013,0.004,0.000],
+[0.120,0.101,0.083,0.066,0.050,0.035,0.022,0.010,0.001],
+[0.137,0.117,0.098,0.080,0.063,0.047,0.032,0.018,0.006],
+[0.155,0.134,0.114,0.095,0.077,0.060,0.044,0.029,0.015],
+[0.175,0.153,0.132,0.112,0.093,0.075,0.057,0.041,0.026],
+[0.197,0.174,0.152,0.131,0.111,0.091,0.073,0.055,0.038],
+[0.221,0.197,0.174,0.152,0.130,0.109,0.090,0.071,0.053],
+[0.248,0.222,0.198,0.175,0.152,0.130,0.109,0.089,0.070],
+[0.279,0.251,0.225,0.200,0.176,0.153,0.131,0.110,0.089],
+[0.313,0.283,0.255,0.228,0.202,0.178,0.154,0.132,0.110],
+[0.352,0.319,0.289,0.260,0.232,0.206,0.181,0.157,0.134],
+[0.397,0.361,0.328,0.296,0.266,0.237,0.210,0.184,0.160]];
 function tNs(angle,phi){
   const a=Math.max(15,Math.min(85,angle)),p=Math.max(0,Math.min(40,phi));
   let ai=Math.max(0,Math.min(TA.findIndex((v,i)=>v<=a&&(TA[i+1]||86)>a),TA.length-2));
   let pi=Math.max(0,Math.min(TP.findIndex((v,i)=>v<=p&&(TP[i+1]||41)>p),TP.length-2));
-  const at=(a-TA[ai])/(TA[ai+1]-TA[ai]);
-  const pt=(p-TP[pi])/(TP[pi+1]-TP[pi]);
+  const at=(a-TA[ai])/(TA[ai+1]-TA[ai]), pt=(p-TP[pi])/(TP[pi+1]-TP[pi]);
   return(TNS[ai][pi]*(1-at)+TNS[ai+1][pi]*at)*(1-pt)+(TNS[ai][pi+1]*(1-at)+TNS[ai+1][pi+1]*at)*pt;
 }
 function taylorFS(c,phi,gamma,H,angle,ru){
-  const Ns=tNs(angle,phi);if(Ns<=0)return 9.99;
-  return c/(Ns*gamma*H)*(1-ru*0.6);
+  if(c<=0){
+    const fs=Math.tan(phi*Math.PI/180)/Math.max(1e-6,Math.tan(angle*Math.PI/180))*(1-ru);
+    return Math.max(0.1,Math.min(9.99,fs));
+  }
+  let FS=1.0;
+  for(let it=0;it<200;it++){
+    const phi_m=Math.atan(Math.tan(phi*Math.PI/180)/FS)*180/Math.PI;
+    const Ns=tNs(angle,phi_m);
+    const c_m=Math.max(1e-6,Ns*gamma*H);
+    const FS_c=c/c_m;
+    const FS_new=(FS+FS_c)/2;
+    if(Math.abs(FS_new-FS)<0.0001){FS=FS_new;break;}
+    FS=FS_new;
+  }
+  FS=FS*(1-ru*0.6);
+  return Math.max(0.1,Math.min(9.99,FS));
+}
+function taylorDetail(c,phi,gamma,H,angle,ru){
+  const FS=taylorFS(c,phi,gamma,H,angle,ru);
+  const FS_eff=FS/(1-ru*0.6);
+  const phi_m=Math.atan(Math.tan(phi*Math.PI/180)/Math.max(0.01,FS_eff))*180/Math.PI;
+  return {FS,phi_m,Ns:tNs(angle,phi_m)};
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  PAGE NAVIGATION
-// ═══════════════════════════════════════════════════════════════════════════
+// ════ NAVIGATION ════
 function goPage(n){
   curPage=n;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page'+n).classList.add('active');
   document.querySelectorAll('.sn-item').forEach((el,i)=>{
     el.classList.remove('active','done');
-    if(i+1<n)el.classList.add('done');
-    else if(i+1===n)el.classList.add('active');
+    if(i+1<n)el.classList.add('done'); else if(i+1===n)el.classList.add('active');
   });
-  window.scrollTo({top:0,behavior:'smooth'});
-  if(n===2)runStability();
+  if(typeof window!=='undefined'&&window.scrollTo)window.scrollTo({top:0,behavior:'smooth'});
+  if(n===2){document.getElementById('p2-results').classList.add('hidden');}
   if(n===3)setupWallPage();
   if(n===4)setupBioPage();
+  if(n===5)setupDrainPage();
 }
 
-function validateAndGo2(){
-  const alt=document.getElementById('s1-alt').value;
-  const asp=document.getElementById('s1-aspect').value;
-  if(!alt||!asp||!ST.rain||!ST.mat){alert('Please complete all site identification fields and select slope material type.');return;}
-  if(ST.mat==='soil'){
-    const soil=document.getElementById('s1-soil').value;
-    const alpha=document.getElementById('s1-alpha').value;
-    const H=document.getElementById('s1-H').value;
-    if(!soil||!alpha||!H){alert('Please select soil type, cut slope angle, and cut height.');return;}
-  }
-  readPage1();
-  goPage(2);
-}
-
-function readPage1(){
-  ST.alt=document.getElementById('s1-alt').value;
-  ST.aspect=document.getElementById('s1-aspect').value;
-  ST.land=document.getElementById('s1-land').value;
-  ST.moist=document.getElementById('s1-moist').value;
-  ST.mat=ST.mat||'soil';
-  if(ST.mat==='soil'){
-    ST.soil=document.getElementById('s1-soil').value;
-    ST.str=document.getElementById('s1-str').value;
-    if(ST.soil){const d=SD[ST.soil];ST.c=d.c[ST.str];ST.phi=d.phi[ST.str];ST.gamma=d.g[ST.str];}
-    ST.beta=parseFloat(document.getElementById('s1-beta').value||0);
-    ST.alpha=parseFloat(document.getElementById('s1-alpha').value||0);
-    ST.H=parseFloat(document.getElementById('s1-H').value||0);
-    ST.ru=parseFloat(document.getElementById('s1-gw').value||0);
-    ST.depth=parseFloat(document.getElementById('s1-depth').value||0);
-  } else {
-    ST.rg=document.getElementById('s1-rg').value;
-    ST.rm=document.getElementById('s1-rm').value;
-    ST.dr=document.getElementById('s1-dr').value;
-    ST.rH=parseFloat(document.getElementById('s1-rH').value||0);
-    ST.bdip=parseFloat(document.getElementById('s1-bdip').value||0);
-    ST.bdir=document.getElementById('s1-bdir').value;
-    ST.sfa=parseFloat(document.getElementById('s1-sfa').value||0);
-    ST.js=document.getElementById('s1-js').value;
-    ST.ji=document.getElementById('s1-ji').value;
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  PAGE 1 INTERACTIONS
-// ═══════════════════════════════════════════════════════════════════════════
-function setRadio(name,val,el){
-  ST[name.replace('s1-','')]=val;
-  el.closest('.radio-grp').querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('sel'));
+// ════ SELECTORS (div+onclick, no inputs) ════
+function setRadio(key,val,el){
+  ST[key]=val;
+  const g=el.closest('.radio-grp')||el.parentElement;
+  g.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
 }
 function setMat(val,el){
   ST.mat=val;
-  el.closest('.radio-grp').querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('sel'));
+  const g=el.closest('.radio-grp')||el.parentElement;
+  g.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
   document.getElementById('soil-panel').classList.toggle('hidden',val!=='soil');
   document.getElementById('rock-panel').classList.toggle('hidden',val!=='rock');
 }
+function togChk(el,grp){
+  const v=el.dataset.val;
+  el.classList.toggle('sel');
+  const on=el.classList.contains('sel');
+  if(grp==='probs') selProbs = on ? [...selProbs.filter(x=>x!==v),v] : selProbs.filter(x=>x!==v);
+  else              selSpecs = on ? [...selSpecs.filter(x=>x!==v),v] : selSpecs.filter(x=>x!==v);
+}
+
+// ════ PAGE 1 ════
 function syncMoisture(){
   const v=document.getElementById('s1-moist').value;
-  const gw=document.getElementById('s1-gw');
-  if(v==='wet')gw.value='0.5';else if(v==='moist')gw.value='0.25';else gw.value='0';
+  document.getElementById('s1-gw').value=v==='wet'?'0.5':v==='moist'?'0.25':'0';
 }
 function onSoilChange(){
-  const soil=document.getElementById('s1-soil').value;
-  const str=document.getElementById('s1-str').value;
+  const soil=document.getElementById('s1-soil').value, str=document.getElementById('s1-str').value;
   if(!soil)return;
   const d=SD[soil];
   document.getElementById('p1-c').textContent=d.c[str];
   document.getElementById('p1-phi').textContent=d.phi[str];
   document.getElementById('p1-g').textContent=d.g[str];
-  document.getElementById('p1-param-box').classList.remove('hidden');
-  const hint=document.getElementById('p1-soil-hint');
-  hint.classList.remove('hidden');
-  hint.innerHTML='<strong>Field ID:</strong> '+d.hint+'<br><strong>Safe unsupported H:</strong> '+d.safe;
+  document.getElementById('p1-param').classList.remove('hidden');
+  const h=document.getElementById('p1-hint');
+  h.classList.remove('hidden');
+  h.innerHTML='<strong>Field ID:</strong> '+d.hint+' &nbsp;<strong>Safe unsupported H:</strong> '+d.safe;
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  PAGE 2 — TAYLOR ANALYSIS
-// ═══════════════════════════════════════════════════════════════════════════
-function buildSummaryBar(elId){
-  const el=document.getElementById(elId);
-  if(!el)return;
-  el.classList.remove('hidden');
-  el.innerHTML=`
-    <div class="sb-item"><div class="sb-lbl">Altitude</div><div class="sb-val">${ST.alt||'—'} m</div></div>
-    <div class="sb-sep"></div>
-    <div class="sb-item"><div class="sb-lbl">Aspect</div><div class="sb-val">${ST.aspect||'—'}</div></div>
-    <div class="sb-sep"></div>
-    <div class="sb-item"><div class="sb-lbl">Material</div><div class="sb-val">${ST.mat==='soil'?'Soil':'Rock'}</div></div>
-    <div class="sb-sep"></div>
-    ${ST.mat==='soil'?`<div class="sb-item"><div class="sb-lbl">Soil</div><div class="sb-val">${ST.soil||'—'} (${ST.str})</div></div>
-    <div class="sb-sep"></div>
-    <div class="sb-item"><div class="sb-lbl">α / β</div><div class="sb-val">${ST.alpha}° / ${ST.beta||'—'}°</div></div>
-    <div class="sb-sep"></div>
-    <div class="sb-item"><div class="sb-lbl">H</div><div class="sb-val">${ST.H} m</div></div>`
-    :`<div class="sb-item"><div class="sb-lbl">Rock group</div><div class="sb-val">${ST.rg||'—'}</div></div>`}
-    <div class="sb-sep"></div>
-    <div class="sb-item"><div class="sb-lbl">Rainfall</div><div class="sb-val">${ST.rain||'—'}</div></div>`;
+function validateAndGo2(){
+  const alt=document.getElementById('s1-alt').value, asp=document.getElementById('s1-aspect').value;
+  const e=[];
+  if(!alt)e.push('Altitude is required.');
+  if(!asp)e.push('Aspect must be selected.');
+  if(!ST.rain)e.push('Rainfall category must be selected (click Low / Medium / High).');
+  if(!ST.mat)e.push('Slope material type must be selected (click Soil or Rock).');
+  if(ST.mat==='soil'){
+    if(!document.getElementById('s1-soil').value)e.push('Soil type must be selected.');
+    if(!(parseFloat(document.getElementById('s1-alpha').value)>0))e.push('Cut slope angle α must be entered.');
+    if(!(parseFloat(document.getElementById('s1-H').value)>0))e.push('Cut height H must be entered.');
+  }
+  const ed=document.getElementById('p1-errors');
+  if(e.length){ ed.classList.remove('hidden'); ed.innerHTML='<strong>Please fix:</strong><ul style="margin-top:4px;padding-left:1.2rem">'+e.map(x=>'<li>'+x+'</li>').join('')+'</ul>'; return; }
+  ed.classList.add('hidden');
+  readPage1();
+  goPage(2);
 }
-
-function runStability(){
-  buildSummaryBar('p2-summary');
-  if(ST.mat==='rock'){runRockStability();return;}
-  if(!ST.soil||!ST.alpha||!ST.H){return;}
-  const {c,phi,gamma,H,alpha,beta,ru}=ST;
-  const FS_cut=Math.min(9.99,taylorFS(c,phi,gamma,H,alpha,ru));
-  const FS_nat=beta?Math.min(9.99,taylorFS(c,phi,gamma,H,beta,ru)):null;
-  const Sn=c/(gamma*H);
-  ST.FS_cut=FS_cut;ST.FS_nat=FS_nat||0;
-  ST.needsWall=FS_cut<1.1;
-
-  drawTaylor(alpha,FS_cut,phi,beta,FS_nat);
-  document.getElementById('p2-results').classList.remove('hidden');
-
-  const fsC=FS_cut>=1.3?'ok':FS_cut>=1.1?'warn':'bad';
-  document.getElementById('p2-mc').innerHTML=`
-    <div class="mc"><div class="mc-lbl">Sn = c/(γ·H)</div><div class="mc-val">${Sn.toFixed(4)}</div></div>
-    <div class="mc"><div class="mc-lbl">Ns_crit at α=${alpha}°</div><div class="mc-val">${tNs(alpha,phi).toFixed(4)}</div></div>
-    <div class="mc ${fsC}"><div class="mc-lbl">FS — cut slope</div><div class="mc-val">${FS_cut.toFixed(2)}</div></div>
-    ${FS_nat!==null?`<div class="mc"><div class="mc-lbl">Ns_crit at β=${beta}°</div><div class="mc-val">${tNs(beta,phi).toFixed(4)}</div></div>
-    <div class="mc ${FS_nat>=1.3?'ok':FS_nat>=1.1?'warn':'bad'}"><div class="mc-lbl">FS — natural slope</div><div class="mc-val">${FS_nat.toFixed(2)}</div></div>
-    <div class="mc"><div class="mc-lbl">ru (pore pressure)</div><div class="mc-val">${ru}</div></div>`:''}`;
-
-  document.getElementById('p2-nat-ang').textContent=beta?beta+'°':'—';
-  document.getElementById('p2-nat-ratio').textContent=beta?'H:V = '+Math.tan(beta*Math.PI/180).toFixed(2)+':1':'';
-  document.getElementById('p2-cut-ang').textContent=alpha+'°';
-  document.getElementById('p2-cut-ratio').textContent='H:V = '+Math.tan(alpha*Math.PI/180).toFixed(2)+':1';
-  document.getElementById('p2-nat-fs').textContent=FS_nat!==null?FS_nat.toFixed(2):'—';
-  const cfEl=document.getElementById('p2-cut-fs');
-  cfEl.textContent=FS_cut.toFixed(2);
-  cfEl.style.color=FS_cut>=1.3?'var(--c-success)':FS_cut>=1.1?'var(--c-warn)':'var(--c-clay)';
-  document.getElementById('p2-nat-bar').style.width=(FS_nat!==null?Math.min(100,FS_nat/3*100):0)+'%';
-  document.getElementById('p2-cut-bar').style.cssText=`width:${Math.min(100,FS_cut/3*100)}%;background:${FS_cut>=1.3?'var(--c-success)':FS_cut>=1.1?'var(--c-amber)':'var(--c-clay)'}`;
-
-  const db=document.getElementById('p2-decision');
-  const nb2=document.getElementById('p2-bio-btn');
-  const nb3=document.getElementById('p2-next-btn');
-  if(FS_cut>1.3){
-    db.innerHTML=`<div class="decision green"><div class="d-title">✅ Slope is stable — FS = ${FS_cut.toFixed(2)} &gt; 1.3</div>
-    <div class="d-body"><strong>Recommendation: Bioengineering for erosion protection.</strong><br>
-    The bare cut face is susceptible to surface erosion and shallow failure during intense monsoon events. Proceed to Step 4 to select bioengineering techniques and species.</div></div>`;
-    nb3.classList.add('hidden');nb2.classList.remove('hidden');
-  }else if(FS_cut>=1.1){
-    db.innerHTML=`<div class="decision amber"><div class="d-title">⚠ Marginally stable — FS = ${FS_cut.toFixed(2)} (1.1–1.3)</div>
-    <div class="d-body"><strong>Small-scale civil engineering + bioengineering required.</strong><br>
-    Install crest cut-off drain, lined catch drains, toe protection (dry stone/gabion), bench at H > 5 m, counterfort drains if seepage active. Then proceed to bioengineering.</div></div>`;
-    nb3.classList.add('hidden');nb2.classList.remove('hidden');
-  }else{
-    db.innerHTML=`<div class="decision red"><div class="d-title">🚨 Unstable — FS = ${FS_cut.toFixed(2)} &lt; 1.1 — Retaining wall required</div>
-    <div class="d-body">Structural intervention required. Proceed to Step 3 for Rankine retaining wall design. Bioengineering follows after wall construction.</div></div>`;
-    nb3.classList.remove('hidden');nb2.classList.add('hidden');
+function readPage1(){
+  ST.alt=document.getElementById('s1-alt').value;
+  ST.aspect=document.getElementById('s1-aspect').value;
+  ST.land=document.getElementById('s1-land').value;
+  ST.moist=document.getElementById('s1-moist').value;
+  if(!ST.mat){ const sp=document.getElementById('soil-panel'); ST.mat=(!sp||sp.classList.contains('hidden'))?'rock':'soil'; }
+  if(ST.mat==='soil'){
+    ST.soil=document.getElementById('s1-soil').value;
+    ST.str=document.getElementById('s1-str').value||'I';
+    if(ST.soil&&SD[ST.soil]){ const d=SD[ST.soil]; ST.c=d.c[ST.str];ST.phi=d.phi[ST.str];ST.gamma=d.g[ST.str]; }
+    ST.beta=parseFloat(document.getElementById('s1-beta').value)||0;
+    ST.alpha=parseFloat(document.getElementById('s1-alpha').value)||0;
+    ST.H=parseFloat(document.getElementById('s1-H').value)||0;
+    ST.ru=parseFloat(document.getElementById('s1-gw').value)||0;
+    ST.depth=parseFloat(document.getElementById('s1-depth').value)||0;
+  } else {
+    ST.rg=document.getElementById('s1-rg').value;
+    ST.rm=document.getElementById('s1-rm').value;
+    ST.dr=document.getElementById('s1-dr').value;
+    ST.rH=parseFloat(document.getElementById('s1-rH').value)||0;
+    ST.bdip=parseFloat(document.getElementById('s1-bdip').value)||0;
+    ST.bdir=document.getElementById('s1-bdir').value;
+    ST.sfa=parseFloat(document.getElementById('s1-sfa').value)||0;
+    ST.js=document.getElementById('s1-js').value;
+    ST.ji=document.getElementById('s1-ji').value;
   }
 }
 
+// ════ SUMMARY BAR ════
+function buildSummaryBar(id){
+  const el=document.getElementById(id); if(!el)return;
+  el.classList.remove('hidden');
+  el.innerHTML=`
+    <div class="sb-item"><div class="sb-lbl">Altitude</div><div class="sb-val">${ST.alt||'—'} m</div></div><div class="sb-sep"></div>
+    <div class="sb-item"><div class="sb-lbl">Aspect</div><div class="sb-val">${ST.aspect||'—'}</div></div><div class="sb-sep"></div>
+    <div class="sb-item"><div class="sb-lbl">Material</div><div class="sb-val">${ST.mat==='soil'?'Soil':'Rock'}</div></div><div class="sb-sep"></div>
+    ${ST.mat==='soil'?`<div class="sb-item"><div class="sb-lbl">Soil</div><div class="sb-val">${ST.soil||'—'} (${ST.str})</div></div><div class="sb-sep"></div>
+    <div class="sb-item"><div class="sb-lbl">α / β</div><div class="sb-val">${ST.alpha}° / ${ST.beta||'—'}°</div></div><div class="sb-sep"></div>
+    <div class="sb-item"><div class="sb-lbl">H</div><div class="sb-val">${ST.H} m</div></div>`:`<div class="sb-item"><div class="sb-lbl">Rock</div><div class="sb-val">${ST.rg||'—'}</div></div>`}<div class="sb-sep"></div>
+    <div class="sb-item"><div class="sb-lbl">Rainfall</div><div class="sb-val">${ST.rain||'—'}</div></div>`;
+}
+
+// ════ PAGE 2: STABILITY ════
+function runStability(){
+  readPage1();
+  buildSummaryBar('p2-summary');
+  if(ST.mat==='rock'){runRockStability();return;}
+  if(!ST.soil||!ST.alpha||!ST.H){
+    document.getElementById('p2-results').classList.add('hidden');
+    document.getElementById('p2-rock-results').classList.add('hidden');
+    document.getElementById('p2-nodata').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('p2-nodata').classList.add('hidden');
+  const {c,phi,gamma,H,alpha,beta,ru}=ST;
+  const FS_cut=taylorFS(c,phi,gamma,H,alpha,ru);
+  const FS_nat=beta?taylorFS(c,phi,gamma,H,beta,ru):null;
+  const Sn=c/(gamma*H);
+  ST.FS_cut=FS_cut; ST.FS_nat=FS_nat||0;
+  ST.needsWall=FS_cut<1.1;
+  ST.needsMarginal=(FS_cut>=1.1&&FS_cut<1.3);
+  drawTaylor(alpha,FS_cut,phi,beta,FS_nat);
+  document.getElementById('p2-results').classList.remove('hidden');
+  const dCut=taylorDetail(c,phi,gamma,H,alpha,ru);
+  const dNat=beta?taylorDetail(c,phi,gamma,H,beta,ru):null;
+  const fsC=FS_cut>=1.3?'ok':FS_cut>=1.1?'warn':'bad';
+  document.getElementById('p2-mc').innerHTML=`
+    <div class="mc"><div class="mc-lbl">Sn=c/(γH)</div><div class="mc-val">${Sn.toFixed(4)}</div></div>
+    <div class="mc"><div class="mc-lbl">Ns at α=${alpha}° (φm=${dCut.phi_m.toFixed(1)}°)</div><div class="mc-val">${dCut.Ns.toFixed(4)}</div></div>
+    <div class="mc ${fsC}"><div class="mc-lbl">FS — cut</div><div class="mc-val">${FS_cut.toFixed(2)}</div></div>
+    ${FS_nat!==null?`<div class="mc"><div class="mc-lbl">Ns at β=${beta}° (φm=${dNat.phi_m.toFixed(1)}°)</div><div class="mc-val">${dNat.Ns.toFixed(4)}</div></div>
+    <div class="mc ${FS_nat>=1.3?'ok':FS_nat>=1.1?'warn':'bad'}"><div class="mc-lbl">FS — natural</div><div class="mc-val">${FS_nat.toFixed(2)}</div></div>
+    <div class="mc"><div class="mc-lbl">ru</div><div class="mc-val">${ru}</div></div>`:''}`;
+  document.getElementById('p2-nat-ang').textContent=beta?beta+'°':'—';
+  document.getElementById('p2-nat-ratio').textContent=beta?'H:V='+Math.tan(beta*Math.PI/180).toFixed(2)+':1':'';
+  document.getElementById('p2-cut-ang').textContent=alpha+'°';
+  document.getElementById('p2-cut-ratio').textContent='H:V='+Math.tan(alpha*Math.PI/180).toFixed(2)+':1';
+  document.getElementById('p2-nat-fs').textContent=FS_nat!==null?FS_nat.toFixed(2):'—';
+  const cf=document.getElementById('p2-cut-fs');
+  cf.textContent=FS_cut.toFixed(2);
+  cf.style.color=FS_cut>=1.3?'var(--c-success)':FS_cut>=1.1?'var(--c-warn)':'var(--c-clay)';
+  document.getElementById('p2-nat-bar').style.width=(FS_nat!==null?Math.min(100,FS_nat/3*100):0)+'%';
+  document.getElementById('p2-cut-bar').style.cssText=`width:${Math.min(100,FS_cut/3*100)}%;background:${FS_cut>=1.3?'var(--c-success)':FS_cut>=1.1?'var(--c-amber)':'var(--c-clay)'}`;
+  const db=document.getElementById('p2-decision');
+  const nb2=document.getElementById('p2-bio-btn'), nb3=document.getElementById('p2-next-btn');
+  if(FS_cut>1.3){
+    db.innerHTML=`<div class="decision green"><div class="d-title">✅ Stable — FS=${FS_cut.toFixed(2)} &gt; 1.3</div><div class="d-body"><strong>Bioengineering for erosion protection.</strong> The bare cut face is susceptible to surface erosion during monsoon. Proceed to Step 4.</div></div>`;
+    nb3.classList.add('hidden'); nb2.classList.remove('hidden');
+  } else if(FS_cut>=1.1){
+    const Hh=ST.H||0, wt=Hh<=3.5?'Dry Stone Masonry (H≤3.5m)':'Banded Stone Masonry (H≤6m)';
+    db.innerHTML=`<div class="decision amber"><div class="d-title">⚠ Marginally stable — FS=${FS_cut.toFixed(2)} (1.1–1.3)</div><div class="d-body"><strong>Prescriptive toe wall + drainage + bioengineering.</strong><br>Wall: ${wt} · top 0.6–0.8 m · bottom 0.6×H=${(0.6*Hh).toFixed(2)} m. Crest cut-off drain, weep holes, granular filter required. Proceed to Step 3 then Step 4.</div></div>`;
+    nb3.classList.remove('hidden'); nb2.classList.add('hidden');
+  } else {
+    db.innerHTML=`<div class="decision red"><div class="d-title">🚨 Unstable — FS=${FS_cut.toFixed(2)} &lt; 1.1</div><div class="d-body">Retaining wall required. Proceed to Step 3 for full Rankine design.</div></div>`;
+    nb3.classList.remove('hidden'); nb2.classList.add('hidden');
+  }
+}
 function runRockStability(){
-  const ROCK_CUTS={
-    blocky:{G1G2:{very_rough:[60,65],rough:[60,65],smooth:[50,60],slickensided:[45,50]},G3G4:{very_rough:[50,60],rough:[50,60],smooth:[45,50],slickensided:[40,45]}},
-    disturbed:{G1G2:{very_rough:[45,50],rough:[45,50],smooth:[40,45],slickensided:[40,45]},G3G4:{very_rough:[40,45],rough:[40,45],smooth:[35,40],slickensided:[35,40]}},
-    disintegrated:{G1G2:{very_rough:[35,40],rough:[35,40],smooth:[35,40],slickensided:[35,40]},G3G4:{very_rough:[35,40],rough:[35,40],smooth:[35,40],slickensided:[35,40]}}
-  };
-  const STRUCT_CUTS={
-    out_steep:{closed:{G1:[65,80],G2:[60,75],G3:[60,70],G4:[55,70]},infilled:{G1:[40,45],G2:[40,45],G3:[40,45],G4:[40,45]}},
-    out_gentle:{closed:{G1:[80,85],G2:[70,80],G3:[70,75],G4:[65,75]},infilled:{G1:[45,50],G2:[45,50],G3:[45,50],G4:[45,50]}},
-    into:{closed:{G1:[80,85],G2:[75,85],G3:[75,80],G4:[70,80]},infilled:{G1:[80,85],G2:[75,85],G3:[75,80],G4:[70,80]}}
-  };
+  const ROCK={blocky:{G1G2:{very_rough:[60,65],rough:[60,65],smooth:[50,60],slickensided:[45,50]},G3G4:{very_rough:[50,60],rough:[50,60],smooth:[45,50],slickensided:[40,45]}},disturbed:{G1G2:{very_rough:[45,50],rough:[45,50],smooth:[40,45],slickensided:[40,45]},G3G4:{very_rough:[40,45],rough:[40,45],smooth:[35,40],slickensided:[35,40]}},disintegrated:{G1G2:{very_rough:[35,40],rough:[35,40],smooth:[35,40],slickensided:[35,40]},G3G4:{very_rough:[35,40],rough:[35,40],smooth:[35,40],slickensided:[35,40]}}};
   document.getElementById('p2-rock-results').classList.remove('hidden');
   document.getElementById('p2-results').classList.add('hidden');
-  const grpKey=(ST.rg==='G1'||ST.rg==='G2')?'G1G2':'G3G4';
-  const angles=(ST.rm&&ST.dr&&ROCK_CUTS[ST.rm])?ROCK_CUTS[ST.rm][grpKey]?.[ST.dr]||[40,50]:[40,50];
-  const Hfactor=ST.rH>15?-5:ST.rH>10?-3:0;
-  const sCuts=ST.bdir&&ST.ji&&STRUCT_CUTS[ST.bdir]?STRUCT_CUTS[ST.bdir]?.[ST.ji]?.['G'+ST.rg.slice(1)]||[40,50]:null;
-  const planarRisk=ST.bdir==='out_steep'&&ST.bdip<ST.sfa&&ST.bdip>10;
-  const wedgeRisk=(ST.js==='2'||ST.js==='3')&&ST.bdir==='out_steep';
-  document.getElementById('p2-rock-results').innerHTML=`
-    <div class="card">
-      <div class="card-hdr"><div class="card-icon blue">⛰</div><div class="card-title">Rock Slope Analysis</div></div>
-      <div class="nb info"><strong>Non-structural cut (${ST.rm}/${ST.dr}):</strong> Recommended angle = ${angles[0]+Hfactor}°–${angles[1]+Hfactor}°</div>
-      ${sCuts?`<div class="nb ${planarRisk||wedgeRisk?'danger':'success'}"><strong>Structural control (${ST.bdir}/${ST.ji}):</strong> Recommended angle = ${sCuts[0]}°–${sCuts[1]}°
-      ${planarRisk?'<br>⚠ Planar failure risk detected — bedding dips out of slope at angle less than slope face.':''}
-      ${wedgeRisk?'<br>⚠ Wedge failure risk — two or more joint sets with adverse geometry.':''}</div>`:''}
-      <div class="nb earth">Governing design angle = more conservative (shallower) of the two methods. Source: DoR RMDP Table 5.7 and C3.7.</div>
-    </div>`;
+  document.getElementById('p2-nodata').classList.add('hidden');
+  const grp=(ST.rg==='G1'||ST.rg==='G2')?'G1G2':'G3G4';
+  const ang=(ST.rm&&ST.dr&&ROCK[ST.rm])?(ROCK[ST.rm][grp]?.[ST.dr]||[40,50]):[40,50];
+  const Hf=ST.rH>15?-5:ST.rH>10?-3:0;
+  const planar=ST.bdir==='out_steep'&&ST.bdip<ST.sfa&&ST.bdip>10;
+  const wedge=(ST.js==='2'||ST.js==='3')&&ST.bdir==='out_steep';
+  document.getElementById('p2-rock-results').innerHTML=`<div class="sub"><div class="sub-title">⛰ Rock Slope Cut Angle</div>
+    <div class="nb info">Non-structural recommended cut: <strong>${ang[0]+Hf}°–${ang[1]+Hf}°</strong> (mass ${ST.rm||'—'}, roughness ${ST.dr||'—'})</div>
+    ${planar?'<div class="nb danger">⚠ Planar failure risk: bedding dips out of slope at angle less than slope face.</div>':''}
+    ${wedge?'<div class="nb danger">⚠ Wedge failure risk: ≥2 joint sets with adverse geometry.</div>':''}
+    <div class="nb earth">Governing design angle = shallower of structural / non-structural. Source: DoR RMDP Table 5.7 & C3.7.</div></div>`;
   ST.needsWall=false;
   document.getElementById('p2-next-btn').classList.add('hidden');
   document.getElementById('p2-bio-btn').classList.remove('hidden');
 }
-
-// ═══════════════════════════════════════════════════════════════════════════
-//  TAYLOR CHART DRAWING
-// ═══════════════════════════════════════════════════════════════════════════
 function drawTaylor(cutAngle,FS_cut,phi,natAngle,FS_nat){
   if(ST.mat!=='soil')return;
-  const canvas=document.getElementById('taylor-canvas');
-  const ctx=canvas.getContext('2d');
-  const W=canvas.width,H=canvas.height;
-  const pad={l:58,r:30,t:22,b:46};
-  const cw=W-pad.l-pad.r,ch=H-pad.t-pad.b;
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#f5f3ee';ctx.fillRect(0,0,W,H);
-  const tx=a=>pad.l+(a-15)/(85-15)*cw;
-  const ty=ns=>pad.t+ch-(ns/0.45)*ch;
-  ctx.strokeStyle='rgba(44,62,45,.08)';ctx.lineWidth=0.5;
+  const cv=document.getElementById('taylor-canvas'); if(!cv||!cv.getContext)return;
+  const ctx=cv.getContext('2d'); const W=cv.width,H=cv.height;
+  const pad={l:58,r:30,t:22,b:46}, cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#f5f3ee'; ctx.fillRect(0,0,W,H);
+  const tx=a=>pad.l+(a-15)/70*cw, ty=ns=>pad.t+ch-(ns/0.45)*ch;
+  ctx.strokeStyle='rgba(44,62,45,.08)'; ctx.lineWidth=0.5;
   for(let a=15;a<=85;a+=5){ctx.beginPath();ctx.moveTo(tx(a),pad.t);ctx.lineTo(tx(a),pad.t+ch);ctx.stroke();}
   for(let ns=0;ns<=0.45;ns+=0.05){ctx.beginPath();ctx.moveTo(pad.l,ty(ns));ctx.lineTo(pad.l+cw,ty(ns));ctx.stroke();}
   ctx.strokeStyle='rgba(44,62,45,.3)';ctx.lineWidth=1;
   ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ch);ctx.lineTo(pad.l+cw,pad.t+ch);ctx.stroke();
-  ctx.fillStyle='rgba(44,62,45,.45)';ctx.font='10px DM Sans,sans-serif';ctx.textAlign='center';
+  ctx.fillStyle='rgba(44,62,45,.45)';ctx.font='10px DM Sans';ctx.textAlign='center';
   for(let a=15;a<=85;a+=10)ctx.fillText(a+'°',tx(a),pad.t+ch+14);
   ctx.fillText('Slope angle (°)',pad.l+cw/2,pad.t+ch+30);
   ctx.textAlign='right';
   for(let ns=0;ns<=0.45;ns+=0.05)ctx.fillText(ns.toFixed(2),pad.l-5,ty(ns)+4);
-  ctx.save();ctx.translate(14,pad.t+ch/2);ctx.rotate(-Math.PI/2);
-  ctx.textAlign='center';ctx.fillText('Stability number Sn = c/(F·γ·H)',0,0);ctx.restore();
-  const CLRS=['#aaa','#4a7fa5','#1D9E75','#e8a03c','#c0603a','#7a5da0','#c0604a','#639922','#a03020'];
+  ctx.save();ctx.translate(14,pad.t+ch/2);ctx.rotate(-Math.PI/2);ctx.textAlign='center';ctx.fillText('Stability number Sn = c/(F·γ·H)',0,0);ctx.restore();
+  const CL=['#aaa','#4a7fa5','#1D9E75','#e8a03c','#c0603a','#7a5da0','#c0604a','#639922','#a03020'];
   TP.forEach((p,pi)=>{
     const near=Math.abs(p-Math.round(phi/5)*5)<3;
-    ctx.beginPath();ctx.strokeStyle=CLRS[pi];ctx.lineWidth=near?2.5:0.8;
+    ctx.beginPath();ctx.strokeStyle=CL[pi];ctx.lineWidth=near?2.5:0.8;
     TA.forEach((a,ai)=>{const x=tx(a),y=ty(TNS[ai][pi]);ai===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});
     ctx.stroke();
-    ctx.fillStyle=CLRS[pi];ctx.font=(near?'bold ':'')+' 10px DM Sans,sans-serif';ctx.textAlign='left';
+    ctx.fillStyle=CL[pi];ctx.font=(near?'bold ':'')+'10px DM Sans';ctx.textAlign='left';
     ctx.fillText('φ='+p+'°',pad.l+cw+2,ty(TNS[TA.length-1][pi])+4);
   });
-  const Sn_actual=ST.c/(ST.gamma*ST.H);
-  if(Sn_actual>0&&Sn_actual<0.44){
+  const Sn=ST.c/(ST.gamma*ST.H);
+  if(Sn>0&&Sn<0.44){
     ctx.setLineDash([5,4]);ctx.strokeStyle='rgba(44,62,45,.25)';ctx.lineWidth=0.8;
-    ctx.beginPath();ctx.moveTo(pad.l,ty(Sn_actual));ctx.lineTo(pad.l+cw,ty(Sn_actual));ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(pad.l,ty(Sn));ctx.lineTo(pad.l+cw,ty(Sn));ctx.stroke();ctx.setLineDash([]);
     ctx.fillStyle='rgba(44,62,45,.4)';ctx.font='9px DM Sans';ctx.textAlign='left';
-    ctx.fillText('Sn='+Sn_actual.toFixed(3),pad.l+4,ty(Sn_actual)-4);
+    ctx.fillText('Sn='+Sn.toFixed(3),pad.l+4,ty(Sn)-4);
   }
   function dot(angle,fs,color,label){
-    const Ns=tNs(angle,phi),mx=tx(angle),my=ty(Ns);
+    const mx=tx(angle),my=ty(Math.min(0.44,Sn));
     ctx.setLineDash([4,3]);ctx.strokeStyle=color;ctx.lineWidth=0.8;
     ctx.beginPath();ctx.moveTo(mx,pad.t+ch);ctx.lineTo(mx,my);ctx.stroke();ctx.setLineDash([]);
     ctx.beginPath();ctx.arc(mx,my,7,0,2*Math.PI);ctx.fillStyle=color;ctx.fill();
     ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
-    ctx.fillStyle=color;ctx.font='bold 11px DM Sans,sans-serif';ctx.textAlign='left';
+    ctx.fillStyle=color;ctx.font='bold 11px DM Sans';ctx.textAlign='left';
     ctx.fillText(label+' FS='+Math.min(fs,9.99).toFixed(2),mx+10,my-4);
   }
   dot(cutAngle,FS_cut,FS_cut>=1.3?'#1D9E75':FS_cut>=1.1?'#e8a03c':'#c0603a','α='+cutAngle+'°');
   if(natAngle&&FS_nat!==null)dot(natAngle,FS_nat,'#e8a03c','β='+natAngle+'°');
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  PAGE 3 — WALL DESIGN
-// ═══════════════════════════════════════════════════════════════════════════
-const WALLS={
-  dry:   {name:'Dry Stone Masonry',    gamma:18,mu:0.65,note:'H ≤ 4 m; free drainage through face. Most common in Nepal rural roads.'},
-  banded:{name:'Banded Stone Masonry', gamma:19,mu:0.65,note:'Improved banding courses. H ≤ 5 m.'},
-  cement:{name:'Cement Stone (1:4)',   gamma:23,mu:0.55,note:'Weep holes at 1.0–1.5 m centres. H ≤ 6 m.'},
-  gabion:{name:'Gabion Wall',          gamma:17,mu:0.50,note:'Wire mesh + local stone. Flexible, permeable. Good for poor foundation.'}
-};
-
+// ════ PAGE 3: WALL ════
+const WALLS={dry:{name:'Dry Stone Masonry',gamma:18,mu:0.65},banded:{name:'Banded Stone Masonry',gamma:19,mu:0.65},cement:{name:'Cement Stone (1:4)',gamma:23,mu:0.55},gabion:{name:'Gabion Wall',gamma:17,mu:0.50}};
+// SBC auto-selected from USCS soil type (simplified IS:1904-1986)
+const SBC_BY_SOIL={CG:600,CGNPF:250,CGPF:300,ML:150,CL:150,CH:200};
+const SBC_LABELS={CG:'Coarse-grained (GW,SW,GP,SP) — medium to compact',CGNPF:'Non-plastic fines (SM,GM) — medium to compact',CGPF:'Plastic fines (GC,SC) — medium to compact',ML:'Inorganic silt (ML/MH) — medium to stiff',CL:'Low-plasticity clay (CL) — medium to stiff',CH:'High-plasticity clay (CH) — medium to stiff'};
+function autoSetSBC(){
+  const soil=ST.soil;
+  if(!soil||!SBC_BY_SOIL[soil]){ST.SBC=null;return;}
+  ST.SBC=SBC_BY_SOIL[soil];
+  const d=document.getElementById('p3-sbc-disp');
+  d.classList.remove('hidden');
+  d.innerHTML=`<strong>Foundation bearing capacity (auto-selected from soil type ${soil}):</strong><br>
+    ${SBC_LABELS[soil]}<br>
+    <strong>SBC = ${ST.SBC} kN/m²</strong> &nbsp;·&nbsp; Simplified IS:1904-1986<br>
+    <em style="font-size:11px">Override if site foundation differs from backslope material — use field inspection.</em>`;
+}
 function setupWallPage(){
   buildSummaryBar('p3-summary');
-  if(!ST.needsWall){
-    document.getElementById('p3-not-needed').classList.remove('hidden');
-    document.getElementById('p3-design-section').classList.add('hidden');
-  } else {
-    document.getElementById('p3-not-needed').classList.add('hidden');
-    document.getElementById('p3-design-section').classList.remove('hidden');
-  }
+  autoSetSBC();
+  const nn=document.getElementById('p3-not-needed'), mg=document.getElementById('p3-marginal-section'), ds=document.getElementById('p3-design-section');
+  nn.classList.add('hidden'); mg.classList.add('hidden'); ds.classList.add('hidden');
+  if(!ST.needsWall&&!ST.needsMarginal){ nn.classList.remove('hidden'); }
+  else if(ST.needsMarginal){ mg.classList.remove('hidden'); buildMarginalContent(); }
+  else { ds.classList.remove('hidden'); }
+}
+function buildMarginalContent(){
+  const H=ST.H||0, isDS=H<=3.5;
+  const wn=isDS?'Dry Stone Masonry':'Banded Stone Masonry', wg=isDS?'17–19':'18–20';
+  const bBot=(0.6*H).toFixed(2), batter=isDS?'1:5':'1:6 to 1:8', maxH=isDS?'3.5':'6.0';
+  const scl=50,ox=160,oy=220,Hpx=H*scl,botPx=parseFloat(bBot)*scl,topPx=0.7*scl,batt=Hpx/5;
+  const wh=[0.2,0.45,0.7].map(f=>`<circle cx="${ox-batt*0.3+botPx*0.1}" cy="${oy-Hpx*f}" r="4" fill="#4a7fa5" opacity="0.8"/>`).join('');
+  document.getElementById('p3-marginal-content').innerHTML=`
+  <div class="nb warn" style="margin-top:0"><strong>Marginally stable (FS=${ST.FS_cut.toFixed(2)}).</strong> Prescriptive ${wn} toe wall — no Rankine analysis required, but build strictly to dimensions below with mandatory drainage.</div>
+  <div class="xs-wrap" style="margin-top:.75rem"><svg width="100%" viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#4a5a4c" stroke-width="1.5"/></marker></defs>
+    <rect x="0" y="0" width="420" height="260" fill="#f5f3ee"/>
+    <line x1="10" y1="${oy}" x2="410" y2="${oy}" stroke="#b8b5ad" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <polygon points="${ox},${oy-Hpx} ${ox+200},${oy-Hpx} ${ox+200},${oy}" fill="#C0DD97" fill-opacity="0.4"/>
+    <polygon points="${ox-batt},${oy-Hpx} ${ox},${oy-Hpx} ${ox+botPx},${oy} ${ox-batt-topPx},${oy}" fill="#7a9e7e" stroke="#2C3E2D" stroke-width="1.5" stroke-linejoin="round"/>
+    ${wh}
+    <polygon points="${ox},${oy-Hpx} ${ox+30},${oy-Hpx} ${ox+botPx+30},${oy} ${ox+botPx},${oy}" fill="#e8a03c" fill-opacity="0.25" stroke="#e8a03c" stroke-width="0.5" stroke-dasharray="3 2"/>
+    <line x1="${ox-batt-topPx-22}" y1="${oy}" x2="${ox-batt-topPx-22}" y2="${oy-Hpx}" stroke="#4a5a4c" stroke-width="0.8" marker-end="url(#ar2)" marker-start="url(#ar2)"/>
+    <text x="${ox-batt-topPx-36}" y="${oy-Hpx/2}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">H=${H}m</text>
+    <line x1="${ox-batt-topPx}" y1="${oy+18}" x2="${ox+botPx}" y2="${oy+18}" stroke="#4a5a4c" stroke-width="0.8" marker-end="url(#ar2)" marker-start="url(#ar2)"/>
+    <text x="${ox+(botPx-topPx)/2}" y="${oy+30}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">B_bot=0.6H=${bBot}m</text>
+    <text x="${ox-batt-topPx/2}" y="${oy-Hpx-8}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">B_top=0.6–0.8m</text>
+    <text x="${ox+botPx/2-12}" y="${oy-Hpx/2}" font-size="11" fill="#fff" text-anchor="middle" font-family="DM Sans" font-weight="600">${wn}</text>
+    <text x="${ox+botPx/2-12}" y="${oy-Hpx/2+15}" font-size="9" fill="rgba(255,255,255,.8)" text-anchor="middle" font-family="DM Sans">γ=${wg} kN/m³</text>
+    <text x="210" y="14" font-size="11" fill="#2C3E2D" text-anchor="middle" font-family="DM Sans" font-weight="600">Prescriptive toe wall — ${wn}</text>
+  </svg></div>
+  <div class="sub" style="margin-top:0"><div class="sub-title">Wall Dimensions</div>
+    <div class="mc-grid">
+      <div class="mc"><div class="mc-lbl">Wall type</div><div class="mc-val" style="font-size:12px">${wn}</div></div>
+      <div class="mc"><div class="mc-lbl">Max height</div><div class="mc-val">${maxH}</div><div class="mc-unit">m</div></div>
+      <div class="mc"><div class="mc-lbl">Unit weight γ</div><div class="mc-val">${wg}</div><div class="mc-unit">kN/m³</div></div>
+      <div class="mc ok"><div class="mc-lbl">Bottom width (0.6H)</div><div class="mc-val">${bBot}</div><div class="mc-unit">m</div></div>
+      <div class="mc ok"><div class="mc-lbl">Top width</div><div class="mc-val">0.6–0.8</div><div class="mc-unit">m</div></div>
+      <div class="mc"><div class="mc-lbl">Front batter</div><div class="mc-val" style="font-size:13px">${batter}</div></div>
+    </div></div>
+  <div class="sub"><div class="sub-title">Mandatory Drainage</div><div style="font-size:12px;line-height:1.9">
+    <div>🔵 Crest cut-off drain: 300–450 mm, lined, back-sloped 5% into hill</div>
+    <div>🔵 Toe catch drain behind wall (size in Step 5)</div>
+    <div>🔵 Weep holes: 100 mm @ 1.0–1.5 m centres; bottom row ≥300 mm above toe</div>
+    <div>🔵 Granular filter: 300 mm gravel (19–38 mm) in geotextile behind wall</div>
+    <div>🔵 Sub-surface herringbone/counterfort drains if seepage observed</div></div></div>
+  <div class="sub"><div class="sub-title">Construction</div><div style="font-size:12px;line-height:1.9">
+    <div>📐 Foundation embedment ≥300 mm into firm material</div>
+    <div>📐 Angular stone ≥150 mm; through-stones every 3rd course</div>
+    ${isDS?'<div>📐 Dry stone: no mortar, 10–15% voids for drainage</div>':'<div>📐 Banded: cement mortar (1:4) bands every 500 mm, dry joints between</div>'}
+    <div>📐 Flat-stone or 75 mm concrete coping; backfill in 150 mm layers</div></div></div>
+  <div class="nb info"><strong>References:</strong> DoR Roadside Geotechnical Problems Manual; RMDP (2007) Annex C; Howell (1999); Gyawali (2024).</div>`;
 }
 function selWall(key,el){
   ST.wallKey=key;
   document.querySelectorAll('.wopt').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
 }
-function updBC(){
-  const v=document.getElementById('p3-bc').value;
-  const d=document.getElementById('p3-sbc-disp');
-  const sbc=parseInt(v)||0;
-  ST.SBC=sbc||null;
-  if(!v){d.classList.add('hidden');return;}
-  d.classList.remove('hidden');
-  d.innerHTML='<strong>Safe bearing capacity (SBC):</strong> '+sbc+' kN/m² &nbsp;·&nbsp; Source: IS:1904-1986 / DoR Nepal';
-}
 function runWall(){
-  const W=WALLS[ST.wallKey];
-  const c=ST.c,phi=ST.phi,gamma=ST.gamma,H=ST.H;
-  ST.q=parseFloat(document.getElementById('p3-q').value||10);
-  const q=ST.q,SBC=ST.SBC;
-  const phi_r=phi*Math.PI/180;
-  const Ka=Math.tan(Math.PI/4-phi_r/2)**2;
-  const Kp=Math.tan(Math.PI/4+phi_r/2)**2;
-  const D=Math.max(0.5,Math.round((0.1*H+0.3)*10)/10);
-  const Hw=H+D,B=Math.max(1.5,Math.round(0.6*Hw*10)/10);
+  const W=WALLS[ST.wallKey], {c,phi,gamma,H}=ST;
+  ST.q=parseFloat(document.getElementById('p3-q').value)||10;
+  const q=ST.q, SBC=ST.SBC;
+  const i_deg=ST.beta||0; // backfill angle = natural slope β from Step 1
+  const ir=i_deg*Math.PI/180, pr=phi*Math.PI/180;
+
+  // ── Rankine Ka with inclined backfill ──────────────────────────────────
+  // Ka = cos(i) × [cos(i) - √(cos²(i) - cos²(φ))] / [cos(i) + √(cos²(i) - cos²(φ))]
+  // Requires i < φ; if i ≥ φ the slope itself is at or beyond failure.
+  let Ka;
+  if(i_deg<=0){
+    Ka=Math.tan(Math.PI/4-pr/2)**2; // standard level-backfill Rankine
+  } else {
+    const ci=Math.cos(ir), cp=Math.cos(pr);
+    const disc=ci*ci-cp*cp;
+    if(disc<0){ // i > φ — backfill itself is unstable
+      document.getElementById('p3-wall-out').classList.remove('hidden');
+      document.getElementById('p3-wall-content').innerHTML='<div class="nb danger">⚠ Backfill angle i='+i_deg+'° exceeds soil friction φ='+phi+'°. The backfill itself is unstable and will fail before any wall can retain it. Reduce backfill angle or improve backfill material.</div>';
+      return;
+    }
+    Ka=ci*(ci-Math.sqrt(disc))/(ci+Math.sqrt(disc));
+  }
+
+  // ── Passive Kp (level toe — conservative; ignore backfill for passive) ──
+  const Kp=Math.tan(Math.PI/4+pr/2)**2;
+
+  // ── Geometry ──────────────────────────────────────────────────────────
+  const D=Math.max(0.5,Math.round((0.1*H+0.3)*10)/10), Hw=H+D;
+  const B=Math.max(1.5,Math.round(0.6*Hw*10)/10);
   const b_top=Math.max(0.3,Math.round(0.2*Hw*10)/10);
   const b_bot=Math.min(B*0.55,Math.round((b_top+0.1*Hw)*10)/10);
-  const Pa_soil=0.5*Ka*gamma*Hw**2,Pa_q=Ka*q*Hw,Pa_c=2*c*Math.sqrt(Ka)*Hw;
-  const Pa_net=Math.max(0.1,Pa_soil+Pa_q-Pa_c);
-  const M_ot=Pa_soil*(Hw/3)+Pa_q*(Hw/2);
-  const Pp=0.5*Kp*gamma*D**2+2*c*Math.sqrt(Kp)*D;
+
+  // ── Active pressure (inclined resultant at angle i to horizontal) ─────
+  const Pa_soil=0.5*Ka*gamma*Hw*Hw;     // total active from soil self-weight
+  const Pa_q=Ka*q*Hw;                    // surcharge component
+  const Pa_c=2*c*Math.sqrt(Ka)*Hw;       // cohesion reduction (conservative for inclined)
+  const Pa_total=Math.max(0.1,Pa_soil+Pa_q-Pa_c);
+
+  // Decompose into horizontal and vertical components
+  const Pa_h=Pa_total*Math.cos(ir);      // horizontal — drives sliding & overturning
+  const Pa_v=Pa_total*Math.sin(ir);      // vertical — adds to stabilizing weight
+
+  // ── Overturning moment (about toe, from horizontal component) ────────
+  const ya_soil=Hw/3;     // lever arm for triangular soil pressure
+  const ya_q=Hw/2;        // lever arm for uniform surcharge pressure
+  const M_ot_soil=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*ya_soil;
+  const M_ot_q=Ka*q*Hw*Math.cos(ir)*ya_q;
+  const M_ot=M_ot_soil+M_ot_q;
+
+  // ── Passive resistance (at toe, level ground) ────────────────────────
+  const Pp=0.5*Kp*gamma*D*D+2*c*Math.sqrt(Kp)*D;
+
+  // ── Wall weight ──────────────────────────────────────────────────────
   const W_stem=W.gamma*((b_top+b_bot)/2)*Hw;
   const W_base=W.gamma*B*0.3;
   const W_total=W_stem+W_base;
-  const M_res=W_stem*(B-(b_top+b_bot)/4)+W_base*(B/2)+Pp*(D/3);
-  const x_bar=(M_res-M_ot)/W_total;
+
+  // ── Resisting moment (about toe) ─────────────────────────────────────
+  // Includes: wall weight + Pa_v acting at back of wall (lever = B) + passive
+  const x_stem=B-(b_top+b_bot)/4;        // centroid of stem from toe
+  const x_base=B/2;                       // centroid of base from toe
+  const M_res=W_stem*x_stem+W_base*x_base+Pa_v*B+Pp*(D/3);
+
+  // ── Base pressure ───────────────────────────────────────────────────
+  const V_total=W_total+Pa_v;             // total vertical load on base
+  const x_bar=(M_res-M_ot)/V_total;       // resultant position from toe
   const e=Math.abs(B/2-x_bar);
-  const q_max=W_total/B*(1+6*e/B);
-  const FOS_OT=M_res/Math.max(0.01,M_ot);
-  const FOS_SL=(W.mu*W_total+Pp)/Pa_net;
+  const q_max=V_total/B*(1+6*e/B);
+  const q_min=V_total/B*(1-6*e/B);
+
+  // ── Stability checks ───────────────────────────────────────────────
+  const FOS_SL=(W.mu*V_total+Pp)/Pa_h;           // sliding: μ(W+Pav)+Pp / Pa_h ≥ 1.5
+  const FOS_OT=M_res/Math.max(0.01,M_ot);        // overturning ≥ 2.0
   const BC_ok=SBC?q_max<=SBC:null;
   const e_ok=e<=B/6;
   const FS_post=Math.min(9.99,ST.FS_cut+0.35);
-  const ot_ok=FOS_OT>=2.0,sl_ok=FOS_SL>=1.5,overall_ok=FS_post>=1.3;
-  const all_pass=ot_ok&&sl_ok&&(BC_ok!==false)&&e_ok&&overall_ok;
+  const sl=FOS_SL>=1.5, ot=FOS_OT>=2.0, ov=FS_post>=1.3;
+  const all=sl&&ot&&(BC_ok!==false)&&e_ok&&ov;
 
-  // SVG cross-section
+  // ── SVG cross-section ──────────────────────────────────────────────
   const sc=18,ox=75,oy=200;
   const Bpx=B*sc,Hwpx=Hw*sc,Dpx=D*sc,btpx=b_top*sc,bbpx=b_bot*sc,tbpx=0.3*sc;
-  const svgW=ox+Bpx+140,svgH=oy+Dpx+30;
+  const svgW=ox+Bpx+160,svgH=oy+Dpx+30;
+  // Inclined backfill line from wall top going uphill at angle i
+  const bfLen=160; // px length of backfill slope line
+  const bfDy=bfLen*Math.tan(ir);
 
   document.getElementById('p3-wall-out').classList.remove('hidden');
   document.getElementById('p3-wall-content').innerHTML=`
-  <div class="xs-wrap">
-  <svg width="100%" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
-    <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-    <line x1="10" y1="${oy}" x2="${ox+Bpx+100}" y2="${oy}" stroke="#b8b5ad" stroke-width="1" stroke-dasharray="5 4"/>
+  <div class="xs-wrap"><svg width="100%" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#7a8c7c" stroke-width="1.5"/></marker></defs>
+    <line x1="10" y1="${oy}" x2="${ox+Bpx+120}" y2="${oy}" stroke="#b8b5ad" stroke-width="1" stroke-dasharray="5 4"/>
+    <!-- base slab -->
     <rect x="${ox}" y="${oy-tbpx}" width="${Bpx}" height="${tbpx}" fill="#B4B2A9" stroke="#7a8c7c" stroke-width="0.5"/>
+    <!-- wall stem -->
     <polygon points="${ox+Bpx-btpx},${oy-tbpx-Hwpx} ${ox+Bpx},${oy-tbpx-Hwpx} ${ox+Bpx},${oy-tbpx} ${ox+Bpx-bbpx},${oy-tbpx}" fill="#7a9e7e" stroke="#4a5a4c" stroke-width="0.5"/>
-    <polygon points="${ox},${oy-tbpx-Hwpx} ${ox+Bpx-btpx},${oy-tbpx-Hwpx} ${ox+Bpx-bbpx},${oy-tbpx} ${ox},${oy-tbpx}" fill="#C0DD97" fill-opacity="0.5"/>
-    <rect x="${ox}" y="${oy}" width="${Bpx*0.4}" height="${Dpx}" fill="#9FE1CB" fill-opacity="0.35"/>
-    <polygon points="${ox-5},${oy-tbpx} ${ox-5},${oy-tbpx-Hwpx} ${ox-5-Math.min(40,Pa_net*0.5)},${oy-tbpx}" fill="#c0603a" fill-opacity="0.2" stroke="#c0603a" stroke-width="0.5"/>
-    <line x1="${ox-8}" y1="${oy-tbpx-Hw/3*sc}" x2="${ox+18}" y2="${oy-tbpx-Hw/3*sc}" stroke="#c0603a" stroke-width="2" marker-end="url(#ar)"/>
-    <text x="${ox-10}" y="${oy-tbpx-Hw/3*sc-5}" font-size="10" fill="#c0603a" text-anchor="end" font-family="DM Sans">Pa=${Pa_net.toFixed(1)}kN/m</text>
-    <line x1="${ox+Bpx-bbpx*0.5}" y1="${oy-tbpx-Hwpx*0.55}" x2="${ox+Bpx-bbpx*0.5}" y2="${oy-tbpx-Hwpx*0.55+20}" stroke="#2d7a4f" stroke-width="2" marker-end="url(#ar)"/>
-    <text x="${ox+Bpx-bbpx*0.5+6}" y="${oy-tbpx-Hwpx*0.55+10}" font-size="10" fill="#2d7a4f" font-family="DM Sans">W=${W_total.toFixed(1)}kN/m</text>
-    <line x1="${ox-22}" y1="${oy-tbpx}" x2="${ox-22}" y2="${oy-tbpx-Hwpx}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#ar)" marker-start="url(#ar)"/>
-    <text x="${ox-34}" y="${oy-tbpx-Hwpx/2+4}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">Hw=${Hw.toFixed(1)}m</text>
-    <line x1="${ox}" y1="${oy+Dpx+14}" x2="${ox+Bpx}" y2="${oy+Dpx+14}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#ar)" marker-start="url(#ar)"/>
+    <!-- retained soil (inclined backfill) -->
+    <polygon points="${ox},${oy-tbpx-Hwpx-bfDy} ${ox+Bpx-btpx},${oy-tbpx-Hwpx} ${ox+Bpx-bbpx},${oy-tbpx} ${ox},${oy-tbpx}" fill="#C0DD97" fill-opacity="0.5"/>
+    <!-- inclined backfill surface line -->
+    ${i_deg>0?`<line x1="${ox+Bpx-btpx}" y1="${oy-tbpx-Hwpx}" x2="${ox-20}" y2="${oy-tbpx-Hwpx-bfDy*1.2}" stroke="#2d7a4f" stroke-width="1.5" stroke-dasharray="6 3"/>
+    <text x="${ox+20}" y="${oy-tbpx-Hwpx-bfDy*0.5-6}" font-size="10" fill="#2d7a4f" font-family="DM Sans" transform="rotate(${-i_deg},${ox+20},${oy-tbpx-Hwpx-bfDy*0.5-6})">i=${i_deg}°</text>`:''}
+    <!-- Pa pressure diagram (inclined) -->
+    <polygon points="${ox-5},${oy-tbpx} ${ox-5},${oy-tbpx-Hwpx} ${ox-5-Math.min(40,Pa_h*0.5)},${oy-tbpx}" fill="#c0603a" fill-opacity="0.2" stroke="#c0603a" stroke-width="0.5"/>
+    <!-- Pa_h arrow -->
+    <line x1="${ox-8}" y1="${oy-tbpx-Hw/3*sc}" x2="${ox+18}" y2="${oy-tbpx-Hw/3*sc}" stroke="#c0603a" stroke-width="2" marker-end="url(#arw)"/>
+    <text x="${ox-10}" y="${oy-tbpx-Hw/3*sc-5}" font-size="9" fill="#c0603a" text-anchor="end" font-family="DM Sans">Pa_h=${Pa_h.toFixed(1)}</text>
+    ${Pa_v>0.1?`<!-- Pa_v arrow --><line x1="${ox+Bpx-btpx}" y1="${oy-tbpx-Hwpx-15}" x2="${ox+Bpx-btpx}" y2="${oy-tbpx-Hwpx+10}" stroke="#2a5f8a" stroke-width="1.5" marker-end="url(#arw)"/><text x="${ox+Bpx-btpx+5}" y="${oy-tbpx-Hwpx-18}" font-size="9" fill="#2a5f8a" font-family="DM Sans">Pa_v=${Pa_v.toFixed(1)}</text>`:''}
+    <!-- dimension lines -->
+    <line x1="${ox-22}" y1="${oy-tbpx}" x2="${ox-22}" y2="${oy-tbpx-Hwpx}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#arw)" marker-start="url(#arw)"/>
+    <text x="${ox-34}" y="${oy-tbpx-Hwpx/2}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">Hw=${Hw.toFixed(1)}m</text>
+    <line x1="${ox}" y1="${oy+Dpx+14}" x2="${ox+Bpx}" y2="${oy+Dpx+14}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#arw)" marker-start="url(#arw)"/>
     <text x="${ox+Bpx/2}" y="${oy+Dpx+25}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">B=${B.toFixed(2)}m</text>
-    <text x="${ox+Bpx-bbpx*0.5}" y="${oy-tbpx-Hwpx/2+4}" font-size="11" fill="#fff" text-anchor="middle" font-family="DM Sans" font-weight="600">${W.name}</text>
-    <text x="${ox+Bpx-bbpx*0.5}" y="${oy-tbpx-Hwpx/2+18}" font-size="9" fill="rgba(255,255,255,.7)" text-anchor="middle" font-family="DM Sans">γ=${W.gamma} kN/m³</text>
-    ${q>0?`<rect x="${ox}" y="${oy-tbpx-Hwpx-12}" width="${Math.max(10,Bpx-btpx)}" height="12" fill="#e8a03c" fill-opacity="0.5"/>
-    <text x="${ox+(Bpx-btpx)/2}" y="${oy-tbpx-Hwpx-3}" font-size="10" fill="#b07020" text-anchor="middle" font-family="DM Sans">q=${q}kPa</text>`:''}
-  </svg>
+    <text x="${ox+Bpx-bbpx*0.5}" y="${oy-tbpx-Hwpx/2}" font-size="10" fill="#fff" text-anchor="middle" font-family="DM Sans" font-weight="600">${W.name}</text>
+    ${q>0?`<rect x="${ox}" y="${oy-tbpx-Hwpx-12}" width="${Math.max(10,Bpx-btpx)}" height="12" fill="#e8a03c" fill-opacity="0.5"/><text x="${ox+(Bpx-btpx)/2}" y="${oy-tbpx-Hwpx-3}" font-size="10" fill="#b07020" text-anchor="middle" font-family="DM Sans">q=${q}kPa</text>`:''}
+  </svg></div>
+
+  ${i_deg>0?`<div class="nb info" style="margin-top:0"><strong>Inclined backfill analysis (i = ${i_deg}°):</strong> Rankine Ka with inclined backfill. Active pressure resultant acts at angle i to horizontal, decomposed into Pa_h (horizontal → drives sliding/overturning) and Pa_v (vertical → adds to stabilizing weight). Pa_v improves sliding and overturning resistance but increases bearing pressure.</div>`:''}
+
+  <div class="sub" style="margin-top:.5rem"><div class="sub-title">Rankine Earth Pressure${i_deg>0?' — Inclined Backfill i='+i_deg+'°':' — Level Backfill'}</div>
+  <div class="mc-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="mc"><div class="mc-lbl">Ka${i_deg>0?' (inclined)':''}</div><div class="mc-val">${Ka.toFixed(4)}</div>${i_deg>0?'<div class="mc-unit">cos(i)[cos(i)−√(cos²i−cos²φ)]<br>/[cos(i)+√(cos²i−cos²φ)]</div>':''}</div>
+    <div class="mc"><div class="mc-lbl">Kp (level toe)</div><div class="mc-val">${Kp.toFixed(3)}</div></div>
+    <div class="mc"><div class="mc-lbl">φ' / i</div><div class="mc-val">${phi}° / ${i_deg}°</div></div>
+    <div class="mc"><div class="mc-lbl">Pa total</div><div class="mc-val">${Pa_total.toFixed(1)}</div><div class="mc-unit">kN/m</div></div>
+    <div class="mc"><div class="mc-lbl">Pa_h (horizontal)</div><div class="mc-val">${Pa_h.toFixed(1)}</div><div class="mc-unit">kN/m  · Pa·cos(i)</div></div>
+    <div class="mc"><div class="mc-lbl">Pa_v (vertical)</div><div class="mc-val">${Pa_v.toFixed(1)}</div><div class="mc-unit">kN/m  · Pa·sin(i)</div></div>
+    <div class="mc"><div class="mc-lbl">Width B (0.6Hw)</div><div class="mc-val">${B.toFixed(2)}</div><div class="mc-unit">m</div></div>
+    <div class="mc"><div class="mc-lbl">Embedment D</div><div class="mc-val">${D.toFixed(2)}</div><div class="mc-unit">m</div></div>
+    <div class="mc ${e_ok?'ok':'bad'}"><div class="mc-lbl">Eccentricity e</div><div class="mc-val">${e.toFixed(3)}</div><div class="mc-unit">≤${(B/6).toFixed(3)}</div></div>
+  </div></div>
+
+  <div class="sub"><div class="sub-title">Force Summary</div>
+  <div style="font-size:12px;line-height:2">
+    <div>Pa_soil = 0.5 × Ka × γ × Hw² = 0.5 × ${Ka.toFixed(4)} × ${gamma} × ${Hw.toFixed(1)}² = <strong>${Pa_soil.toFixed(1)} kN/m</strong></div>
+    <div>Pa_q = Ka × q × Hw = ${Ka.toFixed(4)} × ${q} × ${Hw.toFixed(1)} = <strong>${Pa_q.toFixed(1)} kN/m</strong></div>
+    <div>Pa_c (cohesion) = 2c√Ka × Hw = 2 × ${c} × √${Ka.toFixed(4)} × ${Hw.toFixed(1)} = <strong>${Pa_c.toFixed(1)} kN/m</strong></div>
+    <div>Pa_total = Pa_soil + Pa_q − Pa_c = <strong>${Pa_total.toFixed(1)} kN/m</strong> at angle <strong>i = ${i_deg}°</strong> to horizontal</div>
+    <div>Pa_h = ${Pa_total.toFixed(1)} × cos(${i_deg}°) = <strong>${Pa_h.toFixed(1)} kN/m</strong> &nbsp;|&nbsp; Pa_v = ${Pa_total.toFixed(1)} × sin(${i_deg}°) = <strong>${Pa_v.toFixed(1)} kN/m</strong></div>
+    <div>V_total (base) = W_wall + Pa_v = ${W_total.toFixed(1)} + ${Pa_v.toFixed(1)} = <strong>${V_total.toFixed(1)} kN/m</strong></div>
+    <div>q_max = V/B × (1 + 6e/B) = <strong>${q_max.toFixed(1)} kN/m²</strong> &nbsp;|&nbsp; q_min = <strong>${q_min.toFixed(1)} kN/m²</strong></div>
+  </div></div>
+
+  <div class="sub"><div class="sub-title">Stability Checks (DoR/IS)</div>
+  <table class="chk-table"><thead><tr><th>Check</th><th>Formula${i_deg>0?' (inclined)':''}</th><th>Required</th><th>Computed</th><th>Status</th></tr></thead><tbody>
+    <tr><td><strong>Sliding</strong></td><td style="font-size:11px">μ(W+Pa_v)+Pp / Pa_h</td><td>≥1.5</td><td>${Math.min(FOS_SL,9.99).toFixed(2)}</td><td><span class="${sl?'bpass':'bfail'}">${sl?'✓':'✗'}</span></td></tr>
+    <tr><td><strong>Overturning</strong></td><td style="font-size:11px">M_res / M_ot</td><td>≥2.0</td><td>${Math.min(FOS_OT,9.99).toFixed(2)}</td><td><span class="${ot?'bpass':'bfail'}">${ot?'✓':'✗'}</span></td></tr>
+    <tr><td><strong>Bearing</strong></td><td style="font-size:11px">q_max ≤ SBC</td><td>${SBC?'≤'+SBC:'—'}</td><td>${q_max.toFixed(1)} kN/m²</td><td><span class="${BC_ok===null?'bfail':BC_ok?'bpass':'bfail'}">${BC_ok===null?'⚠':BC_ok?'✓':'✗'}</span></td></tr>
+    <tr><td><strong>Eccentricity</strong></td><td style="font-size:11px">e ≤ B/6</td><td>≤${(B/6).toFixed(3)}</td><td>${e.toFixed(3)} m</td><td><span class="${e_ok?'bpass':'bfail'}">${e_ok?'✓':'✗'}</span></td></tr>
+    <tr><td><strong>Overall slope</strong></td><td style="font-size:11px">Post-wall FS</td><td>≥1.3</td><td>${FS_post.toFixed(2)}</td><td><span class="${ov?'bpass':'bfail'}">${ov?'✓':'✗'}</span></td></tr>
+  </tbody></table>
+  ${!sl?'<div class="nb danger">Sliding fails — add shear key or widen base to '+(B*1.2).toFixed(1)+' m.</div>':''}
+  ${!ot?'<div class="nb danger">Overturning fails — widen base to '+(B*1.25).toFixed(1)+' m or add rear batter.</div>':''}
+  ${BC_ok===false?'<div class="nb danger">Bearing exceeds SBC ('+q_max.toFixed(1)+' > '+SBC+' kN/m²) — widen base or improve foundation.</div>':''}
+  ${BC_ok===null?'<div class="nb warn">SBC not available — verify foundation manually.</div>':''}
   </div>
-  <div class="sub" style="margin-top:.5rem">
-    <div class="sub-title">Rankine Earth Pressure</div>
-    <div class="mc-grid">
-      <div class="mc"><div class="mc-lbl">Ka (active)</div><div class="mc-val">${Ka.toFixed(3)}</div></div>
-      <div class="mc"><div class="mc-lbl">Kp (passive)</div><div class="mc-val">${Kp.toFixed(2)}</div></div>
-      <div class="mc"><div class="mc-lbl">Pa net (kN/m)</div><div class="mc-val">${Pa_net.toFixed(1)}</div><div class="mc-unit">soil+surcharge−cohesion</div></div>
-      <div class="mc"><div class="mc-lbl">Wall width B</div><div class="mc-val">${B.toFixed(2)}</div><div class="mc-unit">m (≈0.6·Hw)</div></div>
-      <div class="mc"><div class="mc-lbl">Embedment D</div><div class="mc-val">${D.toFixed(2)}</div><div class="mc-unit">m</div></div>
-      <div class="mc ${e_ok?'ok':'bad'}"><div class="mc-lbl">Eccentricity e</div><div class="mc-val">${e.toFixed(3)}</div><div class="mc-unit">limit ${(B/6).toFixed(3)} m</div></div>
-    </div>
-  </div>
-  <div class="sub">
-    <div class="sub-title">Stability Checks (DoR / IS Flowchart)</div>
-    <table class="chk-table">
-      <thead><tr><th>Check</th><th>Required (static)</th><th>Computed</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Sliding</strong><br><small>(μ·W + Pp)/Pa</small></td><td>FoS ≥ 1.5</td>
-          <td class="${sl_ok?'rval ok':'rval bad'}">${Math.min(FOS_SL,9.99).toFixed(2)}</td><td><span class="${sl_ok?'bpass':'bfail'}">${sl_ok?'✓ Pass':'✗ Fail'}</span></td></tr>
-        <tr><td><strong>Overturning</strong><br><small>M_res/M_ot</small></td><td>FoS ≥ 2.0</td>
-          <td class="${ot_ok?'rval ok':'rval bad'}">${Math.min(FOS_OT,9.99).toFixed(2)}</td><td><span class="${ot_ok?'bpass':'bfail'}">${ot_ok?'✓ Pass':'✗ Fail'}</span></td></tr>
-        <tr><td><strong>Bearing capacity</strong><br><small>q_max vs SBC</small></td><td>${SBC?'≤ '+SBC+' kN/m²':'Select material'}</td>
-          <td class="${BC_ok===null?'':BC_ok?'rval ok':'rval bad'}">${q_max.toFixed(1)} kN/m²</td><td><span class="${BC_ok===null?'bfail':BC_ok?'bpass':'bfail'}">${BC_ok===null?'⚠ No data':BC_ok?'✓ Pass':'✗ Fail'}</span></td></tr>
-        <tr><td><strong>Eccentricity</strong><br><small>e ≤ B/6</small></td><td>≤ ${(B/6).toFixed(3)} m</td>
-          <td class="${e_ok?'rval ok':'rval bad'}">${e.toFixed(3)} m</td><td><span class="${e_ok?'bpass':'bfail'}">${e_ok?'✓ Pass':'✗ Fail'}</span></td></tr>
-        <tr><td><strong>Overall slope stability</strong><br><small>Post-wall FS (Taylor)</small></td><td>FoS ≥ 1.3</td>
-          <td class="${overall_ok?'rval ok':'rval bad'}">${FS_post.toFixed(2)}</td><td><span class="${overall_ok?'bpass':'bfail'}">${overall_ok?'✓ Pass':'✗ Fail'}</span></td></tr>
-      </tbody>
-    </table>
-    ${!sl_ok?'<div class="nb danger">Sliding fails — add shear key (300–500 mm deep) or increase B to '+(B*1.2).toFixed(1)+' m.</div>':''}
-    ${!ot_ok?'<div class="nb danger">Overturning fails — increase B to '+(B*1.25).toFixed(1)+' m or add rear batter.</div>':''}
-    ${BC_ok===false?'<div class="nb danger">Bearing pressure ('+q_max.toFixed(1)+' kN/m²) exceeds SBC ('+SBC+' kN/m²). Widen base or improve foundation.</div>':''}
-    ${!BC_ok&&BC_ok!==false?'<div class="nb warn">Select foundation bearing material to complete bearing check.</div>':''}
-  </div>
-  <div class="nb ${all_pass?'success':'warn'}">
-    ${all_pass?'<strong>All checks pass.</strong> Proceed to detailing — weep holes (100 mm dia. at 1.0–1.5 m), granular filter behind wall, surface drainage. Proceed to bioengineering.':
-    '<strong>One or more checks fail.</strong> Revise dimensions per notes above and re-run before proceeding.'}
-  </div>
-  <div class="nb earth"><strong>References:</strong> Rankine (1857); IS:456-2000; IS:1904-1986 (SBC); DoR Nepal retaining structure guidelines. Detailed structural design by qualified engineer required.</div>`;
+  <div class="nb ${all?'success':'warn'}">${all?'<strong>All checks pass.</strong> Detail weep holes, granular filter, drainage. Proceed to bioengineering.':'<strong>One or more checks fail.</strong> Revise dimensions and re-run.'}</div>
+  <div class="nb earth"><strong>References:</strong> Rankine (1857) with inclined backfill extension; IS:456-2000; IS:1904-1986; DoR retaining structure guidelines. ${i_deg>0?'Inclined backfill Ka per Das (2021) Principles of Foundation Engineering §7.4.':''}</div>`;
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-//  PAGE 4 — BIOENGINEERING
-// ═══════════════════════════════════════════════════════════════════════════
+// ════ PAGE 4: BIOENGINEERING ════
 const BIORULES=[
-  {aMin:45,aMax:90,lMin:15,lMax:999,drain:'Good',moist:'Damp', prob:['Erosion','Slumping'],fn:'Armour, reinforce, drain',
-   tech:['Diagonal grass lines']},
-  {aMin:45,aMax:90,lMin:15,lMax:999,drain:'Good',moist:'Dry',  prob:['Erosion'],fn:'Armour, reinforce',
-   tech:['Contour grass lines']},
-  {aMin:45,aMax:90,lMin:15,lMax:999,drain:'Poor',moist:'Damp', prob:['Slumping','Erosion'],fn:'Drain, armour, reinforce',
-   tech:['Downslope grass lines and vegetated stone pitched rills','Chevron grass lines and vegetated stone pitched rills']},
-  {aMin:45,aMax:90,lMin:15,lMax:999,drain:'Poor',moist:'Dry',  prob:['Erosion','Slumping'],fn:'Armour, reinforce, drain',
-   tech:['Diagonal grass lines']},
-  {aMin:45,aMax:90,lMin:0, lMax:15, drain:'Good',moist:'Any',  prob:['Erosion'],fn:'Armour, reinforce',
-   tech:['Diagonal grass lines','Jute netting and randomly planted grass']},
-  {aMin:45,aMax:90,lMin:0, lMax:15, drain:'Poor',moist:'Damp', prob:['Slumping','Erosion'],fn:'Drain, armour, reinforce',
-   tech:['Downslope grass lines','Diagonal grass lines']},
-  {aMin:45,aMax:90,lMin:0, lMax:15, drain:'Poor',moist:'Dry',  prob:['Erosion','Slumping'],fn:'Armour, reinforce, drain',
-   tech:['Jute netting and randomly planted grass','Contour grass lines','Diagonal grass lines']},
-  {aMin:30,aMax:45,lMin:15,lMax:999,drain:'Good',moist:'Any',  prob:['Erosion'],fn:'Armour, reinforce, catch',
-   tech:['Horizontal bolster cylinders and shrub/tree planting','Downslope grass lines and vegetated stone pitched rills','Site grass seeding, mulch and wide mesh jute netting']},
-  {aMin:30,aMax:45,lMin:15,lMax:999,drain:'Poor',moist:'Any',  prob:['Slumping','Erosion'],fn:'Drain, armour, reinforce',
-   tech:['Herringbone bolster cylinders and shrub/tree planting','Drainage system and shrub/tree planting']},
-  {aMin:30,aMax:45,lMin:0, lMax:15, drain:'Good',moist:'Any',  prob:['Erosion'],fn:'Armour, reinforce, catch',
-   tech:['Brush layers of woody cuttings','Contour grass lines','Contour fascines','Palisades of woody cuttings','Site grass seeding, mulch and wide mesh jute netting']},
-  {aMin:30,aMax:45,lMin:0, lMax:15, drain:'Poor',moist:'Any',  prob:['Slumping','Erosion'],fn:'Drain, armour, reinforce',
-   tech:['Diagonal grass lines','Diagonal brush layers','Herringbone fascines and shrub/tree planting','Herringbone bolster cylinders and shrub/tree planting','Drainage system and shrub/tree planting']},
-  {aMin:0, aMax:30, lMin:0,lMax:999,drain:'Good',moist:'Any',  prob:['Erosion'],fn:'Armour, catch',
-   tech:['Site seeding of grass and shrub/tree planting','Shrub/tree planting']},
-  {aMin:0, aMax:30, lMin:0,lMax:999,drain:'Poor',moist:'Any',  prob:['Slumping','Erosion'],fn:'Drain, armour, catch',
-   tech:['Diagonal lines of grass and shrubs/trees','Shrub/tree planting']},
-  {aMin:0, aMax:30, lMin:0,lMax:15, drain:'Any', moist:'Any',  prob:['Erosion'],fn:'Armour, catch',
-   tech:['Turfing and shrub/tree planting']},
-];
-const BSPEC_PROB=[
-  {key:'Planar',fn:'Reinforce, anchor',tech:['Site seeding of shrubs/small trees']},
-  {key:'LooseSand',fn:'Armour',tech:['Jute netting and randomly planted grass']},
-  {key:'RatoMato',fn:'Armour, drain',tech:['Diagonal lines of grass and shrubs/trees']},
-  {key:'Gully',fn:'Armour, reinforce, catch',tech:['Large bamboo planting','Live check dams','Vegetated stone pitching']},
-];
+{aMin:45,aMax:90,lMin:15,lMax:999,drain:'Good',moist:'Damp',prob:['Erosion','Slumping'],fn:'Armour, reinforce, drain',tech:['Diagonal grass lines']},
+{aMin:45,aMax:90,lMin:15,lMax:999,drain:'Good',moist:'Dry',prob:['Erosion'],fn:'Armour, reinforce',tech:['Contour grass lines']},
+{aMin:45,aMax:90,lMin:15,lMax:999,drain:'Poor',moist:'Damp',prob:['Slumping','Erosion'],fn:'Drain, armour, reinforce',tech:['Downslope grass lines and vegetated stone pitched rills','Chevron grass lines and vegetated stone pitched rills']},
+{aMin:45,aMax:90,lMin:15,lMax:999,drain:'Poor',moist:'Dry',prob:['Erosion','Slumping'],fn:'Armour, reinforce, drain',tech:['Diagonal grass lines']},
+{aMin:45,aMax:90,lMin:0,lMax:15,drain:'Good',moist:'Any',prob:['Erosion'],fn:'Armour, reinforce',tech:['Diagonal grass lines','Jute netting and randomly planted grass']},
+{aMin:45,aMax:90,lMin:0,lMax:15,drain:'Poor',moist:'Damp',prob:['Slumping','Erosion'],fn:'Drain, armour, reinforce',tech:['Downslope grass lines','Diagonal grass lines']},
+{aMin:45,aMax:90,lMin:0,lMax:15,drain:'Poor',moist:'Dry',prob:['Erosion','Slumping'],fn:'Armour, reinforce, drain',tech:['Jute netting and randomly planted grass','Contour grass lines','Diagonal grass lines']},
+{aMin:30,aMax:45,lMin:15,lMax:999,drain:'Good',moist:'Any',prob:['Erosion'],fn:'Armour, reinforce, catch',tech:['Horizontal bolster cylinders and shrub/tree planting','Downslope grass lines and vegetated stone pitched rills','Site grass seeding, mulch and wide mesh jute netting']},
+{aMin:30,aMax:45,lMin:15,lMax:999,drain:'Poor',moist:'Any',prob:['Slumping','Erosion'],fn:'Drain, armour, reinforce',tech:['Herringbone bolster cylinders and shrub/tree planting','Drainage system and shrub/tree planting']},
+{aMin:30,aMax:45,lMin:0,lMax:15,drain:'Good',moist:'Any',prob:['Erosion'],fn:'Armour, reinforce, catch',tech:['Brush layers of woody cuttings','Contour grass lines','Contour fascines','Palisades of woody cuttings','Site grass seeding, mulch and wide mesh jute netting']},
+{aMin:30,aMax:45,lMin:0,lMax:15,drain:'Poor',moist:'Any',prob:['Slumping','Erosion'],fn:'Drain, armour, reinforce',tech:['Diagonal grass lines','Diagonal brush layers','Herringbone fascines and shrub/tree planting','Herringbone bolster cylinders and shrub/tree planting','Drainage system and shrub/tree planting']},
+{aMin:0,aMax:30,lMin:0,lMax:999,drain:'Good',moist:'Any',prob:['Erosion'],fn:'Armour, catch',tech:['Site seeding of grass and shrub/tree planting','Shrub/tree planting']},
+{aMin:0,aMax:30,lMin:0,lMax:999,drain:'Poor',moist:'Any',prob:['Slumping','Erosion'],fn:'Drain, armour, catch',tech:['Diagonal lines of grass and shrubs/trees','Shrub/tree planting']},
+{aMin:0,aMax:30,lMin:0,lMax:15,drain:'Any',moist:'Any',prob:['Erosion'],fn:'Armour, catch',tech:['Turfing and shrub/tree planting']}];
+const PROB_MITIGATION={
+  Erosion:{label:'Surface / rill erosion',fn_primary:'Catch, Armour',fn_secondary:'Drain',intro:'Surface erosion is controlled by immediate vegetation cover, surface armour to absorb raindrop impact, and catch structures to intercept overland flow.',techs_cut:['Diagonal grass lines','Vetiver / Napier grass on cut face','Contour grass lines','Jute netting and randomly planted grass','Palisades of woody cuttings'],techs_fill:['Diagonal grass lines','Contour grass lines','Jute netting and randomly planted grass','Turfing'],limitation:'Establish grass before monsoon. Brush layers not used on cut slopes — use palisades instead.',species:'Vetiver (Khas khas), Napier, Broom grass (Amliso), Durva (Doob)'},
+  Slumping:{label:'Slumping / shallow sliding',fn_primary:'Reinforce, Drain',fn_secondary:'Support',intro:'Shallow sliding requires root reinforcement to bind the soil mantle and drainage to reduce pore pressure. Toe support prevents progressive failure.',techs_cut:['Palisades of woody cuttings','Contour fascines','Deep-rooted shrub/tree planting','Drainage system and shrub/tree planting','Herringbone fascines and shrub/tree planting'],techs_fill:['Brush layers of woody cuttings','Contour fascines','Palisades','Herringbone bolster cylinders and shrub/tree planting'],limitation:'Brush layering NOT suitable on cut slopes — use palisades/fascines. Grass alone insufficient; deep-rooted woody species essential.',species:'Vitex negundo, Asuro (Justicia adhatoda), Utis (Alnus nepalensis), Bamboo'},
+  Planar:{label:'Planar sliding / shear failure',fn_primary:'Support',fn_secondary:'Reinforce',intro:'Planar failure along a discontinuity needs structural support and anchoring; bioengineering is supplementary. Root reinforcement acts only in the upper 2–3 m.',techs_cut:['Deep-rooted shrub and tree planting above failure zone','Large bamboo planting at slope base','Drainage system before planting','Site seeding of shrubs/small trees'],techs_fill:['Deep-rooted tree planting at slope base','Bamboo planting','Sub-surface drainage system'],limitation:'Bioengineering is supplementary to structural measures (wall/drain) for planar failure. Inadequate alone for deep-seated slides.',species:'Utis (Alnus nepalensis), Male bamboo (Dendrocalamus strictus), Garuga, Sissoo'},
+  Debris:{label:'Debris fall / rockfall',fn_primary:'Reinforce, Support',fn_secondary:'Catch, Drain',intro:'Vegetation reinforces loose rock with roots in joints and supports/catches small debris. Structural nets needed for large rockfall.',techs_cut:['Site seeding of shrubs/small trees in rock joints','Large tree planting at slope base as catch buffer','Palisades of bamboo at slope toe','Vegetated stone pitching'],techs_fill:['Site seeding of shrubs/small trees','Tree planting as catch barrier'],limitation:'Vegetation only secondary for small debris. Significant rockfall needs structural nets/bolting.',species:'Gobre salla (Pinus wallichiana) high altitude, Berberis on rocky faces, Bamboo at base'},
+  Gully:{label:'Gully erosion (≤45°)',fn_primary:'Catch',fn_secondary:'Drain',intro:'Gully stabilisation needs check dams to catch sediment and slow flow, armour on the floor, and reinforcement of the sides.',techs_cut:['Large bamboo planting in and beside gully','Live check dams of bamboo/Vitex stakes','Vegetated stone pitching on gully sides','Contour fascines above gully head'],techs_fill:['Large bamboo planting','Live check dams','Vegetated stone pitching'],limitation:'Start from the gully head; install check dams first before planting the floor.',species:'Male bamboo (Dendrocalamus strictus), Vitex negundo, Bambusa tulda'},
+  LooseSand:{label:'Loose sand surface',fn_primary:'Catch',fn_secondary:'Reinforce',intro:'Loose sand has very low cohesion. Jute netting catches and armours the surface while grasses establish root reinforcement.',techs_cut:['Jute netting with randomly planted grass (full face)','Vetiver grass slips through netting','Contour grass lines once netting established'],techs_fill:['Jute netting with randomly planted grass','Vetiver grass slips'],limitation:'No brush layers/fascines — cannot anchor in loose sand. Net must cover full face, pegged at 0.3 m.',species:'Vetiver (deepest roots), Durva for surface binding'},
+  RatoMato:{label:'Rato mato (red residual clay/silt)',fn_primary:'Reinforce',fn_secondary:'Drain',intro:'Rato mato is highly erodible when saturated; it needs root reinforcement combined with drainage to prevent slaking, plus surface armour.',techs_cut:['Diagonal lines of grass and shrubs/trees','Palisades on cut faces','Contour grass lines','Sub-surface drains if seepage'],techs_fill:['Diagonal lines of grass and shrubs/trees','Brush layers (fill only)','Contour grass lines'],limitation:'Swells and slakes on wetting. No brush-layer trenches on cut slopes — use palisades. Install drainage with planting.',species:'Vetiver, Broom grass (Amliso), Asuro (Justicia adhatoda)'}
+};
 const BSPEC_CHK=[
-  {key:'BaseFail',fn:'Support, anchor, catch',tech:['Large bamboo planting','Large tree planting']},
-  {key:'Rocky',fn:'Reinforce, anchor',tech:['Site seeding of shrubs/small trees']},
+{key:'BaseFail',fn:'Support, anchor, catch',tech:['Large bamboo planting','Large tree planting'],label:'Base of slope — planar sliding/shear failure'},
+{key:'Rocky',fn:'Reinforce, anchor',tech:['Site seeding of shrubs/small trees'],label:'Rocky material (>30°) — debris fall'},
+{key:'Planar',fn:'Reinforce, anchor',tech:['Site seeding of shrubs/small trees'],label:'Planar sliding / shear failure (any slope)'},
+{key:'LooseSand',fn:'Armour',tech:['Jute netting and randomly planted grass'],label:'Loose sand — erosion'},
+{key:'RatoMato',fn:'Armour, drain',tech:['Diagonal lines of grass and shrubs/trees'],label:'Rato mato — erosion, slumping'},
+{key:'Gully',fn:'Armour, reinforce, catch',tech:['Large bamboo planting','Live check dams','Vegetated stone pitching'],label:'Gullies ≤ 45° — major erosion'}
 ];
 const TECH_INFO={
-  'Diagonal grass lines':'Grass slips planted at 45° to slope direction. Intercepts runoff, binds top 300–500 mm. Most versatile for steep cut slopes.',
-  'Contour grass lines':'Grass slips along contour lines. Slows overland flow, traps sediment.',
-  'Downslope grass lines':'Vertical grass lines to intercept concentrated flow and prevent rill formation.',
-  'Jute netting and randomly planted grass':'Biodegradable jute mesh pegged to slope + randomly planted grass. Immediate armour during establishment.',
-  'Brush layers of woody cuttings':'Live branches 1–2 m laid in horizontal trenches. Roots reinforce soil to 0.5–2 m depth.',
-  'Contour fascines':'Bundles of 4–8 live branches tied and placed in shallow contour trenches. Living check and reinforcement.',
-  'Palisades of woody cuttings':'Vertical live stakes (bamboo/hardwood) driven along contour. Traps debris, reinforces face up to 60°.',
-  'Horizontal bolster cylinders and shrub/tree planting':'Rolled live branch cylinders on contour + tree/shrub planting for long-term root reinforcement.',
-  'Herringbone bolster cylinders and shrub/tree planting':'V-pattern cylinders directing drainage off slope + deep-rooted woody planting.',
-  'Site grass seeding, mulch and wide mesh jute netting':'Broadcast seed + straw mulch + wide mesh jute netting. For moderate slopes with reasonable access.',
-  'Diagonal brush layers':'Brush layers at 45° to direct drainage diagonally off slope face.',
-  'Herringbone fascines and shrub/tree planting':'Fascine drain pattern + shrub/tree. Addresses drainage and long-term stabilisation.',
-  'Drainage system and shrub/tree planting':'Sub-surface/herringbone drains first, then deep-rooted woody planting.',
-  'Downslope grass lines and vegetated stone pitched rills':'Grass lines + stone-lined rills in combined pattern for long steep slopes.',
-  'Chevron grass lines and vegetated stone pitched rills':'Chevron (V) pattern grass + stone rills directing runoff to safe outlets.',
-  'Site seeding of grass and shrub/tree planting':'Full site seeding with mixed grass and shrub/tree seedlings for gentle slopes.',
-  'Shrub/tree planting':'Direct planting of native shrubs and trees. Primary technique for gentle slopes.',
-  'Turfing and shrub/tree planting':'Grass turf slabs for immediate cover + shrub/tree planting on short gentle slopes.',
-  'Large bamboo planting':'Bamboo at slope base or gullies. Deep roots provide anchoring and lateral support.',
-  'Large tree planting':'Deep-rooted trees at slope base for buttressing and anchoring of toe material.',
-  'Live check dams':'Low barriers of live stakes woven with branches across gully floor.',
-  'Vegetated stone pitching':'Stone pitched revetment + grass/shrubs in joints. Combines structural strength with root reinforcement.',
-  'Diagonal lines of grass and shrubs/trees':'Combined grass slips and shrub/tree seedlings in diagonal lines.',
-  'Site seeding of shrubs/small trees':'Broadcast seeding of shrubs and small trees for reinforcement and anchoring.',
+'Diagonal grass lines':'Grass slips at 45° to slope direction. Intercepts runoff, binds top 300–500 mm. Versatile for steep cut slopes.',
+'Contour grass lines':'Grass slips along contour. Slows overland flow, traps sediment.',
+'Downslope grass lines':'Vertical grass lines intercept concentrated flow, prevent rill formation.',
+'Jute netting and randomly planted grass':'Biodegradable jute mesh pegged to slope + randomly planted grass. Immediate armour.',
+'Brush layers of woody cuttings':'Live branches in horizontal trenches. Roots reinforce soil 0.5–2 m deep. Fill slopes only.',
+'Contour fascines':'Bundles of live branches in shallow contour trenches. Living check + reinforcement.',
+'Palisades of woody cuttings':'Vertical live stakes driven along contour. Traps debris, reinforces face up to 60°.',
+'Horizontal bolster cylinders and shrub/tree planting':'Rolled live-branch cylinders on contour + woody planting for long-term reinforcement.',
+'Herringbone bolster cylinders and shrub/tree planting':'V-pattern cylinders directing drainage off slope + woody planting.',
+'Site grass seeding, mulch and wide mesh jute netting':'Broadcast seed + mulch + wide jute net. Moderate slopes with access.',
+'Diagonal brush layers':'Brush layers at 45° to direct drainage diagonally. Fill slopes only.',
+'Herringbone fascines and shrub/tree planting':'Fascine drains in herringbone + woody planting.',
+'Drainage system and shrub/tree planting':'Sub-surface drains first, then deep-rooted woody planting.',
+'Downslope grass lines and vegetated stone pitched rills':'Grass lines + stone-lined rills for long steep slopes.',
+'Chevron grass lines and vegetated stone pitched rills':'Chevron grass + stone rills directing runoff to outlets.',
+'Site seeding of grass and shrub/tree planting':'Full site seeding for gentle slopes.',
+'Shrub/tree planting':'Direct planting of native shrubs/trees. Gentle slopes.',
+'Turfing and shrub/tree planting':'Grass turf slabs + woody planting on short gentle slopes.',
+'Turfing':'Grass turf slabs for immediate cover.',
+'Large bamboo planting':'Bamboo at slope base/gullies. Deep roots anchor and support.',
+'Large tree planting':'Deep-rooted trees at slope base for buttressing.',
+'Live check dams':'Low live-stake barriers across gully floor to catch sediment.',
+'Vegetated stone pitching':'Stone pitching + grass/shrubs in joints. Structural + root reinforcement.',
+'Diagonal lines of grass and shrubs/trees':'Combined grass and woody seedlings in diagonal lines.',
+'Site seeding of shrubs/small trees':'Broadcast seeding of shrubs/small trees for reinforcement and anchoring.',
+'Vetiver / Napier grass on cut face':'Deep-rooted vetiver or fast-growing napier directly on the cut face for immediate armour and reinforcement.',
+'Deep-rooted shrub/tree planting':'Native deep-rooted woody species at 1 m centres for root reinforcement.',
+'Deep-rooted shrub and tree planting above failure zone':'Woody species planted above the failure zone to reduce driving mass and reinforce soil.',
+'Deep-rooted tree planting at slope base':'Trees at the toe to buttress and anchor base material.',
+'Bamboo planting':'Bamboo clumps for deep anchoring and rapid regrowth.',
+'Sub-surface drainage system':'Herringbone/counterfort gravel drains wrapped in geotextile to remove groundwater.',
+'Palisades':'Vertical live-stake fence along contour for reinforcement.',
+'Jute netting with randomly planted grass (full face)':'Full-face jute mesh pegged at 0.3 m + grass slips.',
+'Jute netting with randomly planted grass':'Jute mesh + grass slips for surface armour.',
+'Vetiver grass slips through netting':'Vetiver slips planted through jute netting for deep reinforcement.',
+'Vetiver grass slips':'Vetiver slips for deep-rooted surface binding.',
+'Contour grass lines once netting established':'Contour grass lines added after netting stabilises the surface.',
+'Site seeding of shrubs/small trees in rock joints':'Shrub/small-tree seed in rock joints and ledges to bind loose rock.',
+'Large tree planting at slope base as catch buffer':'Trees at base forming a catch buffer for falling debris.',
+'Palisades of bamboo at slope toe':'Bamboo palisade at toe to trap debris.',
+'Large bamboo planting in and beside gully':'Bamboo lining the gully to reinforce and slow flow.',
+'Live check dams of bamboo/Vitex stakes':'Porous live-stake check dams across the gully.',
+'Vegetated stone pitching on gully sides':'Stone pitching with planted joints on gully sides.',
+'Contour fascines above gully head':'Fascines above the gully head to intercept flow.',
+'Diagonal lines of grass and shrubs/trees':'Combined grass + woody seedlings diagonally across the face.',
+'Palisades on cut faces':'Palisades replacing brush layers on cut faces.',
+'Sub-surface drains if seepage':'Sub-surface drains where seepage is observed.',
+'Sub-surface drains before planting':'Install drains and let slope drain before planting.',
+'Drainage system before planting':'Drainage installed before woody planting.',
+'Brush layers (fill only)':'Brush layers used on fill slopes only.',
+'Tree planting as catch barrier':'Trees forming a catch barrier.'
 };
 const SPECIES_DB={
-  grasses:[
-    {name:'Vetiver (Khas khas)',sci:'Vetiveria zizanioides',alt:[100,1800],moist:'Both',note:'Deepest roots (3–5 m); preferred for cut slopes'},
-    {name:'Napier / Elephant grass',sci:'Pennisetum purpureum',alt:[100,1600],moist:'Both',note:'Fast-growing, large biomass; steep cut faces'},
-    {name:'Kans grass',sci:'Saccharum spontaneum',alt:[100,1500],moist:'Damp',note:'Pioneer species; disturbed ground'},
-    {name:'Broom grass (Amliso)',sci:'Thysanolaena maxima',alt:[600,2200],moist:'Both',note:'Deep roots, multi-purpose; mid-altitude'},
-    {name:'Durva grass (Doob)',sci:'Cynodon dactylon',alt:[100,2200],moist:'Dry',note:'Creeping stolons; drought tolerant'},
-    {name:'Festuca / Turf grass',sci:'Festuca arundinacea',alt:[1800,3500],moist:'Both',note:'High altitude cool climate; use above 1800 m'},
-  ],
-  shrubs:[
-    {name:'Malabar nut (Asuro)',sci:'Justicia adhatoda',alt:[100,1700],moist:'Both',note:'Hardy; live stakes and brush layering'},
-    {name:'Five-leaved chaste tree',sci:'Vitex negundo',alt:[100,1600],moist:'Dry',note:'Excellent for palisades; drought-tolerant'},
-    {name:'Artemesia (Titepati)',sci:'Artemisia spp.',alt:[1200,3500],moist:'Dry',note:'Pioneer at mid to high altitude'},
-    {name:'Paineti / Barberry',sci:'Berberis spp.',alt:[1500,3500],moist:'Both',note:'Thorny; good erosion control at high altitude'},
-    {name:'Dhanyero',sci:'Woodfordia fruticosa',alt:[500,1800],moist:'Damp',note:'Common mid-hill shrub for bioengineering'},
-  ],
-  trees:[
-    {name:'Utis (Himalayan alder)',sci:'Alnus nepalensis',alt:[900,2700],moist:'Damp',note:'N-fixing pioneer; best for moist north-facing slopes'},
-    {name:'Sissoo (Indian rosewood)',sci:'Dalbergia sissoo',alt:[100,1500],moist:'Damp',note:'Deep roots, fast-growing; slope base anchoring'},
-    {name:'Gobre salla (Blue pine)',sci:'Pinus wallichiana',alt:[1800,4000],moist:'Both',note:'High altitude long-term stabilisation'},
-    {name:'Garuga / Ghogar',sci:'Garuga pinnata',alt:[100,1500],moist:'Both',note:'Deep tap root; slope base anchoring'},
-    {name:'Poplar (Safeda)',sci:'Populus deltoides',alt:[800,2500],moist:'Damp',note:'Very fast-growing; moist valley slopes'},
-    {name:'Mulberry (Kimbu)',sci:'Morus alba',alt:[100,2000],moist:'Both',note:'Multi-purpose; live stakes and brush layering'},
-  ],
-  bamboo:[
-    {name:'Male bamboo',sci:'Dendrocalamus strictus',alt:[100,1500],moist:'Dry',note:'Drought-tolerant; slope base and gully protection'},
-    {name:'Nigalo bamboo',sci:'Himalayacalamus spp.',alt:[1500,2800],moist:'Damp',note:'High altitude; use above 1500 m on moist slopes'},
-    {name:'Dhanu bans',sci:'Bambusa tulda',alt:[100,1200],moist:'Damp',note:'River/gully bank protection'},
-  ]
+grasses:[
+{name:'Vetiver (Khas khas)',sci:'Chrysopogon zizanioides',alt:[100,1800],moist:'Both',note:'Deepest roots 3–5 m; best for cut slopes'},
+{name:'Napier / Elephant grass',sci:'Pennisetum purpureum',alt:[100,1600],moist:'Both',note:'Fast-growing, large biomass'},
+{name:'Kans grass',sci:'Saccharum spontaneum',alt:[100,1500],moist:'Damp',note:'Pioneer, disturbed ground'},
+{name:'Broom grass (Amliso)',sci:'Thysanolaena maxima',alt:[600,2200],moist:'Both',note:'Deep roots, multi-purpose, mid-altitude'},
+{name:'Durva (Doob)',sci:'Cynodon dactylon',alt:[100,2200],moist:'Dry',note:'Creeping stolons, drought tolerant'},
+{name:'Festuca / Turf grass',sci:'Festuca arundinacea',alt:[1800,3500],moist:'Both',note:'High-altitude cool climate'}],
+shrubs:[
+{name:'Asuro',sci:'Justicia adhatoda',alt:[100,1700],moist:'Both',note:'Hardy; live stakes & brush layering'},
+{name:'Five-leaved chaste tree',sci:'Vitex negundo',alt:[100,1600],moist:'Dry',note:'Palisades; drought-tolerant'},
+{name:'Titepati',sci:'Artemisia spp.',alt:[1200,3500],moist:'Dry',note:'Pioneer mid–high altitude'},
+{name:'Barberry',sci:'Berberis spp.',alt:[1500,3500],moist:'Both',note:'Thorny, high-altitude erosion control'},
+{name:'Dhanyero',sci:'Woodfordia fruticosa',alt:[500,1800],moist:'Damp',note:'Common mid-hill bioengineering shrub'}],
+trees:[
+{name:'Utis (Himalayan alder)',sci:'Alnus nepalensis',alt:[900,2700],moist:'Damp',note:'N-fixing pioneer; moist north-facing slopes'},
+{name:'Sissoo',sci:'Dalbergia sissoo',alt:[100,1500],moist:'Damp',note:'Deep roots; slope-base anchoring'},
+{name:'Gobre salla (Blue pine)',sci:'Pinus wallichiana',alt:[1800,4000],moist:'Both',note:'High-altitude long-term stabilisation'},
+{name:'Garuga',sci:'Garuga pinnata',alt:[100,1500],moist:'Both',note:'Deep tap root; slope-base anchoring'},
+{name:'Poplar',sci:'Populus deltoides',alt:[800,2500],moist:'Damp',note:'Fast-growing; moist valley slopes'},
+{name:'Mulberry (Kimbu)',sci:'Morus alba',alt:[100,2000],moist:'Both',note:'Live stakes & brush layering'}],
+bamboo:[
+{name:'Male bamboo',sci:'Dendrocalamus strictus',alt:[100,1500],moist:'Dry',note:'Drought-tolerant; gully & slope-base'},
+{name:'Nigalo',sci:'Himalayacalamus spp.',alt:[1500,2800],moist:'Damp',note:'High-altitude moist slopes'},
+{name:'Dhanu bans',sci:'Bambusa tulda',alt:[100,1200],moist:'Damp',note:'River/gully bank protection'}]
 };
-
-let selProbs=[],selSpecs=[];
-function togChk(el,grp){
-  el.classList.toggle('sel');
-  const v=el.querySelector('input').value;
-  if(grp==='probs') selProbs=selProbs.includes(v)?selProbs.filter(x=>x!==v):[...selProbs,v];
-  else selSpecs=selSpecs.includes(v)?selSpecs.filter(x=>x!==v):[...selSpecs,v];
+let bioType='cut';
+function setBioType(type,el){
+  bioType=type;
+  const g=el.closest('.radio-grp')||el.parentElement;
+  g.querySelectorAll('.radio-opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('p4-cut-section').classList.toggle('hidden',type!=='cut');
+  document.getElementById('p4-fill-section').classList.toggle('hidden',type!=='fill');
+  document.getElementById('p4-output').classList.add('hidden');
+  // Reset selections when switching
+  selProbs=[];selSpecs=[];
+  document.querySelectorAll('#p4-cut-section .chk-opt, #p4-fill-section .chk-opt').forEach(o=>o.classList.remove('sel'));
 }
-
 function setupBioPage(){
   buildSummaryBar('p4-summary');
-  // Pre-fill angle from stability analysis
-  if(ST.alpha) document.getElementById('p4-len').placeholder='e.g. slope length in metres';
+  const ctx=document.getElementById('p4-cut-context');
+  if(ctx&&ST.alpha) ctx.innerHTML=`Cut slope angle <strong>α = ${ST.alpha}°</strong>, height <strong>H = ${ST.H} m</strong> (from Step 1). FS = ${ST.FS_cut>0?ST.FS_cut.toFixed(2):'—'}. Brush layering is NOT used on cut slopes — palisades are substituted automatically.`;
 }
-
-function runBio(){
-  const len=parseFloat(document.getElementById('p4-len').value||0);
-  const drain=document.getElementById('p4-drain').value;
-  const moist=document.getElementById('p4-moist').value;
-  if(!len||!drain||!moist){alert('Please enter slope length, drainage and moisture conditions.');return;}
-  const angle=ST.alpha||45;
-  const alt=parseFloat(ST.alt)||1000;
-  const aspect=ST.aspect||'';
-  const fsClass=ST.needsWall?'wall':ST.FS_cut>=1.3?'stable':ST.FS_cut>=1.1?'marginal':'wall';
+function runBio(mode){
+  const isCut=(mode==='cut');
+  let angle,len,drain,moist;
+  if(isCut){
+    angle=ST.alpha||45;
+    len=parseFloat(document.getElementById('p4c-len').value)||0;
+    drain=document.getElementById('p4c-drain').value;
+    moist=document.getElementById('p4c-moist').value;
+  } else {
+    angle=parseFloat(document.getElementById('p4f-angle').value)||0;
+    len=parseFloat(document.getElementById('p4f-len').value)||0;
+    drain=document.getElementById('p4f-drain').value;
+    moist=document.getElementById('p4f-moist').value;
+  }
+  if(!angle||!len||!drain||!moist){alert('Enter all fields: slope angle (fill), length, drainage, moisture.');return;}
+  const alt=parseFloat(ST.alt)||1000, aspect=ST.aspect||'';
+  const fillH=isCut?0:(parseFloat(document.getElementById('p4f-H').value)||0);
+  const fsClass=ST.needsWall?'wall':ST.needsMarginal?'marginal':ST.FS_cut>=1.3?'stable':'wall';
 
   // Tags
   document.getElementById('p4-tags').innerHTML=`
+    <span class="tag" style="background:${isCut?'var(--c-sage-ll)':'var(--c-warn-l)'};color:${isCut?'var(--c-earth)':'var(--c-warn)'}">${isCut?'✂ CUT SLOPE':'🏔 FILL SLOPE'}</span>
     <span class="tag angle">α=${angle}° ${angle>45?'>45°':angle>=30?'30–45°':'<30°'}</span>
     <span class="tag len">L=${len}m ${len>15?'>15m':'≤15m'}</span>
-    <span class="tag drain">${drain} drainage</span>
-    <span class="tag moist">${moist}</span>
+    <span class="tag drain">${drain}</span><span class="tag moist">${moist}</span>
     ${selProbs.map(p=>`<span class="tag prob">${p}</span>`).join('')}`;
 
-  // Special conditions
-  let specHtml='';
-  BSPEC_PROB.forEach(sp=>{if(selProbs.includes(sp.key))specHtml+=`<div class="special-box">⚡ <strong>Special: ${sp.key==='Planar'?'Planar sliding/shear failure':sp.key==='LooseSand'?'Loose sand':sp.key==='RatoMato'?'Rato mato':sp.key==='Gully'?'Gully erosion':sp.key}</strong> — Function: ${sp.fn} — <strong>${sp.tech.join(' / ')}</strong></div>`;});
-  BSPEC_CHK.forEach(sp=>{if(selSpecs.includes(sp.key))specHtml+=`<div class="special-box">⚡ <strong>Special: ${sp.key==='BaseFail'?'Base of slope — planar sliding':'Rocky material >30°'}</strong> — Function: ${sp.fn} — <strong>${sp.tech.join(' / ')}</strong></div>`;});
-  document.getElementById('p4-special-out').innerHTML=specHtml;
+  // ── FILL SLOPE TOE WALL RECOMMENDATION
+  const twRec=document.getElementById('p4-toewall-rec');
+  if(!isCut&&len>5){
+    const twH=fillH>4?'1.5':'1.0';
+    twRec.innerHTML=`<div class="decision amber" style="margin-bottom:.75rem">
+      <div class="d-title">🧱 Dry Stone Toe Wall Recommended — Fill Slope Length ${len} m (&gt;5 m)</div>
+      <div class="d-body">
+        <strong>Wall specification:</strong><br>
+        • Wall type: Dry stone masonry (no mortar; free-draining)<br>
+        • Wall height: <strong>${twH} m</strong> (1.0 m for fills ≤4 m; 1.5 m for fills &gt;4 m)<br>
+        • Top width: 0.6 m minimum<br>
+        • Bottom width: 0.6 × wall height = <strong>${(0.6*parseFloat(twH)).toFixed(2)} m</strong><br>
+        • Foundation embedment: ≥300 mm into firm undisturbed ground<br>
+        • Through-stones at every 3rd course; coping of flat stone<br><br>
+        <strong>Purpose:</strong> Prevents progressive toe erosion and base undermining of the fill slope. The wall supports the toe and allows bioengineering above to establish root reinforcement without being undermined from below.<br><br>
+        <strong>Drainage:</strong> Free-draining wall face (10–15% voids); no weep holes needed. Install a lined toe drain at the wall base to collect and discharge seepage.
+      </div>
+    </div>`;
+  } else {
+    twRec.innerHTML=(!isCut&&len<=5)?'<div class="nb success" style="margin-bottom:.5rem">Fill slope length ≤ 5 m — toe wall not required. Bioengineering alone is adequate for erosion and shallow stability.</div>':'';
+  }
 
-  // Match rule
+  // ── CUT SLOPE RULE
+  function applyCut(techs){
+    if(!isCut)return techs;
+    return techs.map(t=>(t==='Brush layers of woody cuttings'||t==='Diagonal brush layers')?'Palisades of woody cuttings':t).filter((t,i,a)=>a.indexOf(t)===i);
+  }
+
+  // ── PROBLEM-SPECIFIC MITIGATION
+  let probHtml='';
+  if(selProbs.length>0){
+    probHtml='<div class="sub" style="border-color:var(--c-clay)"><div class="sub-title" style="color:var(--c-clay)">⚠ Problem-specific mitigation</div>';
+    selProbs.forEach(pk=>{
+      const pm=PROB_MITIGATION[pk]; if(!pm)return;
+      const techs=isCut?pm.techs_cut:pm.techs_fill;
+      probHtml+=`<div style="border:1px solid var(--c-border);border-radius:var(--r);padding:.85rem;margin-top:.6rem;background:var(--c-bg)">
+        <div style="font-size:13px;font-weight:700;color:var(--c-clay);margin-bottom:.3rem">⚠ ${pm.label}</div>
+        <div style="margin-bottom:.4rem"><span style="background:var(--c-danger-l);color:var(--c-clay);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;margin-right:6px">PRIMARY: ${pm.fn_primary}</span><span style="background:var(--c-warn-l);color:var(--c-warn);padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">SECONDARY: ${pm.fn_secondary}</span></div>
+        <div style="font-size:12px;color:var(--c-text2);margin-bottom:.5rem">${pm.intro}</div>
+        <div style="font-size:11px;font-weight:700;color:var(--c-text2);text-transform:uppercase;margin-bottom:3px">Techniques (${isCut?'cut':'fill'} slope):</div>
+        <ul style="font-size:12px;line-height:1.9;padding-left:1.2rem">${applyCut(techs).map((t,i)=>`<li${i===0?' style="font-weight:600"':''}>${t}</li>`).join('')}</ul>
+        <div style="font-size:11px;color:var(--c-warn);background:var(--c-warn-l);border-radius:var(--r);padding:6px 10px;margin-top:.5rem;border-left:2px solid var(--c-warn)"><strong>Limitation:</strong> ${pm.limitation}</div>
+        <div style="font-size:11px;color:var(--c-earth);margin-top:.4rem"><strong>Key species:</strong> ${pm.species}</div></div>`;
+    });
+    probHtml+='</div>';
+  }
+
+  // ── SPECIAL CONDITIONS
+  let specHtml='';
+  BSPEC_CHK.forEach(sp=>{
+    const triggered=(sp.key==='BaseFail'||sp.key==='Rocky')?selSpecs.includes(sp.key):selProbs.includes(sp.key);
+    if(triggered) specHtml+=`<div class="special-box">⚡ <strong>SPECIAL: ${sp.label}</strong><br>Functions: ${sp.fn}<br>Recommended: <strong>${applyCut(sp.tech).join(' / ')}</strong></div>`;
+  });
+  document.getElementById('p4-special-out').innerHTML=probHtml+(specHtml?'<div style="margin-top:.5rem">'+specHtml+'</div>':'');
+
+  // ── TABLE MATCH
   let matched=BIORULES.filter(r=>{
-    const aOk=angle>r.aMin&&angle<=r.aMax;
-    const lOk=len>=r.lMin&&len<r.lMax;
-    const dOk=r.drain==='Any'||r.drain===drain;
-    const mOk=r.moist==='Any'||r.moist===moist||moist==='Any';
+    const aOk=angle>r.aMin&&angle<=r.aMax, lOk=len>=r.lMin&&len<r.lMax;
+    const dOk=r.drain==='Any'||r.drain===drain, mOk=r.moist==='Any'||r.moist===moist||moist==='Any';
     const pOk=selProbs.length===0||r.prob.some(p=>selProbs.includes(p));
     return aOk&&lOk&&dOk&&mOk&&pOk;
   });
   if(!matched.length)matched=BIORULES.filter(r=>angle>r.aMin&&angle<=r.aMax&&r.drain===drain);
   if(!matched.length)matched=BIORULES.filter(r=>angle>r.aMin&&angle<=r.aMax);
   const best=matched[0];
+  document.getElementById('p4-match-nb').innerHTML=best?`<strong>Table match (${isCut?'cut':'fill'} slope):</strong> Slope ${angle>45?'>45°':angle>=30?'30–45°':'<30°'}, length ${len>15?'>15m':'≤15m'}, ${drain} drainage, ${moist}. <strong>Functions: ${best.fn}</strong>`:'General recommendation by slope angle.';
+  const techs=applyCut(best?best.tech:angle>45?['Diagonal grass lines']:angle>=30?['Palisades of woody cuttings']:['Site seeding of grass and shrub/tree planting']);
+  const cutNotice=isCut&&(best?.tech||[]).some(t=>t.indexOf('Brush layer')>=0)?'<div class="nb warn">⚠ <strong>Cut slope limitation:</strong> Brush layering creates a plane of weakness on cut faces — replaced with palisades. Ref: DoR Bioengineering Reference Manual §4.3.</div>':'';
+  document.getElementById('p4-tech-list').innerHTML=cutNotice+techs.map((t,i)=>`<div class="tech-card ${i===0?'primary':''}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:.4rem"><div class="tech-rank ${i===0?'r1':''}">${i+1}</div><div class="tech-name">${t}</div></div>${best?`<div class="tech-fn">${best.fn}</div>`:''}<div class="tech-desc">${TECH_INFO[t]||'Refer to DoR Bioengineering Reference Manual.'}</div></div>`).join('');
 
-  document.getElementById('p4-match-nb').innerHTML=best
-    ?`<strong>Table match:</strong> Slope ${angle>45?'>45°':angle>=30?'30–45°':'<30°'}, length ${len>15?'>15 m':'≤15 m'}, drainage ${drain}, moisture ${moist}. <strong>Functions required: ${best.fn}</strong>`
-    :`General recommendation based on slope angle. Verify against site conditions.`;
-
-  const techs=best?best.tech:angle>45?['Diagonal grass lines']:angle>=30?['Brush layers of woody cuttings']:['Site seeding of grass and shrub/tree planting'];
-  document.getElementById('p4-tech-list').innerHTML=techs.map((t,i)=>`
-    <div class="tech-card ${i===0?'primary':''}">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:.4rem">
-        <div class="tech-rank ${i===0?'r1':''}">${i+1}</div>
-        <div class="tech-name">${t}</div>
-      </div>
-      ${best?`<div class="tech-fn">${best.fn}</div>`:''}
-      <div class="tech-desc">${TECH_INFO[t]||'Refer to DoR Bioengineering Reference Manual for specification.'}</div>
-    </div>`).join('');
-
-  // Species
+  // ── SPECIES
   function fsp(cat){return SPECIES_DB[cat].filter(s=>alt>=s.alt[0]&&alt<=s.alt[1]&&(s.moist==='Both'||moist==='Any'||(moist==='Damp'&&s.moist!=='Dry')||(moist==='Dry'&&s.moist!=='Damp')));}
-  const grasses=fsp('grasses'),shrubs=fsp('shrubs'),trees=fsp('trees'),bamboos=fsp('bamboo');
-  const altZone=alt<1000?'Tropical (<1000 m)':alt<2000?'Sub-tropical (1000–2000 m)':alt<2700?'Lower temperate (2000–2700 m)':alt<3500?'Upper temperate (2700–3500 m)':'Sub-alpine (>3500 m)';
-  function spRows(arr){return arr.map(s=>`<tr><td><strong>${s.name}</strong></td><td style="font-style:italic;color:var(--c-text3)">${s.sci}</td><td>${s.alt[0]}–${s.alt[1]} m</td><td>${s.note}</td></tr>`).join('');}
-  document.getElementById('p4-species').innerHTML=`
-  <div class="nb earth" style="margin-top:0;margin-bottom:.5rem">Altitude zone: <strong>${altZone}</strong> · Aspect: ${aspect||'—'} · Moisture: ${moist}
-  ${aspect.includes('N')?'<br>North-facing: prefer shade-tolerant, moisture-loving species (utis, kans, nigalo).':aspect.includes('S')?'<br>South-facing: prefer drought-tolerant species (vetiver, Vitex, durva, male bamboo).':''}</div>
-  <table class="sp-table">
-    <thead><tr><th>Common name</th><th>Scientific name</th><th>Altitude range</th><th>Notes</th></tr></thead>
-    <tbody>
-      ${grasses.length?`<tr class="grp-hdr"><td colspan="4">GRASSES</td></tr>${spRows(grasses)}`:''}
-      ${shrubs.length?`<tr class="grp-hdr"><td colspan="4">SHRUBS</td></tr>${spRows(shrubs)}`:''}
-      ${trees.length?`<tr class="grp-hdr"><td colspan="4">TREES</td></tr>${spRows(trees)}`:''}
-      ${bamboos.length?`<tr class="grp-hdr"><td colspan="4">BAMBOO</td></tr>${spRows(bamboos)}`:''}
-    </tbody>
-  </table>`;
+  const gr=fsp('grasses'),sh=fsp('shrubs'),tr=fsp('trees'),bm=fsp('bamboo');
+  const zone=alt<1000?'Tropical (<1000m)':alt<2000?'Sub-tropical (1000–2000m)':alt<2700?'Lower temperate (2000–2700m)':alt<3500?'Upper temperate (2700–3500m)':'Sub-alpine (>3500m)';
+  const rows=arr=>arr.map(s=>`<tr><td><strong>${s.name}</strong></td><td style="font-style:italic;color:var(--c-text3)">${s.sci}</td><td>${s.alt[0]}–${s.alt[1]} m</td><td>${s.note}</td></tr>`).join('');
+  document.getElementById('p4-species').innerHTML=`<div class="nb earth" style="margin-top:0;margin-bottom:.5rem">Zone: <strong>${zone}</strong> · Aspect: ${aspect||'—'} · ${moist}${aspect.indexOf('N')>=0?'<br>North-facing: moisture-loving species (utis, kans, nigalo).':aspect.indexOf('S')>=0?'<br>South-facing: drought-tolerant species (vetiver, Vitex, durva, male bamboo).':''}</div>
+  <table class="sp-table"><thead><tr><th>Common name</th><th>Scientific name</th><th>Altitude</th><th>Notes</th></tr></thead><tbody>
+    ${gr.length?'<tr class="grp-hdr"><td colspan="4">GRASSES</td></tr>'+rows(gr):''}
+    ${sh.length?'<tr class="grp-hdr"><td colspan="4">SHRUBS</td></tr>'+rows(sh):''}
+    ${tr.length?'<tr class="grp-hdr"><td colspan="4">TREES</td></tr>'+rows(tr):''}
+    ${bm.length?'<tr class="grp-hdr"><td colspan="4">BAMBOO</td></tr>'+rows(bm):''}
+  </tbody></table>`;
 
-  const calNote=fsClass==='stable'?'Begin bioengineering immediately after cutting. Prioritise grass planting before first monsoon rain.':
-    fsClass==='marginal'?'Install drainage and civil works first (April–May). Begin planting at monsoon onset (June–July).':
-    'Construct retaining wall first. Begin bioengineering on retained face and above wall top at monsoon onset (June–July).';
-  document.getElementById('p4-calendar').innerHTML=`
-    <div style="font-size:12px;line-height:1.9;color:var(--c-text)">
-      <div>🌱 <strong>Primary planting season:</strong> June–August (monsoon onset) — grass slips, live stakes, brush layers, palisades</div>
-      <div>🌿 <strong>Nursery preparation:</strong> March–May — raise seedlings, collect cuttings, prepare jute netting</div>
-      <div>🌳 <strong>Tree/shrub seedlings:</strong> July–September — plant at monsoon when soil is moist</div>
-      <div>🌾 <strong>Direct seeding:</strong> June–July — broadcast grass and shrub seed on prepared slope</div>
-      <div>🔍 <strong>Maintenance:</strong> October–November — post-monsoon survey, gap-filling, coppicing</div>
-      <div class="nb earth" style="margin-top:.5rem"><strong>Implementation context:</strong> ${calNote}</div>
-      <div style="margin-top:.5rem">📏 <strong>Spacing guide:</strong> Grass slips 20–30 cm apart in rows · Shrubs 1.0–1.5 m centres · Trees 1.5–2.0 m centres. Mix species — avoid single-species monocultures.</div>
-    </div>`;
+  // ── CALENDAR
+  const fillNote=(!isCut&&len>5)?'Construct dry stone toe wall (1.0–1.5 m) first. Then plant immediately on fill surface at monsoon onset.':'';
+  const cal=isCut?(fsClass==='stable'?'Begin bioengineering immediately after cutting, before first monsoon rain.':fsClass==='marginal'?'Install drainage + prescriptive wall first. Plant at monsoon onset (June–July).':'Construct retaining wall first. Apply on face above coping at monsoon onset.')
+    :(fillNote||'Plant immediately on fill surface at monsoon onset (June–July).');
+  document.getElementById('p4-calendar').innerHTML=`<div style="font-size:12px;line-height:1.9">
+    <div>🌱 <strong>Primary planting:</strong> June–August (monsoon onset) — grass slips, live stakes, ${isCut?'palisades, fascines':'brush layers, palisades'}</div>
+    <div>🌿 <strong>Nursery prep:</strong> March–May — seedlings, cuttings, jute netting</div>
+    <div>🌳 <strong>Tree/shrub seedlings:</strong> July–September</div>
+    <div>🔍 <strong>Maintenance:</strong> Oct–Nov — survey, gap-filling, desilt drains</div>
+    <div class="nb earth" style="margin-top:.5rem"><strong>Context${isCut?' (FS='+((ST.FS_cut>0)?ST.FS_cut.toFixed(2):'—')+')':''}:</strong> ${cal}</div>
+    <div style="margin-top:.5rem">📏 Spacing: grass 20–30 cm · shrubs 1.0–1.5 m · trees 1.5–2.0 m. Mix species.</div>
+    ${isCut?'<div style="margin-top:.3rem">✂ <strong>Cut slope:</strong> no brush layers; use palisades/fascines/grass lines.</div>':'<div style="margin-top:.3rem">🏔 <strong>Fill slope:</strong> brush layers and diagonal brush layers are permitted and effective for soil reinforcement.</div>'}</div>`;
 
   document.getElementById('p4-output').classList.remove('hidden');
-  document.getElementById('p4-output').scrollIntoView({behavior:'smooth'});
+}
+
+// ════ PAGE 5: DRAINAGE ════
+
+const C_ROWS=[
+{desc:'Steep bare rock; concrete / bitumen pavement',cLo:0.85,cHi:0.95},
+{desc:'Steep rock with some vegetative cover',cLo:0.75,cHi:0.85},
+{desc:'Bare stiff clay (impervious); cut slope',cLo:0.60,cHi:0.70},
+{desc:'Stiff clay with veg cover; compacted gravel road',cLo:0.45,cHi:0.60},
+{desc:'Loam, lightly cultivated/covered; disturbed slope',cLo:0.35,cHi:0.45},
+{desc:'Loam largely cultivated, turfed, grassed',cLo:0.25,cHi:0.35},
+{desc:'Sandy soil, light growth, parks, meadows',cLo:0.15,cHi:0.25},
+{desc:'Sandy soil with heavy brush or forested',cLo:0.05,cHi:0.15}];
+const LINING={
+concrete_smooth:{n:[0.012,0.014],vmax:[6.0,6.0],label:'Smooth concrete'},
+concrete_float:{n:[0.013,0.015],vmax:[6.0,6.0],label:'Float concrete'},
+cement_masonry:{n:[0.017,0.020],vmax:[4.5,5.0],label:'Cement stone masonry (1:4)'},
+dressed_stone:{n:[0.015,0.017],vmax:[5.0,6.0],label:'Dressed stone in mortar'},
+rough_stone:{n:[0.025,0.030],vmax:[4.0,4.5],label:'Rough stone / riprap'},
+gabion:{n:[0.028,0.035],vmax:[3.5,4.5],label:'Gabion lining'},
+turf:{n:[0.030,0.050],vmax:[0.9,1.2],label:'Dense turf'},
+bare_earth:{n:[0.020,0.026],vmax:[0.3,0.6],label:'Bare earth'},
+bitumen:{n:[0.013,0.016],vmax:[5.0,6.0],label:'Bituminous'},
+rock_smooth:{n:[0.035,0.040],vmax:[5.5,6.0],label:'Natural rock — smooth'},
+rock_jagged:{n:[0.040,0.045],vmax:[5.5,6.0],label:'Natural rock — jagged'},
+rock_soft:{n:[0.035,0.040],vmax:[2.5,2.5],label:'Natural rock — soft'},
+rock_hard:{n:[0.035,0.040],vmax:[5.5,5.5],label:'Natural rock — hard'}};
+function buildCTable(){
+  const tb=document.getElementById('c-tbody'); if(!tb||tb.children.length>0)return;
+  tb.innerHTML=C_ROWS.map((r,i)=>`<tr style="border-bottom:1px solid var(--c-border);${i%2===0?'background:var(--c-bg2)':''}"><td style="padding:6px 10px;font-size:12px">${r.desc}</td><td style="padding:6px 10px;text-align:center"><input type="number" class="c-pct" data-idx="${i}" value="0" min="0" max="100" style="width:72px;height:30px;border:1px solid var(--c-border);border-radius:var(--r);text-align:center;font-size:12px;background:var(--c-bg);font-family:inherit" oninput="updateCTable()"></td><td style="padding:6px 10px;text-align:center;font-size:12px;color:var(--c-text2)" id="ca-${i}">—</td></tr>`).join('');
+}
+function updateCTable(){
+  let tp=0,tc=0;
+  document.querySelectorAll('.c-pct').forEach((inp,i)=>{
+    const pct=parseFloat(inp.value)||0, cMid=(C_ROWS[i].cLo+C_ROWS[i].cHi)/2, ca=pct*cMid;
+    tp+=pct; tc+=ca;
+    const cel=document.getElementById('ca-'+i); if(cel)cel.textContent=pct>0?(ca/100).toFixed(4):'—';
+  });
+  weightedC=tc/100;
+  document.getElementById('c-total-pct').textContent=tp.toFixed(0)+' %';
+  document.getElementById('c-total-cw').textContent='C_w = '+(tp>0?weightedC.toFixed(3):'—');
+  const w=document.getElementById('c-warn'),o=document.getElementById('c-ok');
+  if(Math.abs(tp-100)<1){w.classList.add('hidden');o.classList.remove('hidden');o.innerHTML='✓ Total 100%. <strong>C_w = '+weightedC.toFixed(3)+'</strong>';}
+  else{o.classList.add('hidden');w.classList.remove('hidden');w.innerHTML='⚠ Total = '+tp.toFixed(0)+'% (must = 100%). Remaining '+(100-tp).toFixed(0)+'%';}
+  calcDischarge();
+}
+function calcTc(){
+  const L=parseFloat(document.getElementById('d-L').value)||0, Hd=parseFloat(document.getElementById('d-Hd').value)||0;
+  const box=document.getElementById('tc-result');
+  if(!L||!Hd){box.classList.add('hidden');return;}
+  const tc_raw=0.0195*Math.pow(L,1.155)/Math.pow(Hd,0.385);
+  const tc_used=Math.max(5,Math.min(20,tc_raw));
+  box.classList.remove('hidden');
+  document.getElementById('tc-val').textContent=tc_raw.toFixed(2);
+  document.getElementById('tc-used').textContent=tc_used.toFixed(2)+(Math.abs(tc_raw-tc_used)>0.01?' (clamped)':'');
+  const cs=document.getElementById('d-catslope').value;
+  const adv=cs==='steep'?'Steep catchment — use tc toward lower end; higher intensity.':cs==='gentle'?'Gentle catchment — tc toward upper limit; lower intensity.':'Moderate — Kirpich estimate appropriate.';
+  const n=document.getElementById('tc-cs-note'); if(n){n.classList.remove('hidden');n.innerHTML='<strong>Slope advisory:</strong> '+adv;}
+  calcDischarge();
+}
+function onIsrcChange(){
+  const src=document.getElementById('d-Isrc').value, I=document.getElementById('d-I'), note=document.getElementById('I-note');
+  if(src==='typical'){I.value=125;note.classList.remove('hidden');note.innerHTML='High rainfall zone (>2500 mm/yr). Verify with DHM IDF curves.';}
+  else if(src==='typical_med'){I.value=80;note.classList.remove('hidden');note.innerHTML='Medium rainfall zone (1500–2500 mm/yr).';}
+  else if(src==='typical_low'){I.value=50;note.classList.remove('hidden');note.innerHTML='Low rainfall zone (<1500 mm/yr).';}
+  else note.classList.add('hidden');
+  calcDischarge();
+}
+function freqFactor(rp){return {'10':1.00,'25':1.10,'50':1.20}[rp]||1.0;}
+function calcDischarge(){
+  const A=parseFloat(document.getElementById('d-area').value)||0, I=parseFloat(document.getElementById('d-I').value)||0;
+  const rp=document.getElementById('d-return').value, amc=document.getElementById('d-amc').value, dtype=document.getElementById('d-dtype').value;
+  if(!A||!I||weightedC<=0)return;
+  const amcF={'I':0.80,'II':1.00,'III':1.15}[amc]||1.0, Cf=freqFactor(rp);
+  const Cd=Math.min(0.95,weightedC*Cf*amcF);
+  peakQ=0.278*Cd*I*A;
+  document.getElementById('discharge-card').classList.remove('hidden');
+  document.getElementById('channel-card').classList.remove('hidden');
+  const amcL={'I':'Dry','II':'Normal','III':'Wet'}[amc];
+  document.getElementById('d-mc-q').innerHTML=`
+    <div class="mc"><div class="mc-lbl">Base C_w</div><div class="mc-val">${weightedC.toFixed(3)}</div></div>
+    <div class="mc"><div class="mc-lbl">AMC (${amcL})</div><div class="mc-val">${amcF.toFixed(2)}</div></div>
+    <div class="mc"><div class="mc-lbl">Freq C_f (${rp}yr)</div><div class="mc-val">${Cf.toFixed(2)}</div></div>
+    <div class="mc"><div class="mc-lbl">Design C</div><div class="mc-val">${Cd.toFixed(3)}</div><div class="mc-unit">≤0.95</div></div>
+    <div class="mc"><div class="mc-lbl">Intensity I</div><div class="mc-val">${I}</div><div class="mc-unit">mm/hr</div></div>
+    <div class="mc"><div class="mc-lbl">Area A</div><div class="mc-val">${A}</div><div class="mc-unit">km²</div></div>
+    <div class="mc ok" style="grid-column:span 3"><div class="mc-lbl">Peak Q = 0.278·C·I·A</div><div class="mc-val" style="font-size:22px">${peakQ.toFixed(4)}</div><div class="mc-unit">m³/s</div></div>`;
+  document.getElementById('d-q-note').innerHTML=`<strong>Q = 0.278 × ${Cd.toFixed(3)} × ${I} × ${A} = ${peakQ.toFixed(4)} m³/s</strong><br><em>0.278 = 1/3.6 converts mm/hr·km² → m³/s</em><br>${dtype==='both'?'Two drains — design each for full Q (conservative).':'Design the '+dtype+' drain for this Q.'} Return period ${rp}-yr.`;
+}
+function onLiningChange(){
+  const key=document.getElementById('d-lining').value, box=document.getElementById('lining-params');
+  if(!key){box.classList.add('hidden');return;}
+  const L=LINING[key]; box.classList.remove('hidden');
+  document.getElementById('d-n-val').textContent=L.n[0].toFixed(3)+'–'+L.n[1].toFixed(3)+' (use '+((L.n[0]+L.n[1])/2).toFixed(3)+')';
+  document.getElementById('d-vmax-val').textContent=L.vmax[0]+'–'+L.vmax[1];
+  runChannelDesign();
+}
+function manningCalc(shape,b,d,n,S){
+  const side=1.5; let A_f,P;
+  switch(shape){
+    case 'rect': A_f=b*d; P=b+2*d; break;
+    case 'trap': A_f=(b+side*d)*d; P=b+2*d*Math.sqrt(1+side*side); break;
+    case 'tri': A_f=side*d*d; P=2*d*Math.sqrt(1+side*side); break;
+    case 'semi':{const r=b/2;A_f=0.5*Math.PI*r*r;P=Math.PI*r;break;}
+    default: A_f=b*d;P=b+2*d;
+  }
+  if(A_f<=0||P<=0)return{A_f:0,P:0,R:0,V:0,Q_cap:0};
+  const R=A_f/P, V=(1/n)*Math.pow(R,2/3)*Math.pow(S,0.5);
+  return{A_f,P,R,V,Q_cap:A_f*V};
+}
+function runChannelDesign(){
+  const shape=document.getElementById('d-shape').value, key=document.getElementById('d-lining').value, S=parseFloat(document.getElementById('d-slope').value)||0;
+  if(!key||!S||peakQ<=0)return;
+  const L=LINING[key], n=(L.n[0]+L.n[1])/2, vmax=(L.vmax[0]+L.vmax[1])/2, vmin=0.30, FB=0.20, side=1.5;
+  let best=null;
+  if(shape==='rect'){
+    // B = H/1.5  →  b = d/1.5
+    let d=0.001;
+    for(let it=0;it<10000;it++){ const b=d/1.5; const res=manningCalc('rect',b,d,n,S); if(res.Q_cap>=peakQ){best={b,d,...res};break;} d+=0.001; if(d>10)break; }
+    if(best&&(best.V>vmax||best.V<vmin)){ let fb=null; for(let d2=0.05;d2<=5;d2+=0.001){const b2=d2/1.5;const res=manningCalc('rect',b2,d2,n,S);if(res.Q_cap>=peakQ&&res.V<=vmax&&res.V>=vmin){fb={b:b2,d:d2,...res};break;}} if(fb)best=fb; }
+  } else if(shape==='trap'){
+    let d=0.001;
+    for(let it=0;it<10000;it++){ const b=0.606*d; const res=manningCalc('trap',b,d,n,S); if(res.Q_cap>=peakQ){best={b,d,...res};break;} d+=0.001; if(d>10)break; }
+    if(best&&(best.V>vmax||best.V<vmin)){ let fb=null; for(let d2=0.05;d2<=5;d2+=0.001){const b2=0.606*d2;const res=manningCalc('trap',b2,d2,n,S);if(res.Q_cap>=peakQ&&res.V<=vmax&&res.V>=vmin){fb={b:b2,d:d2,...res};break;}} if(fb)best=fb; }
+  } else if(shape==='tri'){
+    let d=0.001; for(let it=0;it<10000;it++){const res=manningCalc('tri',0,d,n,S);if(res.Q_cap>=peakQ){best={b:0,d,...res};break;}d+=0.001;if(d>10)break;}
+  } else if(shape==='semi'){
+    let r=0.001; for(let it=0;it<10000;it++){const res=manningCalc('semi',2*r,r,n,S);if(res.Q_cap>=peakQ){best={b:2*r,d:r,...res};break;}r+=0.001;if(r>5)break;}
+  }
+  if(!best){ let d=0.001; for(let it=0;it<10000;it++){const b=Math.max(0.2,d/1.5);const res=manningCalc('rect',b,d,n,S);if(res.Q_cap>=peakQ){best={b,d,...res};break;}d+=0.001;if(d>10)break;} }
+  if(!best||best.Q_cap<peakQ*0.99){
+    document.getElementById('channel-results').classList.remove('hidden');
+    document.getElementById('ch-results-content').innerHTML='<div class="nb danger">⚠ Cannot achieve Q='+peakQ.toFixed(4)+' m³/s with this lining (n='+n.toFixed(3)+') and slope S='+S+'. Increase slope, smoother lining, or trapezoidal section.</div>';
+    return;
+  }
+  const D=best.d+FB, v_ok=best.V<=vmax&&best.V>=vmin;
+  const b_c=Math.ceil(best.b*200)/200, d_c=Math.ceil(best.d*200)/200, D_c=Math.ceil(D*200)/200;
+  const res_c=manningCalc(shape,shape==='tri'?0:b_c,d_c,n,S);
+  const scl=160,svgW=460,svgH=200,ox=svgW/2,oy=svgH-35;
+  function bsvg(b,d,fb){
+    const bpx=b*scl,dpx=d*scl,totpx=(d+fb)*scl;
+    switch(shape){
+      case 'rect':return{ch:`M${ox-bpx/2},${oy} L${ox-bpx/2},${oy-totpx} L${ox+bpx/2},${oy-totpx} L${ox+bpx/2},${oy}`,ws:`M${ox-bpx/2},${oy} L${ox-bpx/2},${oy-dpx} L${ox+bpx/2},${oy-dpx} L${ox+bpx/2},${oy} Z`,tw:bpx,lbl:`B=${b.toFixed(3)}m (=d/1.5) | d=${d.toFixed(3)}m | D=${(d+fb).toFixed(3)}m`};
+      case 'trap':return{ch:`M${ox-bpx/2-totpx*side},${oy} L${ox-bpx/2},${oy-totpx} L${ox+bpx/2},${oy-totpx} L${ox+bpx/2+totpx*side},${oy}`,ws:`M${ox-bpx/2-dpx*side},${oy} L${ox-bpx/2},${oy-dpx} L${ox+bpx/2},${oy-dpx} L${ox+bpx/2+dpx*side},${oy} Z`,tw:bpx+2*totpx*side,lbl:`B_bot=${b.toFixed(3)}m | B_top=${(b+2*side*(d+fb)).toFixed(3)}m | D=${(d+fb).toFixed(3)}m`};
+      case 'tri':return{ch:`M${ox-totpx*side},${oy} L${ox},${oy-totpx} L${ox+totpx*side},${oy}`,ws:`M${ox-dpx*side},${oy} L${ox},${oy-dpx} L${ox+dpx*side},${oy} Z`,tw:2*totpx*side,lbl:`d=${d.toFixed(3)}m | D=${(d+fb).toFixed(3)}m | Top=${(2*side*(d+fb)).toFixed(3)}m | 1V:1.5H`};
+      case 'semi':{const r=b/2,rpx=r*scl;return{ch:`M${ox-rpx},${oy} A${rpx},${rpx} 0 0 1 ${ox+rpx},${oy}`,ws:`M${ox-rpx},${oy} A${rpx},${rpx} 0 0 1 ${ox+rpx},${oy} Z`,tw:2*rpx,lbl:`Diameter=${b.toFixed(3)}m | r=${r.toFixed(3)}m | D=${(r+fb).toFixed(3)}m`};}
+      default:return{ch:'',ws:'',tw:0,lbl:''};
+    }
+  }
+  const sv=bsvg(shape==='tri'?0:b_c,d_c,FB);
+  document.getElementById('channel-results').classList.remove('hidden');
+  document.getElementById('ch-results-content').innerHTML=`
+  <div class="sub" style="margin-top:0"><div class="sub-title">Computed Dimensions</div><div class="mc-grid">
+    ${shape!=='tri'&&shape!=='semi'?`<div class="mc"><div class="mc-lbl">${shape==='rect'?'Width B (=H/1.5)':'Bottom width B'}</div><div class="mc-val">${b_c.toFixed(3)}</div><div class="mc-unit">m</div></div>`:''}
+    <div class="mc"><div class="mc-lbl">Flow depth d</div><div class="mc-val">${d_c.toFixed(3)}</div><div class="mc-unit">m</div></div>
+    <div class="mc"><div class="mc-lbl">Freeboard</div><div class="mc-val">${FB.toFixed(2)}</div><div class="mc-unit">m</div></div>
+    <div class="mc ok"><div class="mc-lbl">Total depth D</div><div class="mc-val">${D_c.toFixed(3)}</div><div class="mc-unit">m</div></div>
+    ${shape==='rect'?`<div class="mc"><div class="mc-lbl">B/d ratio</div><div class="mc-val">${(b_c/d_c).toFixed(2)}</div></div>`:''}
+    ${shape==='trap'?`<div class="mc"><div class="mc-lbl">Top width</div><div class="mc-val">${(b_c+2*side*d_c).toFixed(3)}</div><div class="mc-unit">m</div></div>`:''}
+    ${shape==='semi'?`<div class="mc"><div class="mc-lbl">Diameter</div><div class="mc-val">${b_c.toFixed(3)}</div><div class="mc-unit">m</div></div>`:''}
+    <div class="mc"><div class="mc-lbl">Flow area A</div><div class="mc-val">${res_c.A_f.toFixed(4)}</div><div class="mc-unit">m²</div></div>
+    <div class="mc"><div class="mc-lbl">Hydraulic R</div><div class="mc-val">${res_c.R.toFixed(4)}</div><div class="mc-unit">m</div></div>
+    <div class="mc ${v_ok?'ok':'bad'}"><div class="mc-lbl">Velocity V</div><div class="mc-val">${res_c.V.toFixed(3)}</div><div class="mc-unit">m/s</div></div>
+    <div class="mc ok"><div class="mc-lbl">Capacity Q</div><div class="mc-val">${res_c.Q_cap.toFixed(4)}</div><div class="mc-unit">m³/s</div></div>
+    <div class="mc"><div class="mc-lbl">Manning n</div><div class="mc-val">${n.toFixed(3)}</div></div>
+  </div></div>
+  <div class="nb ${res_c.Q_cap>=peakQ?'success':'danger'}">${res_c.Q_cap>=peakQ?'✓ Capacity '+res_c.Q_cap.toFixed(4)+' ≥ Peak Q '+peakQ.toFixed(4)+' m³/s':'✗ Capacity < Peak Q — enlarge section'}</div>
+  ${!v_ok?`<div class="nb ${res_c.V>vmax?'danger':'warn'}">${res_c.V>vmax?'⚠ Velocity '+res_c.V.toFixed(3)+' > permissible '+vmax+' m/s — scour risk. Flatten slope or use resistant lining.':'⚠ Velocity '+res_c.V.toFixed(3)+' < non-silting min '+vmin+' m/s — siltation. Steepen or narrow section.'}</div>`:`<div class="nb success">✓ Velocity ${res_c.V.toFixed(3)} m/s within non-silting/non-scouring range (${vmin}–${vmax} m/s).</div>`}
+  <div class="xs-wrap" style="margin-top:.75rem"><svg width="100%" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="${svgW}" height="${svgH}" fill="#f5f3ee"/>
+    <line x1="0" y1="${oy}" x2="${svgW}" y2="${oy}" stroke="#b8b5ad" stroke-width="1.5"/>
+    <path d="${sv.ws}" fill="#4a7fa5" fill-opacity="0.35"/>
+    <path d="${sv.ch}" fill="none" stroke="#2C3E2D" stroke-width="2.5" stroke-linejoin="round"/>
+    <line x1="${ox-sv.tw/2-24}" y1="${oy-d_c*scl}" x2="${ox+sv.tw/2+24}" y2="${oy-d_c*scl}" stroke="#4a7fa5" stroke-width="1" stroke-dasharray="5 3"/>
+    <text x="${ox}" y="${oy-d_c*scl-7}" font-size="9" fill="#4a7fa5" text-anchor="middle" font-family="DM Sans">▲ Water d=${d_c.toFixed(3)}m</text>
+    <text x="${ox}" y="${oy+20}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">${sv.lbl}</text>
+    <text x="${ox}" y="14" font-size="11" fill="#2C3E2D" text-anchor="middle" font-family="DM Sans" font-weight="600">${shape==='rect'?'Rectangular (B=H/1.5)':shape==='trap'?'Trapezoidal (1V:1.5H)':shape==='tri'?'Triangular V':'Semi-circular'} — ${L.label}</text>
+  </svg></div>
+  <div class="sub"><div class="sub-title">Manning Verification</div><div style="font-size:12px;line-height:2">
+    <div>A=${res_c.A_f.toFixed(4)} m² · P=${res_c.P.toFixed(4)} m · R=A/P=${res_c.R.toFixed(4)} m · S=${S}</div>
+    <div>V=(1/${n.toFixed(3)})×${res_c.R.toFixed(4)}^(2/3)×${S}^(1/2)=<strong>${res_c.V.toFixed(3)} m/s</strong></div>
+    <div>Q=A×V=<strong>${res_c.Q_cap.toFixed(4)} m³/s</strong> (required ${peakQ.toFixed(4)})</div>
+    ${shape==='rect'?`<div style="color:var(--c-earth)"><strong>B=H/1.5:</strong> ${b_c.toFixed(3)}=${d_c.toFixed(3)}/1.5=${(d_c/1.5).toFixed(3)} ✓</div>`:''}
+  </div></div>
+  <div class="sub"><div class="sub-title">Construction Notes</div><div style="font-size:12px;line-height:1.9">
+    <div>🏗 Lining: ${L.label} — n=${n.toFixed(3)}, Vmax=${L.vmax[0]}–${L.vmax[1]} m/s</div>
+    <div>📏 Freeboard 0.20 m (DoR standard)</div>
+    ${shape==='trap'?'<div>📐 Side slopes 1V:1.5H — do not steepen</div>':''}
+    <div>🔧 Bed slope ${S} m/m — uniform; drop structure at change >0.05 m/m</div>
+    <div>🌿 Seed turf/bare-earth drains with vetiver/durva after construction</div>
+    <div>🔍 Desilt annually before monsoon</div></div></div>
+  <div class="nb info"><strong>References:</strong> Rational formula (DoR Standards); Kirpich (1940); Manning (1891); IS:10430-2000; MRE-ICIMOD.</div>`;
+}
+function setupDrainPage(){
+  buildCTable();
+  const rain=ST.rain, src=document.getElementById('d-Isrc'), note=document.getElementById('I-note');
+  if(rain==='High'){src.value='typical';document.getElementById('d-I').value=125;note.classList.remove('hidden');note.innerHTML='Pre-filled: High rainfall zone. Verify DHM IDF.';}
+  else if(rain==='Medium'){src.value='typical_med';document.getElementById('d-I').value=80;note.classList.remove('hidden');note.innerHTML='Pre-filled: Medium rainfall zone.';}
+  else if(rain==='Low'){src.value='typical_low';document.getElementById('d-I').value=50;note.classList.remove('hidden');note.innerHTML='Pre-filled: Low rainfall zone.';}
 }
 </script>
 </body>
