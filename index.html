@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -314,7 +315,21 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
         <div class="wopt" onclick="selWall('cement',this)"><div class="wn">Cement (1:4)</div><div class="wg">γ23 μ0.55</div></div>
         <div class="wopt" onclick="selWall('gabion',this)"><div class="wn">Gabion</div><div class="wg">γ17 μ0.50</div></div>
       </div>
-      <div class="fld" style="margin-top:12px"><label>Road / surcharge q (kPa)</label><input type="number" id="p3-q" value="10"></div>
+      <div class="g3" style="margin-top:12px">
+        <div class="fld"><label>Road / surcharge q (kPa)</label><input type="number" id="p3-q" value="10"></div>
+        <div class="fld"><label>Wall height Hw (m) ≤ H</label><input type="number" id="p3-Hw" placeholder="e.g. 4" min="0.5">
+          <span style="font-size:10px;color:var(--c-text3)">Leave blank to use full H. Free cut h = H − Hw above wall.</span>
+        </div>
+        <div class="fld"><label>Free cut height h (m)</label><input type="number" id="p3-h" readonly tabindex="-1" style="background:var(--c-bg2);color:var(--c-text3)">
+          <span style="font-size:10px;color:var(--c-text3)">Auto-calculated: h = H − Hw</span>
+        </div>
+      </div>
+      <div class="g2" style="margin-top:10px">
+        <div class="fld"><label>Override base width B (m) — optional</label><input type="number" id="p3-B-ov" placeholder="Blank = auto" step="0.1" min="0.5">
+          <span style="font-size:10px;color:var(--c-text3)">Auto: max(0.5+Hw/10+Hw/36, 0.6·Hw). Enter to override for redesign.</span>
+        </div>
+        <div></div>
+      </div>
       <div id="p3-sbc-disp" class="nb info hidden"></div>
       <button class="btn btn-danger" style="margin-top:1rem" onclick="runWall()">🧱 Design Wall &amp; Check Stability</button>
     </div>
@@ -341,9 +356,14 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
   <div id="p4-cut-section">
     <div class="card">
       <div class="card-hdr"><div class="card-icon earth">✂</div><div><div class="card-title">Cut Slope — Bioengineering Parameters</div><div class="card-sub">Slope angle carried from stability analysis; enter additional data below</div></div></div>
-      <div class="nb earth" style="margin-top:0" id="p4-cut-context">Cut slope angle α and height H from Step 1 are used. Brush layering is NOT used on cut slopes — palisades are substituted automatically.</div>
-      <div class="g3" style="margin-top:.75rem">
-        <div class="fld"><label>Cut slope length (m)</label><input type="number" id="p4c-len" placeholder="e.g. 12"></div>
+      <div class="nb earth" style="margin-top:0" id="p4-cut-context">Cut slope angle α and height from Step 1. If wall built, free cut h is used. Palisades substitute brush layers automatically.</div>
+      <div class="g4" style="margin-top:.75rem">
+        <div class="fld"><label>Unsupported height (m)</label><input type="number" id="p4c-Heff" readonly tabindex="-1" style="background:var(--c-bg2)">
+          <span style="font-size:10px;color:var(--c-text3)">h if wall, else H</span>
+        </div>
+        <div class="fld"><label>Slope length L (m)</label><input type="number" id="p4c-len" readonly tabindex="-1" style="background:var(--c-bg2)">
+          <span style="font-size:10px;color:var(--c-text3)">H_eff/sin(α)</span>
+        </div>
         <div class="fld"><label>Material drainage</label><select id="p4c-drain"><option value="">Select</option><option value="Good">Good — free-draining</option><option value="Poor">Poor — impeded</option></select></div>
         <div class="fld"><label>Site moisture</label><select id="p4c-moist"><option value="">Select</option><option value="Damp">Damp</option><option value="Dry">Dry</option><option value="Any">Variable</option></select></div>
       </div>
@@ -672,9 +692,18 @@ function runStability(){
   }
   document.getElementById('p2-nodata').classList.add('hidden');
   const {c,phi,gamma,H,alpha,beta,ru}=ST;
-  const FS_cut=taylorFS(c,phi,gamma,H,alpha,ru);
-  const FS_nat=beta?taylorFS(c,phi,gamma,H,beta,ru):null;
+  const FS_cut_raw=taylorFS(c,phi,gamma,H,alpha,ru);
+  const FS_nat_raw=beta?taylorFS(c,phi,gamma,H,beta,ru):null;
   const Sn=c/(gamma*H);
+  // Land use factor a
+  const LU_FACTOR={'Forest':1.15,'Scrubland / degraded forest':1.10,'Cultivated / terraced':1.00,'Barren / eroded':0.90,'Settlement':1.00,'Pasture / grassland':1.05};
+  const a_lu=LU_FACTOR[ST.land]||1.0;
+  // Rainfall factor b
+  const RF_FACTOR={'Low':1.10,'Medium':1.00,'High':0.90};
+  const b_rf=RF_FACTOR[ST.rain]||1.0;
+  // Adjusted FS
+  const FS_cut=FS_cut_raw*a_lu*b_rf;
+  const FS_nat=FS_nat_raw!==null?FS_nat_raw*a_lu*b_rf:null;
   ST.FS_cut=FS_cut; ST.FS_nat=FS_nat||0;
   ST.needsWall=FS_cut<1.1;
   ST.needsMarginal=(FS_cut>=1.1&&FS_cut<1.3);
@@ -686,9 +715,12 @@ function runStability(){
   document.getElementById('p2-mc').innerHTML=`
     <div class="mc"><div class="mc-lbl">Sn=c/(γH)</div><div class="mc-val">${Sn.toFixed(4)}</div></div>
     <div class="mc"><div class="mc-lbl">Ns at α=${alpha}° (φm=${dCut.phi_m.toFixed(1)}°)</div><div class="mc-val">${dCut.Ns.toFixed(4)}</div></div>
-    <div class="mc ${fsC}"><div class="mc-lbl">FS — cut</div><div class="mc-val">${FS_cut.toFixed(2)}</div></div>
-    ${FS_nat!==null?`<div class="mc"><div class="mc-lbl">Ns at β=${beta}° (φm=${dNat.phi_m.toFixed(1)}°)</div><div class="mc-val">${dNat.Ns.toFixed(4)}</div></div>
-    <div class="mc ${FS_nat>=1.3?'ok':FS_nat>=1.1?'warn':'bad'}"><div class="mc-lbl">FS — natural</div><div class="mc-val">${FS_nat.toFixed(2)}</div></div>
+    <div class="mc"><div class="mc-lbl">FS raw (Taylor)</div><div class="mc-val">${FS_cut_raw.toFixed(3)}</div></div>
+    <div class="mc"><div class="mc-lbl">Land use factor a</div><div class="mc-val">${a_lu.toFixed(2)}</div><div class="mc-unit">${ST.land||'—'}</div></div>
+    <div class="mc"><div class="mc-lbl">Rainfall factor b</div><div class="mc-val">${b_rf.toFixed(2)}</div><div class="mc-unit">${ST.rain||'—'}</div></div>
+    <div class="mc ${fsC}"><div class="mc-lbl">FS adjusted (a×b)</div><div class="mc-val">${FS_cut.toFixed(2)}</div></div>
+    ${FS_nat!==null?`<div class="mc"><div class="mc-lbl">FS nat raw</div><div class="mc-val">${FS_nat_raw.toFixed(3)}</div></div>
+    <div class="mc ${FS_nat>=1.3?'ok':FS_nat>=1.1?'warn':'bad'}"><div class="mc-lbl">FS nat adjusted</div><div class="mc-val">${FS_nat.toFixed(2)}</div></div>
     <div class="mc"><div class="mc-lbl">ru</div><div class="mc-val">${ru}</div></div>`:''}`;
   document.getElementById('p2-nat-ang').textContent=beta?beta+'°':'—';
   document.getElementById('p2-nat-ratio').textContent=beta?'H:V='+Math.tan(beta*Math.PI/180).toFixed(2)+':1':'';
@@ -861,161 +893,142 @@ function runWall(){
   const W=WALLS[ST.wallKey], {c,phi,gamma,H}=ST;
   ST.q=parseFloat(document.getElementById('p3-q').value)||10;
   const q=ST.q, SBC=ST.SBC;
-  const i_deg=ST.beta||0; // backfill angle = natural slope β from Step 1
+  // Wall height and free cut
+  const Hw_in=parseFloat(document.getElementById('p3-Hw').value)||H;
+  const Hw_wall=Math.min(Hw_in,H);
+  const h=Math.max(0,H-Hw_wall);
+  ST.h=h; ST.Hw_wall=Hw_wall;
+  document.getElementById('p3-h').value=h.toFixed(2);
+  // Backfill = natural slope
+  const i_deg=ST.beta||0;
   const ir=i_deg*Math.PI/180, pr=phi*Math.PI/180;
-
-  // ── Rankine Ka with inclined backfill ──────────────────────────────────
-  // Ka = cos(i) × [cos(i) - √(cos²(i) - cos²(φ))] / [cos(i) + √(cos²(i) - cos²(φ))]
-  // Requires i < φ; if i ≥ φ the slope itself is at or beyond failure.
+  // Ka inclined backfill
   let Ka;
-  if(i_deg<=0){
-    Ka=Math.tan(Math.PI/4-pr/2)**2; // standard level-backfill Rankine
-  } else {
-    const ci=Math.cos(ir), cp=Math.cos(pr);
-    const disc=ci*ci-cp*cp;
-    if(disc<0){ // i > φ — backfill itself is unstable
+  if(i_deg<=0){ Ka=Math.tan(Math.PI/4-pr/2)**2; }
+  else {
+    const ci=Math.cos(ir),cp=Math.cos(pr),disc=ci*ci-cp*cp;
+    if(disc<0){
       document.getElementById('p3-wall-out').classList.remove('hidden');
-      document.getElementById('p3-wall-content').innerHTML='<div class="nb danger">⚠ Backfill angle i='+i_deg+'° exceeds soil friction φ='+phi+'°. The backfill itself is unstable and will fail before any wall can retain it. Reduce backfill angle or improve backfill material.</div>';
+      document.getElementById('p3-wall-content').innerHTML='<div class="nb danger">Backfill i='+i_deg+'° >= phi='+phi+'°. Unstable backfill.</div>';
       return;
     }
     Ka=ci*(ci-Math.sqrt(disc))/(ci+Math.sqrt(disc));
   }
-
-  // ── Passive Kp (level toe — conservative; ignore backfill for passive) ──
   const Kp=Math.tan(Math.PI/4+pr/2)**2;
-
-  // ── Geometry ──────────────────────────────────────────────────────────
-  const D=Math.max(0.5,Math.round((0.1*H+0.3)*10)/10), Hw=H+D;
-  const B=Math.max(1.5,Math.round(0.6*Hw*10)/10);
-  const b_top=Math.max(0.3,Math.round(0.2*Hw*10)/10);
-  const b_bot=Math.min(B*0.55,Math.round((b_top+0.1*Hw)*10)/10);
-
-  // ── Active pressure (inclined resultant at angle i to horizontal) ─────
-  const Pa_soil=0.5*Ka*gamma*Hw*Hw;     // total active from soil self-weight
-  const Pa_q=Ka*q*Hw;                    // surcharge component
-  const Pa_c=2*c*Math.sqrt(Ka)*Hw;       // cohesion reduction (conservative for inclined)
+  // Geometry
+  const D=Math.max(0.5,Math.round((0.1*Hw_wall+0.3)*10)/10);
+  const Hw=Hw_wall+D;
+  const B_auto=Math.max(Math.round((0.5+Hw_wall/10+Hw_wall/36)*100)/100, Math.round(0.6*Hw_wall*100)/100);
+  const B_ov=parseFloat(document.getElementById('p3-B-ov').value)||0;
+  const B=B_ov>0?B_ov:B_auto;
+  const B_source=B_ov>0?'user override':'auto formula';
+  const b_top=Math.max(0.3,Math.round(0.2*Hw_wall*10)/10);
+  const b_bot=Math.min(B*0.55,Math.round((b_top+0.1*Hw_wall)*10)/10);
+  // Active pressure with free-cut surcharge
+  const q_eff=q+gamma*h;
+  const Pa_soil=0.5*Ka*gamma*Hw*Hw;
+  const Pa_q=Ka*q_eff*Hw;
+  const Pa_c=2*c*Math.sqrt(Ka)*Hw;
   const Pa_total=Math.max(0.1,Pa_soil+Pa_q-Pa_c);
-
-  // Decompose into horizontal and vertical components
-  const Pa_h=Pa_total*Math.cos(ir);      // horizontal — drives sliding & overturning
-  const Pa_v=Pa_total*Math.sin(ir);      // vertical — adds to stabilizing weight
-
-  // ── Overturning moment (about toe, from horizontal component) ────────
-  const ya_soil=Hw/3;     // lever arm for triangular soil pressure
-  const ya_q=Hw/2;        // lever arm for uniform surcharge pressure
-  const M_ot_soil=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*ya_soil;
-  const M_ot_q=Ka*q*Hw*Math.cos(ir)*ya_q;
-  const M_ot=M_ot_soil+M_ot_q;
-
-  // ── Passive resistance (at toe, level ground) ────────────────────────
+  const Pa_h=Pa_total*Math.cos(ir);
+  const Pa_v=Pa_total*Math.sin(ir);
+  // Moments
+  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2);
   const Pp=0.5*Kp*gamma*D*D+2*c*Math.sqrt(Kp)*D;
-
-  // ── Wall weight ──────────────────────────────────────────────────────
   const W_stem=W.gamma*((b_top+b_bot)/2)*Hw;
   const W_base=W.gamma*B*0.3;
   const W_total=W_stem+W_base;
-
-  // ── Resisting moment (about toe) ─────────────────────────────────────
-  // Includes: wall weight + Pa_v acting at back of wall (lever = B) + passive
-  const x_stem=B-(b_top+b_bot)/4;        // centroid of stem from toe
-  const x_base=B/2;                       // centroid of base from toe
-  const M_res=W_stem*x_stem+W_base*x_base+Pa_v*B+Pp*(D/3);
-
-  // ── Base pressure ───────────────────────────────────────────────────
-  const V_total=W_total+Pa_v;             // total vertical load on base
-  const x_bar=(M_res-M_ot)/V_total;       // resultant position from toe
+  const M_res=W_stem*(B-(b_top+b_bot)/4)+W_base*(B/2)+Pa_v*B+Pp*(D/3);
+  const V_total=W_total+Pa_v;
+  const x_bar=(M_res-M_ot)/V_total;
   const e=Math.abs(B/2-x_bar);
   const q_max=V_total/B*(1+6*e/B);
   const q_min=V_total/B*(1-6*e/B);
-
-  // ── Stability checks ───────────────────────────────────────────────
-  const FOS_SL=(W.mu*V_total+Pp)/Pa_h;           // sliding: μ(W+Pav)+Pp / Pa_h ≥ 1.5
-  const FOS_OT=M_res/Math.max(0.01,M_ot);        // overturning ≥ 2.0
+  // Checks
+  const FOS_SL=(W.mu*V_total+Pp)/Pa_h;
+  const FOS_OT=M_res/Math.max(0.01,M_ot);
   const BC_ok=SBC?q_max<=SBC:null;
   const e_ok=e<=B/6;
   const FS_post=Math.min(9.99,ST.FS_cut+0.35);
-  const sl=FOS_SL>=1.5, ot=FOS_OT>=2.0, ov=FS_post>=1.3;
-  const all=sl&&ot&&(BC_ok!==false)&&e_ok&&ov;
-
-  // ── SVG cross-section ──────────────────────────────────────────────
-  const sc=18,ox=75,oy=200;
-  const Bpx=B*sc,Hwpx=Hw*sc,Dpx=D*sc,btpx=b_top*sc,bbpx=b_bot*sc,tbpx=0.3*sc;
-  const svgW=ox+Bpx+160,svgH=oy+Dpx+30;
-  // Inclined backfill line from wall top going uphill at angle i
-  const bfLen=160; // px length of backfill slope line
-  const bfDy=bfLen*Math.tan(ir);
-
+  const sl=FOS_SL>=1.5,ot=FOS_OT>=2.0,ov=FS_post>=1.3;
+  // Free cut stability
+  let FS_fc=9.99,fcC='ok',fcN='';
+  if(h>0.5){
+    FS_fc=taylorFS(c,phi,gamma,h,ST.alpha,ST.ru);
+    ST.FS_freecut=FS_fc;
+    fcC=FS_fc>=1.3?'ok':FS_fc>=1.1?'warn':'bad';
+    fcN=FS_fc>=1.3?'Free cut h='+h.toFixed(1)+'m stable: FS='+FS_fc.toFixed(2)+' > 1.3.'
+      :FS_fc>=1.1?'Free cut h='+h.toFixed(1)+'m marginal: FS='+FS_fc.toFixed(2)+'. Drainage+bioengineering above wall.'
+      :'Free cut h='+h.toFixed(1)+'m UNSTABLE: FS='+FS_fc.toFixed(2)+'. Increase Hw or bench.';
+  }
+  const all=sl&&ot&&(BC_ok!==false)&&e_ok&&ov&&(h<=0.5||FS_fc>=1.1);
+  // SVG
+  const sc=24,ox=100,oy=260;
+  const Bpx=B*sc,Hwpx=Hw*sc,Dpx=D*sc,btpx=b_top*sc,bbpx=b_bot*sc,tbpx=0.3*sc,hpx=h*sc;
+  const svgW=ox+Bpx+200,svgH=oy+Dpx+50;
+  const bfDy=160*Math.tan(ir);
   document.getElementById('p3-wall-out').classList.remove('hidden');
   document.getElementById('p3-wall-content').innerHTML=`
   <div class="xs-wrap"><svg width="100%" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
     <defs><marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#7a8c7c" stroke-width="1.5"/></marker></defs>
     <line x1="10" y1="${oy}" x2="${ox+Bpx+120}" y2="${oy}" stroke="#b8b5ad" stroke-width="1" stroke-dasharray="5 4"/>
-    <!-- base slab -->
     <rect x="${ox}" y="${oy-tbpx}" width="${Bpx}" height="${tbpx}" fill="#B4B2A9" stroke="#7a8c7c" stroke-width="0.5"/>
-    <!-- wall stem -->
     <polygon points="${ox+Bpx-btpx},${oy-tbpx-Hwpx} ${ox+Bpx},${oy-tbpx-Hwpx} ${ox+Bpx},${oy-tbpx} ${ox+Bpx-bbpx},${oy-tbpx}" fill="#7a9e7e" stroke="#4a5a4c" stroke-width="0.5"/>
-    <!-- retained soil (inclined backfill) -->
     <polygon points="${ox},${oy-tbpx-Hwpx-bfDy} ${ox+Bpx-btpx},${oy-tbpx-Hwpx} ${ox+Bpx-bbpx},${oy-tbpx} ${ox},${oy-tbpx}" fill="#C0DD97" fill-opacity="0.5"/>
-    <!-- inclined backfill surface line -->
-    ${i_deg>0?`<line x1="${ox+Bpx-btpx}" y1="${oy-tbpx-Hwpx}" x2="${ox-20}" y2="${oy-tbpx-Hwpx-bfDy*1.2}" stroke="#2d7a4f" stroke-width="1.5" stroke-dasharray="6 3"/>
-    <text x="${ox+20}" y="${oy-tbpx-Hwpx-bfDy*0.5-6}" font-size="10" fill="#2d7a4f" font-family="DM Sans" transform="rotate(${-i_deg},${ox+20},${oy-tbpx-Hwpx-bfDy*0.5-6})">i=${i_deg}°</text>`:''}
-    <!-- Pa pressure diagram (inclined) -->
-    <polygon points="${ox-5},${oy-tbpx} ${ox-5},${oy-tbpx-Hwpx} ${ox-5-Math.min(40,Pa_h*0.5)},${oy-tbpx}" fill="#c0603a" fill-opacity="0.2" stroke="#c0603a" stroke-width="0.5"/>
-    <!-- Pa_h arrow -->
+    ${h>0.1?`<rect x="${ox+Bpx}" y="${oy-tbpx-Hwpx-hpx}" width="40" height="${hpx}" fill="#e8d4a0" fill-opacity="0.5" stroke="#b07020" stroke-width="0.5" stroke-dasharray="3 2"/><text x="${ox+Bpx+20}" y="${oy-tbpx-Hwpx-hpx/2+4}" font-size="9" fill="#b07020" text-anchor="middle" font-family="DM Sans">h=${h.toFixed(1)}m</text>`:''}
+    ${i_deg>0?`<line x1="${ox+Bpx-btpx}" y1="${oy-tbpx-Hwpx}" x2="${ox-20}" y2="${oy-tbpx-Hwpx-bfDy*1.2}" stroke="#2d7a4f" stroke-width="1.5" stroke-dasharray="6 3"/><text x="${ox+20}" y="${oy-tbpx-Hwpx-bfDy*0.5-6}" font-size="10" fill="#2d7a4f" font-family="DM Sans">i=${i_deg}deg</text>`:''}
+    <polygon points="${ox-5},${oy-tbpx} ${ox-5},${oy-tbpx-Hwpx} ${ox-5-Math.min(40,Pa_h*0.4)},${oy-tbpx}" fill="#c0603a" fill-opacity="0.2" stroke="#c0603a" stroke-width="0.5"/>
     <line x1="${ox-8}" y1="${oy-tbpx-Hw/3*sc}" x2="${ox+18}" y2="${oy-tbpx-Hw/3*sc}" stroke="#c0603a" stroke-width="2" marker-end="url(#arw)"/>
     <text x="${ox-10}" y="${oy-tbpx-Hw/3*sc-5}" font-size="9" fill="#c0603a" text-anchor="end" font-family="DM Sans">Pa_h=${Pa_h.toFixed(1)}</text>
-    ${Pa_v>0.1?`<!-- Pa_v arrow --><line x1="${ox+Bpx-btpx}" y1="${oy-tbpx-Hwpx-15}" x2="${ox+Bpx-btpx}" y2="${oy-tbpx-Hwpx+10}" stroke="#2a5f8a" stroke-width="1.5" marker-end="url(#arw)"/><text x="${ox+Bpx-btpx+5}" y="${oy-tbpx-Hwpx-18}" font-size="9" fill="#2a5f8a" font-family="DM Sans">Pa_v=${Pa_v.toFixed(1)}</text>`:''}
-    <!-- dimension lines -->
-    <line x1="${ox-22}" y1="${oy-tbpx}" x2="${ox-22}" y2="${oy-tbpx-Hwpx}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#arw)" marker-start="url(#arw)"/>
-    <text x="${ox-34}" y="${oy-tbpx-Hwpx/2}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">Hw=${Hw.toFixed(1)}m</text>
+    ${Pa_v>0.1?`<line x1="${ox+Bpx-btpx}" y1="${oy-tbpx-Hwpx-15}" x2="${ox+Bpx-btpx}" y2="${oy-tbpx-Hwpx+10}" stroke="#2a5f8a" stroke-width="1.5" marker-end="url(#arw)"/><text x="${ox+Bpx-btpx+5}" y="${oy-tbpx-Hwpx-18}" font-size="9" fill="#2a5f8a" font-family="DM Sans">Pa_v=${Pa_v.toFixed(1)}</text>`:''}
+    <line x1="${ox-25}" y1="${oy-tbpx}" x2="${ox-25}" y2="${oy-tbpx-Hwpx}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#arw)" marker-start="url(#arw)"/>
+    <text x="${ox-38}" y="${oy-tbpx-Hwpx/2}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">Hw=${Hw.toFixed(1)}</text>
     <line x1="${ox}" y1="${oy+Dpx+14}" x2="${ox+Bpx}" y2="${oy+Dpx+14}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#arw)" marker-start="url(#arw)"/>
     <text x="${ox+Bpx/2}" y="${oy+Dpx+25}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">B=${B.toFixed(2)}m</text>
     <text x="${ox+Bpx-bbpx*0.5}" y="${oy-tbpx-Hwpx/2}" font-size="10" fill="#fff" text-anchor="middle" font-family="DM Sans" font-weight="600">${W.name}</text>
-    ${q>0?`<rect x="${ox}" y="${oy-tbpx-Hwpx-12}" width="${Math.max(10,Bpx-btpx)}" height="12" fill="#e8a03c" fill-opacity="0.5"/><text x="${ox+(Bpx-btpx)/2}" y="${oy-tbpx-Hwpx-3}" font-size="10" fill="#b07020" text-anchor="middle" font-family="DM Sans">q=${q}kPa</text>`:''}
+    ${q_eff>0?`<rect x="${ox}" y="${oy-tbpx-Hwpx-12}" width="${Math.max(10,Bpx-btpx)}" height="12" fill="#e8a03c" fill-opacity="0.5"/><text x="${ox+(Bpx-btpx)/2}" y="${oy-tbpx-Hwpx-3}" font-size="9" fill="#b07020" text-anchor="middle" font-family="DM Sans">q_eff=${q_eff.toFixed(0)} (q=${q}+yh=${(gamma*h).toFixed(0)})</text>`:''}
   </svg></div>
-
-  ${i_deg>0?`<div class="nb info" style="margin-top:0"><strong>Inclined backfill analysis (i = ${i_deg}°):</strong> Rankine Ka with inclined backfill. Active pressure resultant acts at angle i to horizontal, decomposed into Pa_h (horizontal → drives sliding/overturning) and Pa_v (vertical → adds to stabilizing weight). Pa_v improves sliding and overturning resistance but increases bearing pressure.</div>`:''}
-
-  <div class="sub" style="margin-top:.5rem"><div class="sub-title">Rankine Earth Pressure${i_deg>0?' — Inclined Backfill i='+i_deg+'°':' — Level Backfill'}</div>
+  ${h>0.5?`<div class="nb ${fcC==='ok'?'success':fcC==='warn'?'warn':'danger'}"><strong>Free cut stability (h=${h.toFixed(1)}m, alpha=${ST.alpha} deg):</strong> ${fcN}</div>`:''}
+  ${i_deg>0||h>0?`<div class="nb info">${i_deg>0?'<strong>Inclined backfill i=beta='+i_deg+'deg.</strong> ':''}${h>0?'Free cut h='+h.toFixed(1)+'m adds surcharge yh='+(gamma*h).toFixed(1)+' kPa at wall top.':''}</div>`:''}
+  <div class="sub" style="margin-top:.5rem"><div class="sub-title">Geometry and Pressures${h>0?' (free cut h='+h.toFixed(1)+'m)':''}</div>
   <div class="mc-grid" style="grid-template-columns:repeat(3,1fr)">
-    <div class="mc"><div class="mc-lbl">Ka${i_deg>0?' (inclined)':''}</div><div class="mc-val">${Ka.toFixed(4)}</div>${i_deg>0?'<div class="mc-unit">cos(i)[cos(i)−√(cos²i−cos²φ)]<br>/[cos(i)+√(cos²i−cos²φ)]</div>':''}</div>
-    <div class="mc"><div class="mc-lbl">Kp (level toe)</div><div class="mc-val">${Kp.toFixed(3)}</div></div>
-    <div class="mc"><div class="mc-lbl">φ' / i</div><div class="mc-val">${phi}° / ${i_deg}°</div></div>
+    <div class="mc"><div class="mc-lbl">Hw_wall</div><div class="mc-val">${Hw_wall.toFixed(1)}</div><div class="mc-unit">m</div></div>
+    <div class="mc"><div class="mc-lbl">Free cut h</div><div class="mc-val">${h.toFixed(1)}</div><div class="mc-unit">m (H-Hw)</div></div>
+    <div class="mc"><div class="mc-lbl">Hw+D</div><div class="mc-val">${Hw.toFixed(1)}</div><div class="mc-unit">m total</div></div>
+    <div class="mc"><div class="mc-lbl">Ka${i_deg>0?' (i='+i_deg+'deg)':''}</div><div class="mc-val">${Ka.toFixed(4)}</div></div>
+    <div class="mc"><div class="mc-lbl">q_eff (q+yh)</div><div class="mc-val">${q_eff.toFixed(1)}</div><div class="mc-unit">kPa</div></div>
+    <div class="mc"><div class="mc-lbl">Kp</div><div class="mc-val">${Kp.toFixed(3)}</div></div>
     <div class="mc"><div class="mc-lbl">Pa total</div><div class="mc-val">${Pa_total.toFixed(1)}</div><div class="mc-unit">kN/m</div></div>
-    <div class="mc"><div class="mc-lbl">Pa_h (horizontal)</div><div class="mc-val">${Pa_h.toFixed(1)}</div><div class="mc-unit">kN/m  · Pa·cos(i)</div></div>
-    <div class="mc"><div class="mc-lbl">Pa_v (vertical)</div><div class="mc-val">${Pa_v.toFixed(1)}</div><div class="mc-unit">kN/m  · Pa·sin(i)</div></div>
-    <div class="mc"><div class="mc-lbl">Width B (0.6Hw)</div><div class="mc-val">${B.toFixed(2)}</div><div class="mc-unit">m</div></div>
+    <div class="mc"><div class="mc-lbl">Pa_h</div><div class="mc-val">${Pa_h.toFixed(1)}</div><div class="mc-unit">kN/m</div></div>
+    <div class="mc"><div class="mc-lbl">Pa_v</div><div class="mc-val">${Pa_v.toFixed(1)}</div><div class="mc-unit">kN/m</div></div>
+    <div class="mc"><div class="mc-lbl">Width B</div><div class="mc-val">${B.toFixed(2)}</div><div class="mc-unit">m</div></div>
     <div class="mc"><div class="mc-lbl">Embedment D</div><div class="mc-val">${D.toFixed(2)}</div><div class="mc-unit">m</div></div>
-    <div class="mc ${e_ok?'ok':'bad'}"><div class="mc-lbl">Eccentricity e</div><div class="mc-val">${e.toFixed(3)}</div><div class="mc-unit">≤${(B/6).toFixed(3)}</div></div>
+    <div class="mc ${e_ok?'ok':'bad'}"><div class="mc-lbl">Eccentricity e</div><div class="mc-val">${e.toFixed(3)}</div><div class="mc-unit">le ${(B/6).toFixed(3)}</div></div>
   </div></div>
-
-  <div class="sub"><div class="sub-title">Force Summary</div>
-  <div style="font-size:12px;line-height:2">
-    <div>Pa_soil = 0.5 × Ka × γ × Hw² = 0.5 × ${Ka.toFixed(4)} × ${gamma} × ${Hw.toFixed(1)}² = <strong>${Pa_soil.toFixed(1)} kN/m</strong></div>
-    <div>Pa_q = Ka × q × Hw = ${Ka.toFixed(4)} × ${q} × ${Hw.toFixed(1)} = <strong>${Pa_q.toFixed(1)} kN/m</strong></div>
-    <div>Pa_c (cohesion) = 2c√Ka × Hw = 2 × ${c} × √${Ka.toFixed(4)} × ${Hw.toFixed(1)} = <strong>${Pa_c.toFixed(1)} kN/m</strong></div>
-    <div>Pa_total = Pa_soil + Pa_q − Pa_c = <strong>${Pa_total.toFixed(1)} kN/m</strong> at angle <strong>i = ${i_deg}°</strong> to horizontal</div>
-    <div>Pa_h = ${Pa_total.toFixed(1)} × cos(${i_deg}°) = <strong>${Pa_h.toFixed(1)} kN/m</strong> &nbsp;|&nbsp; Pa_v = ${Pa_total.toFixed(1)} × sin(${i_deg}°) = <strong>${Pa_v.toFixed(1)} kN/m</strong></div>
-    <div>V_total (base) = W_wall + Pa_v = ${W_total.toFixed(1)} + ${Pa_v.toFixed(1)} = <strong>${V_total.toFixed(1)} kN/m</strong></div>
-    <div>q_max = V/B × (1 + 6e/B) = <strong>${q_max.toFixed(1)} kN/m²</strong> &nbsp;|&nbsp; q_min = <strong>${q_min.toFixed(1)} kN/m²</strong></div>
+  <div class="sub"><div class="sub-title">Force Summary</div><div style="font-size:12px;line-height:2">
+    <div>Pa_soil = 0.5*Ka*y*Hw2 = ${Pa_soil.toFixed(1)} | Pa_surcharge = Ka*(q+yh)*Hw = ${Pa_q.toFixed(1)} | Pa_c = 2c*sqrtKa*Hw = ${Pa_c.toFixed(1)}</div>
+    <div>Pa_total = ${Pa_total.toFixed(1)} kN/m at i=${i_deg}deg | Pa_h = ${Pa_h.toFixed(1)} | Pa_v = ${Pa_v.toFixed(1)}</div>
+    <div>V_total = W+Pa_v = ${W_total.toFixed(1)}+${Pa_v.toFixed(1)} = <strong>${V_total.toFixed(1)} kN/m</strong></div>
+    <div>q_max = ${q_max.toFixed(1)} kN/m2 | q_min = ${q_min.toFixed(1)} kN/m2</div>
   </div></div>
-
-  <div class="sub"><div class="sub-title">Stability Checks (DoR/IS)</div>
-  <table class="chk-table"><thead><tr><th>Check</th><th>Formula${i_deg>0?' (inclined)':''}</th><th>Required</th><th>Computed</th><th>Status</th></tr></thead><tbody>
-    <tr><td><strong>Sliding</strong></td><td style="font-size:11px">μ(W+Pa_v)+Pp / Pa_h</td><td>≥1.5</td><td>${Math.min(FOS_SL,9.99).toFixed(2)}</td><td><span class="${sl?'bpass':'bfail'}">${sl?'✓':'✗'}</span></td></tr>
-    <tr><td><strong>Overturning</strong></td><td style="font-size:11px">M_res / M_ot</td><td>≥2.0</td><td>${Math.min(FOS_OT,9.99).toFixed(2)}</td><td><span class="${ot?'bpass':'bfail'}">${ot?'✓':'✗'}</span></td></tr>
-    <tr><td><strong>Bearing</strong></td><td style="font-size:11px">q_max ≤ SBC</td><td>${SBC?'≤'+SBC:'—'}</td><td>${q_max.toFixed(1)} kN/m²</td><td><span class="${BC_ok===null?'bfail':BC_ok?'bpass':'bfail'}">${BC_ok===null?'⚠':BC_ok?'✓':'✗'}</span></td></tr>
-    <tr><td><strong>Eccentricity</strong></td><td style="font-size:11px">e ≤ B/6</td><td>≤${(B/6).toFixed(3)}</td><td>${e.toFixed(3)} m</td><td><span class="${e_ok?'bpass':'bfail'}">${e_ok?'✓':'✗'}</span></td></tr>
-    <tr><td><strong>Overall slope</strong></td><td style="font-size:11px">Post-wall FS</td><td>≥1.3</td><td>${FS_post.toFixed(2)}</td><td><span class="${ov?'bpass':'bfail'}">${ov?'✓':'✗'}</span></td></tr>
+  <div class="sub"><div class="sub-title">Stability Checks</div>
+  <table class="chk-table"><thead><tr><th>Check</th><th>Formula</th><th>Required</th><th>Computed</th><th>Status</th></tr></thead><tbody>
+    <tr><td><strong>Sliding</strong></td><td style="font-size:11px">mu(W+Pa_v)+Pp/Pa_h</td><td>ge 1.5</td><td>${Math.min(FOS_SL,9.99).toFixed(2)}</td><td><span class="${sl?'bpass':'bfail'}">${sl?'pass':'fail'}</span></td></tr>
+    <tr><td><strong>Overturning</strong></td><td style="font-size:11px">M_res/M_ot</td><td>ge 2.0</td><td>${Math.min(FOS_OT,9.99).toFixed(2)}</td><td><span class="${ot?'bpass':'bfail'}">${ot?'pass':'fail'}</span></td></tr>
+    <tr><td><strong>Bearing</strong></td><td style="font-size:11px">q_max le SBC</td><td>${SBC?'le '+SBC:'--'}</td><td>${q_max.toFixed(1)}</td><td><span class="${BC_ok===null?'bfail':BC_ok?'bpass':'bfail'}">${BC_ok===null?'warn':BC_ok?'pass':'fail'}</span></td></tr>
+    <tr><td><strong>Eccentricity</strong></td><td style="font-size:11px">e le B/6</td><td>le ${(B/6).toFixed(3)}</td><td>${e.toFixed(3)}</td><td><span class="${e_ok?'bpass':'bfail'}">${e_ok?'pass':'fail'}</span></td></tr>
+    <tr><td><strong>Overall FS</strong></td><td style="font-size:11px">FS_post</td><td>ge 1.3</td><td>${FS_post.toFixed(2)}</td><td><span class="${ov?'bpass':'bfail'}">${ov?'pass':'fail'}</span></td></tr>
+    ${h>0.5?`<tr><td><strong>Free cut FS</strong></td><td style="font-size:11px">Taylor h=${h.toFixed(1)}m</td><td>ge 1.1</td><td>${FS_fc.toFixed(2)}</td><td><span class="${FS_fc>=1.1?'bpass':'bfail'}">${FS_fc>=1.1?'pass':'fail'}</span></td></tr>`:''}
   </tbody></table>
-  ${!sl?'<div class="nb danger">Sliding fails — add shear key or widen base to '+(B*1.2).toFixed(1)+' m.</div>':''}
-  ${!ot?'<div class="nb danger">Overturning fails — widen base to '+(B*1.25).toFixed(1)+' m or add rear batter.</div>':''}
-  ${BC_ok===false?'<div class="nb danger">Bearing exceeds SBC ('+q_max.toFixed(1)+' > '+SBC+' kN/m²) — widen base or improve foundation.</div>':''}
-  ${BC_ok===null?'<div class="nb warn">SBC not available — verify foundation manually.</div>':''}
+  ${!sl?'<div class="nb danger">Sliding fails. Add shear key or widen base.</div>':''}
+  ${!ot?'<div class="nb danger">Overturning fails. Widen base or add rear batter.</div>':''}
+  ${BC_ok===false?'<div class="nb danger">Bearing exceeds SBC. Widen base or improve foundation.</div>':''}
+  ${h>0.5&&FS_fc<1.1?'<div class="nb danger">Free cut UNSTABLE. Increase Hw or bench the cut.</div>':''}
   </div>
-  <div class="nb ${all?'success':'warn'}">${all?'<strong>All checks pass.</strong> Detail weep holes, granular filter, drainage. Proceed to bioengineering.':'<strong>One or more checks fail.</strong> Revise dimensions and re-run.'}</div>
-  <div class="nb earth"><strong>References:</strong> Rankine (1857) with inclined backfill extension; IS:456-2000; IS:1904-1986; DoR retaining structure guidelines. ${i_deg>0?'Inclined backfill Ka per Das (2021) Principles of Foundation Engineering §7.4.':''}</div>`;
+  <div class="nb ${all?'success':'warn'}">${all?'<strong>All checks pass.</strong> Proceed to bioengineering.':'<strong>Checks fail.</strong> Revise and re-run.'}</div>
+  <div class="nb earth"><strong>Ref:</strong> Rankine inclined backfill Das (2021); IS:456; IS:1904-1986. ${h>0?'Free cut FS by Taylor (1937).':''}</div>`;
 }
+
 
 // ════ PAGE 4: BIOENGINEERING ════
 const BIORULES=[
@@ -1105,22 +1118,22 @@ const TECH_INFO={
 };
 const SPECIES_DB={
 grasses:[
-{name:'Vetiver (Khas khas)',sci:'Chrysopogon zizanioides',alt:[100,1800],moist:'Both',note:'Deepest roots 3–5 m; best for cut slopes'},
+{name:'Vetiver (Khas khas)',sci:'Chrysopogon zizanioides',alt:[100,1800],moist:'Dry',note:'Deepest roots 3–5 m; best for cut slopes'},
 {name:'Napier / Elephant grass',sci:'Pennisetum purpureum',alt:[100,1600],moist:'Both',note:'Fast-growing, large biomass'},
 {name:'Kans grass',sci:'Saccharum spontaneum',alt:[100,1500],moist:'Damp',note:'Pioneer, disturbed ground'},
 {name:'Broom grass (Amliso)',sci:'Thysanolaena maxima',alt:[600,2200],moist:'Both',note:'Deep roots, multi-purpose, mid-altitude'},
 {name:'Durva (Doob)',sci:'Cynodon dactylon',alt:[100,2200],moist:'Dry',note:'Creeping stolons, drought tolerant'},
 {name:'Festuca / Turf grass',sci:'Festuca arundinacea',alt:[1800,3500],moist:'Both',note:'High-altitude cool climate'}],
 shrubs:[
-{name:'Asuro',sci:'Justicia adhatoda',alt:[100,1700],moist:'Both',note:'Hardy; live stakes & brush layering'},
+{name:'Asuro',sci:'Justicia adhatoda',alt:[100,1700],moist:'Dry',note:'Hardy; live stakes & brush layering'},
 {name:'Five-leaved chaste tree',sci:'Vitex negundo',alt:[100,1600],moist:'Dry',note:'Palisades; drought-tolerant'},
 {name:'Titepati',sci:'Artemisia spp.',alt:[1200,3500],moist:'Dry',note:'Pioneer mid–high altitude'},
-{name:'Barberry',sci:'Berberis spp.',alt:[1500,3500],moist:'Both',note:'Thorny, high-altitude erosion control'},
-{name:'Dhanyero',sci:'Woodfordia fruticosa',alt:[500,1800],moist:'Damp',note:'Common mid-hill bioengineering shrub'}],
+{name:'Barberry',sci:'Berberis spp.',alt:[1500,3500],moist:'Damp',note:'Thorny, high-altitude erosion control'},
+{name:'Dhanyero',sci:'Woodfordia fruticosa',alt:[500,1800],moist:'Dry',note:'Common mid-hill bioengineering shrub'}],
 trees:[
 {name:'Utis (Himalayan alder)',sci:'Alnus nepalensis',alt:[900,2700],moist:'Damp',note:'N-fixing pioneer; moist north-facing slopes'},
 {name:'Sissoo',sci:'Dalbergia sissoo',alt:[100,1500],moist:'Damp',note:'Deep roots; slope-base anchoring'},
-{name:'Gobre salla (Blue pine)',sci:'Pinus wallichiana',alt:[1800,4000],moist:'Both',note:'High-altitude long-term stabilisation'},
+{name:'Gobre salla (Blue pine)',sci:'Pinus wallichiana',alt:[1800,4000],moist:'Dry',note:'High-altitude long-term stabilisation'},
 {name:'Garuga',sci:'Garuga pinnata',alt:[100,1500],moist:'Both',note:'Deep tap root; slope-base anchoring'},
 {name:'Poplar',sci:'Populus deltoides',alt:[800,2500],moist:'Damp',note:'Fast-growing; moist valley slopes'},
 {name:'Mulberry (Kimbu)',sci:'Morus alba',alt:[100,2000],moist:'Both',note:'Live stakes & brush layering'}],
@@ -1144,8 +1157,16 @@ function setBioType(type,el){
 }
 function setupBioPage(){
   buildSummaryBar('p4-summary');
+  // Auto-calculate unsupported height and slope length for cut slope
+  const H_eff=(ST.h>0.5)?ST.h:ST.H; // free cut if wall built, else full H
+  const alpha_rad=ST.alpha*Math.PI/180;
+  const L_auto=(alpha_rad>0&&H_eff>0)?H_eff/Math.sin(alpha_rad):0;
+  const hEff=document.getElementById('p4c-Heff');
+  const lenEl=document.getElementById('p4c-len');
+  if(hEff) hEff.value=H_eff.toFixed(2);
+  if(lenEl) lenEl.value=L_auto.toFixed(2);
   const ctx=document.getElementById('p4-cut-context');
-  if(ctx&&ST.alpha) ctx.innerHTML=`Cut slope angle <strong>α = ${ST.alpha}°</strong>, height <strong>H = ${ST.H} m</strong> (from Step 1). FS = ${ST.FS_cut>0?ST.FS_cut.toFixed(2):'—'}. Brush layering is NOT used on cut slopes — palisades are substituted automatically.`;
+  if(ctx&&ST.alpha) ctx.innerHTML=`Cut slope <strong>α=${ST.alpha}°</strong>, unsupported height <strong>${H_eff.toFixed(1)} m</strong>${ST.h>0.5?' (free cut above '+ST.Hw_wall+'m wall)':' (full H)'}. Slope length = ${L_auto.toFixed(1)} m. FS = ${ST.FS_cut>0?ST.FS_cut.toFixed(2):'—'}. Palisades substitute brush layers automatically.`;
 }
 function runBio(mode){
   const isCut=(mode==='cut');
@@ -1177,13 +1198,13 @@ function runBio(mode){
   // ── FILL SLOPE TOE WALL RECOMMENDATION
   const twRec=document.getElementById('p4-toewall-rec');
   if(!isCut&&len>5){
-    const twH=fillH>4?'1.5':'1.0';
+    const twH=fillH>12?'1.5':'1.0';
     twRec.innerHTML=`<div class="decision amber" style="margin-bottom:.75rem">
       <div class="d-title">🧱 Dry Stone Toe Wall Recommended — Fill Slope Length ${len} m (&gt;5 m)</div>
       <div class="d-body">
         <strong>Wall specification:</strong><br>
         • Wall type: Dry stone masonry (no mortar; free-draining)<br>
-        • Wall height: <strong>${twH} m</strong> (1.0 m for fills ≤4 m; 1.5 m for fills &gt;4 m)<br>
+        • Wall height: <strong>${twH} m</strong> (1.0 m for fill height ≤12 m; 1.5 m for fill height &gt;12 m)<br>
         • Top width: 0.6 m minimum<br>
         • Bottom width: 0.6 × wall height = <strong>${(0.6*parseFloat(twH)).toFixed(2)} m</strong><br>
         • Foundation embedment: ≥300 mm into firm undisturbed ground<br>
