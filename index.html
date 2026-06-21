@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -448,7 +449,7 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
     <div class="g3" style="margin-top:.75rem">
       <div class="fld"><label>Catchment area A (km²)</label><input type="number" id="d-area" placeholder="e.g. 0.05" step="0.001" oninput="calcDischarge()"></div>
       <div class="fld"><label>Drain type</label><select id="d-dtype" onchange="calcDischarge()"><option value="catch">Catch drain (crest)</option><option value="side">Road side drain (toe)</option><option value="both">Both</option></select></div>
-      <div class="fld"><label>Return period</label><select id="d-return" onchange="calcDischarge()"><option value="10">10-year</option><option value="25">25-year (critical)</option><option value="50">50-year</option></select></div>
+      <div class="fld"><label>Return period T (yr)</label><select id="d-return" onchange="onReturnChange()"><option value="10">10-year</option><option value="25">25-year (critical)</option><option value="50">50-year</option><option value="100">100-year</option></select></div>
     </div>
   </div>
   <div class="card">
@@ -465,8 +466,8 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
     </div>
     <div id="tc-result" class="sub hidden"><div class="g3"><div class="mc"><div class="mc-lbl">tc (Kirpich)</div><div class="mc-val" id="tc-val">—</div><div class="mc-unit">min</div></div><div class="mc"><div class="mc-lbl">tc (design)</div><div class="mc-val" id="tc-used">—</div><div class="mc-unit">min</div></div><div class="mc"><div class="mc-lbl">Mountain range</div><div class="mc-val">5–20</div><div class="mc-unit">min</div></div></div><div id="tc-cs-note" class="nb info hidden" style="margin-top:.5rem"></div></div>
     <div class="g2" style="margin-top:10px">
-      <div class="fld"><label>Rainfall intensity I (mm/hr)</label><input type="number" id="d-I" placeholder="e.g. 80" oninput="calcDischarge()"></div>
-      <div class="fld"><label>Intensity source</label><select id="d-Isrc" onchange="onIsrcChange()"><option value="manual">Manual (DHM IDF)</option><option value="typical">High zone (~125)</option><option value="typical_med">Medium zone (~80)</option><option value="typical_low">Low zone (~50)</option></select></div>
+      <div class="fld"><label>Rainfall intensity I (mm/hr)</label><input type="number" id="d-I" placeholder="e.g. 80" oninput="onManualI()"></div>
+      <div class="fld"><label>Intensity source</label><select id="d-Isrc" onchange="onIsrcChange()"><option value="rambabu">Empirical IDF — Rambabu et al. (1979) N. India</option><option value="manual">DHM / measured IDF (manual)</option><option value="typical">High zone (~125)</option><option value="typical_med">Medium zone (~80)</option><option value="typical_low">Low zone (~50)</option></select></div>
     </div>
     <div class="g2" style="margin-top:10px">
       <div class="fld"><label>Antecedent moisture (AMC)</label><select id="d-amc" onchange="calcDischarge()"><option value="II">AMC-II Normal (×1.00)</option><option value="I">AMC-I Dry (×0.80)</option><option value="III">AMC-III Wet (×1.15)</option></select></div>
@@ -501,6 +502,7 @@ let ST={ alt:'',aspect:'',land:'',moist:'',rain:'',mat:'',
   FS_cut:0,FS_nat:0,needsWall:false,needsMarginal:false,
   wallKey:'dry',SBC:null,q:10, len:0,drain:'',bio_moist:'',probs:[],specs:[] };
 let curPage=1, selProbs=[], selSpecs=[], weightedC=0, peakQ=0;
+let tcDesignMin=null; // design time of concentration (min) shared with the Rambabu IDF intensity calc
 
 // ════ SOIL DATA ════
 const SD={
@@ -1341,26 +1343,70 @@ function updateCTable(){
 function calcTc(){
   const L=parseFloat(document.getElementById('d-L').value)||0, Hd=parseFloat(document.getElementById('d-Hd').value)||0;
   const box=document.getElementById('tc-result');
-  if(!L||!Hd){box.classList.add('hidden');return;}
+  if(!L||!Hd){box.classList.add('hidden');refreshIntensity();calcDischarge();return;}
   const tc_raw=0.0195*Math.pow(L,1.155)/Math.pow(Hd,0.385);
   const tc_used=Math.max(5,Math.min(20,tc_raw));
+  tcDesignMin=tc_used; // shared with the Rambabu IDF intensity calc
   box.classList.remove('hidden');
   document.getElementById('tc-val').textContent=tc_raw.toFixed(2);
   document.getElementById('tc-used').textContent=tc_used.toFixed(2)+(Math.abs(tc_raw-tc_used)>0.01?' (clamped)':'');
   const cs=document.getElementById('d-catslope').value;
   const adv=cs==='steep'?'Steep catchment — use tc toward lower end; higher intensity.':cs==='gentle'?'Gentle catchment — tc toward upper limit; lower intensity.':'Moderate — Kirpich estimate appropriate.';
   const n=document.getElementById('tc-cs-note'); if(n){n.classList.remove('hidden');n.innerHTML='<strong>Slope advisory:</strong> '+adv;}
+  refreshIntensity();
+  calcDischarge();
+}
+// ── RAINFALL INTENSITY — Rambabu et al. (1979) empirical IDF ──
+// i (cm/hr) = (k · T^x) / (t_c + a)^n , with t_c in HOURS and T in YEARS.
+// Northern India zone constants (Ram Babu, Tejwani, Agarwal & Chandra, 1979, CSWCRTI Dehradun):
+const RAMBABU={k:5.914,x:0.1623,a:0.50,n:1.0127,zone:'Northern India'};
+function rambabuIntensity(T,tcMin){
+  const tcHr=Math.max(0.001,tcMin/60);                                            // min → hr
+  const i_cm=(RAMBABU.k*Math.pow(T,RAMBABU.x))/Math.pow(tcHr+RAMBABU.a,RAMBABU.n); // cm/hr
+  return {i_cm,i_mm:i_cm*10,tcHr};                                                // cm/hr → mm/hr
+}
+function refreshIntensity(){
+  const srcEl=document.getElementById('d-Isrc');
+  if(!srcEl||srcEl.value!=='rambabu')return;
+  const T=parseFloat(document.getElementById('d-return').value)||25;
+  const tcKnown=(tcDesignMin&&tcDesignMin>0);
+  const tcMin=tcKnown?tcDesignMin:10; // fallback 10 min until t_c is computed from L & H
+  const r=rambabuIntensity(T,tcMin);
+  document.getElementById('d-I').value=r.i_mm.toFixed(1);
+  const note=document.getElementById('I-note');
+  note.classList.remove('hidden');
+  note.innerHTML='<strong>Empirical IDF — Ram Babu et al. (1979), '+RAMBABU.zone+' zone</strong><br>'+
+    'I = (k·T<sup>x</sup>) / (t_c + a)<sup>n</sup> &nbsp;·&nbsp; k='+RAMBABU.k+', x='+RAMBABU.x+', a='+RAMBABU.a+', n='+RAMBABU.n+'<br>'+
+    'T = '+T+' yr &nbsp;·&nbsp; t_c = '+tcMin.toFixed(2)+' min = '+r.tcHr.toFixed(3)+' hr'+(tcKnown?'':' <em>(default — enter L &amp; H above to compute t_c)</em>')+'<br>'+
+    'I = ('+RAMBABU.k+' × '+T+'<sup>'+RAMBABU.x+'</sup>) / ('+r.tcHr.toFixed(3)+' + '+RAMBABU.a+')<sup>'+RAMBABU.n+'</sup> = <strong>'+r.i_cm.toFixed(3)+' cm/hr = '+r.i_mm.toFixed(1)+' mm/hr</strong><br>'+
+    '<em>Formula yields cm/hr; ×10 → mm/hr. Where DHM station IDF data exist, switch source to “DHM / measured IDF (manual)” and enter I directly.</em>';
+  calcDischarge();
+}
+function onReturnChange(){
+  const srcEl=document.getElementById('d-Isrc');
+  if(srcEl&&srcEl.value==='rambabu')refreshIntensity(); else calcDischarge();
+}
+function onManualI(){
+  const srcEl=document.getElementById('d-Isrc');
+  if(srcEl&&srcEl.value==='rambabu'){
+    srcEl.value='manual';
+    const note=document.getElementById('I-note');
+    note.classList.remove('hidden');
+    note.innerHTML='Manual intensity entered — using DHM / measured IDF value. Switch source back to “Empirical IDF — Rambabu et al. (1979)” to recompute from T and t_c.';
+  }
   calcDischarge();
 }
 function onIsrcChange(){
   const src=document.getElementById('d-Isrc').value, I=document.getElementById('d-I'), note=document.getElementById('I-note');
-  if(src==='typical'){I.value=125;note.classList.remove('hidden');note.innerHTML='High rainfall zone (>2500 mm/yr). Verify with DHM IDF curves.';}
+  if(src==='rambabu'){ refreshIntensity(); return; }
+  else if(src==='manual'){ note.classList.remove('hidden'); note.innerHTML='Manual entry: input rainfall intensity I (mm/hr) from DHM / measured IDF curves for the design return period and t_c.'; }
+  else if(src==='typical'){I.value=125;note.classList.remove('hidden');note.innerHTML='High rainfall zone (>2500 mm/yr). Verify with DHM IDF curves.';}
   else if(src==='typical_med'){I.value=80;note.classList.remove('hidden');note.innerHTML='Medium rainfall zone (1500–2500 mm/yr).';}
   else if(src==='typical_low'){I.value=50;note.classList.remove('hidden');note.innerHTML='Low rainfall zone (<1500 mm/yr).';}
   else note.classList.add('hidden');
   calcDischarge();
 }
-function freqFactor(rp){return {'10':1.00,'25':1.10,'50':1.20}[rp]||1.0;}
+function freqFactor(rp){return {'10':1.00,'25':1.10,'50':1.20,'100':1.25}[rp]||1.0;}
 function calcDischarge(){
   const A=parseFloat(document.getElementById('d-area').value)||0, I=parseFloat(document.getElementById('d-I').value)||0;
   const rp=document.getElementById('d-return').value, amc=document.getElementById('d-amc').value, dtype=document.getElementById('d-dtype').value;
@@ -1488,9 +1534,11 @@ function runChannelDesign(){
 function setupDrainPage(){
   buildCTable();
   const rain=ST.rain, src=document.getElementById('d-Isrc'), note=document.getElementById('I-note');
-  if(rain==='High'){src.value='typical';document.getElementById('d-I').value=125;note.classList.remove('hidden');note.innerHTML='Pre-filled: High rainfall zone. Verify DHM IDF.';}
-  else if(rain==='Medium'){src.value='typical_med';document.getElementById('d-I').value=80;note.classList.remove('hidden');note.innerHTML='Pre-filled: Medium rainfall zone.';}
-  else if(rain==='Low'){src.value='typical_low';document.getElementById('d-I').value=50;note.classList.remove('hidden');note.innerHTML='Pre-filled: Low rainfall zone.';}
+  // Default to the Rambabu (1979) empirical IDF; compute I from T and t_c.
+  src.value='rambabu';
+  refreshIntensity();
+  const zoneTxt=rain==='High'?'Site rainfall category: High (>2500 mm/yr).':rain==='Medium'?'Site rainfall category: Medium (1500–2500 mm/yr).':rain==='Low'?'Site rainfall category: Low (<1500 mm/yr).':'';
+  if(zoneTxt){ note.classList.remove('hidden'); note.innerHTML=(note.innerHTML?note.innerHTML+'<br>':'')+'<em>'+zoneTxt+' If you have DHM station IDF data, switch the source to “DHM / measured IDF (manual)”.</em>'; }
 }
 </script>
 </body>
