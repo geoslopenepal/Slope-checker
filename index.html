@@ -725,9 +725,9 @@ function runStability(){
     <div class="mc ${FS_nat>=1.3?'ok':FS_nat>=1.1?'warn':'bad'}"><div class="mc-lbl">FS nat adjusted</div><div class="mc-val">${FS_nat.toFixed(2)}</div></div>
     <div class="mc"><div class="mc-lbl">ru</div><div class="mc-val">${ru}</div></div>`:''}`;
   document.getElementById('p2-nat-ang').textContent=beta?beta+'°':'—';
-  document.getElementById('p2-nat-ratio').textContent=beta?'H:V='+Math.tan(beta*Math.PI/180).toFixed(2)+':1':'';
+  document.getElementById('p2-nat-ratio').textContent=beta?'V:H='+Math.tan(beta*Math.PI/180).toFixed(2)+':1':'';
   document.getElementById('p2-cut-ang').textContent=alpha+'°';
-  document.getElementById('p2-cut-ratio').textContent='H:V='+Math.tan(alpha*Math.PI/180).toFixed(2)+':1';
+  document.getElementById('p2-cut-ratio').textContent='V:H='+Math.tan(alpha*Math.PI/180).toFixed(2)+':1';
   document.getElementById('p2-nat-fs').textContent=FS_nat!==null?FS_nat.toFixed(2):'—';
   const cf=document.getElementById('p2-cut-fs');
   cf.textContent=FS_cut.toFixed(2);
