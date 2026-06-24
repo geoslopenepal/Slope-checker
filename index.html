@@ -434,7 +434,7 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
       <div id="p4-tech-list" style="margin-top:.75rem"></div>
       <div class="sub"><div class="sub-title">🌱 Recommended Species</div><div id="p4-species"></div></div>
       <div class="sub"><div class="sub-title">📅 Planting Season</div><div id="p4-calendar"></div></div>
-      <div class="nb info"><strong>References:</strong> DoR Roadside Bioengineering Reference Manual (2076); DRSP Bioengineering Success Cases; FRTC (2021).</div>
+      <div class="nb info"><strong>References:</strong> Nature-Based Solutions for Roadside Slope Stabilization for Bagmati Province (2083).</div>
     </div>
   </div>
   <div class="page-nav"><button class="btn btn-nav btn-sm" onclick="goPage(3)">← Back</button><button class="btn btn-primary" style="width:auto;padding:0 28px" onclick="goPage(5)">Continue to Drainage →</button><button class="btn btn-nav" style="width:auto;padding:0 20px" onclick="window.print()">🖨 Print</button></div>
@@ -884,7 +884,7 @@ function buildMarginalContent(){
     <div>📐 Angular stone ≥150 mm; through-stones every 3rd course</div>
     ${isDS?'<div>📐 Dry stone: no mortar, 10–15% voids for drainage</div>':'<div>📐 Banded: cement mortar (1:4) bands every 500 mm, dry joints between</div>'}
     <div>📐 Flat-stone or 75 mm concrete coping; backfill in 150 mm layers</div></div></div>
-  <div class="nb info"><strong>References:</strong> DoR Roadside Geotechnical Problems Manual; RMDP (2007) Annex C; Howell (1999); Gyawali (2024).</div>`;
+  <div class="nb info"><strong>References:</strong>Nature-Based Solutions for Roadside Slope Stabilization for Bagmati Province </div>`;
 }
 function selWall(key,el){
   ST.wallKey=key;
@@ -1264,8 +1264,8 @@ function runBio(mode){
   const best=matched[0];
   document.getElementById('p4-match-nb').innerHTML=best?`<strong>Table match (${isCut?'cut':'fill'} slope):</strong> Slope ${angle>45?'>45°':angle>=30?'30–45°':'<30°'}, length ${len>15?'>15m':'≤15m'}, ${drain} drainage, ${moist}. <strong>Functions: ${best.fn}</strong>`:'General recommendation by slope angle.';
   const techs=applyCut(best?best.tech:angle>45?['Diagonal grass lines']:angle>=30?['Palisades of woody cuttings']:['Site seeding of grass and shrub/tree planting']);
-  const cutNotice=isCut&&(best?.tech||[]).some(t=>t.indexOf('Brush layer')>=0)?'<div class="nb warn">⚠ <strong>Cut slope limitation:</strong> Brush layering creates a plane of weakness on cut faces — replaced with palisades. Ref: DoR Bioengineering Reference Manual §4.3.</div>':'';
-  document.getElementById('p4-tech-list').innerHTML=cutNotice+techs.map((t,i)=>`<div class="tech-card ${i===0?'primary':''}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:.4rem"><div class="tech-rank ${i===0?'r1':''}">${i+1}</div><div class="tech-name">${t}</div></div>${best?`<div class="tech-fn">${best.fn}</div>`:''}<div class="tech-desc">${TECH_INFO[t]||'Refer to DoR Bioengineering Reference Manual.'}</div></div>`).join('');
+  const cutNotice=isCut&&(best?.tech||[]).some(t=>t.indexOf('Brush layer')>=0)?'<div class="nb warn">⚠ <strong>Cut slope limitation:</strong> Brush layering creates a plane of weakness on cut faces — replaced with palisades. Ref: Nature-Based Solutions for Roadside Slope Stabilization for Bagmati Province §4.3.</div>':'';
+  document.getElementById('p4-tech-list').innerHTML=cutNotice+techs.map((t,i)=>`<div class="tech-card ${i===0?'primary':''}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:.4rem"><div class="tech-rank ${i===0?'r1':''}">${i+1}</div><div class="tech-name">${t}</div></div>${best?`<div class="tech-fn">${best.fn}</div>`:''}<div class="tech-desc">${TECH_INFO[t]||' Refer to Nature-Based Solutions for Roadside Slope Stabilization for Bagmati Province.'}</div></div>`).join('');
 
   // ── SPECIES
   function fsp(cat){return SPECIES_DB[cat].filter(s=>alt>=s.alt[0]&&alt<=s.alt[1]&&(s.moist==='Both'||moist==='Any'||(moist==='Damp'&&s.moist!=='Dry')||(moist==='Dry'&&s.moist!=='Damp')));}
