@@ -1063,11 +1063,11 @@ const BSPEC_CHK=[
 {key:'Planar',fn:'Reinforce, anchor',tech:['Site seeding of shrubs/small trees'],label:'Planar sliding / shear failure (any slope)'},
 {key:'LooseSand',fn:'Armour',tech:['Jute netting and randomly planted grass'],label:'Loose sand — erosion'},
 {key:'RatoMato',fn:'Armour, drain',tech:['Diagonal lines of grass and shrubs/trees'],label:'Rato mato — erosion, slumping'},
-{key:'Gully',fn:'Armour, reinforce, catch',tech:['Large bamboo planting','Live check dams','Vegetated stone pitching'],label:'Gullies ≤ 45° — major erosion'}
+{key:'Gully',fn:'Armour, reinforce, catch',tech:['Large bamboo planting @ 0.5m to 1.0m spacing','Live check dams: Appropriate spacing based on the slope and material of gully floor','Vegetated stone pitching'],label:'Gullies ≤ 45° — major erosion'}
 ];
 const TECH_INFO={
-'Diagonal grass lines':'Grass slips at 45° to slope direction. Intercepts runoff, binds top 300–500 mm. Versatile for steep cut slopes.',
-'Contour grass lines':'Grass slips along contour. Slows overland flow, traps sediment.',
+'Diagonal grass lines':'Grass slips at 45° to slope direction. Intercepts runoff, catches sediments, binds top 300–500 mm. Versatile for steep cut slopes.',
+'Contour grass lines':'Grass slips along contour. Slows overland flow, catches sediment.',
 'Downslope grass lines':'Vertical grass lines intercept concentrated flow, prevent rill formation.',
 'Jute netting and randomly planted grass':'Biodegradable jute mesh pegged to slope + randomly planted grass. Immediate armour.',
 'Brush layers of woody cuttings':'Live branches in horizontal trenches. Roots reinforce soil 0.5–2 m deep. Fill slopes only.',
@@ -1286,12 +1286,13 @@ function runBio(mode){
     :(fillNote||'Plant immediately on fill surface at monsoon onset (June–July).');
   document.getElementById('p4-calendar').innerHTML=`<div style="font-size:12px;line-height:1.9">
     <div>🌱 <strong>Primary planting:</strong> June–August (monsoon onset) — grass slips, live stakes, ${isCut?'palisades, fascines':'brush layers, palisades'}</div>
+    <div>🌿 <strong>Seed collection:</strong> November–February</div>
     <div>🌿 <strong>Nursery prep:</strong> March–May — seedlings, cuttings, jute netting</div>
     <div>🌳 <strong>Tree/shrub seedlings:</strong> July–September</div>
-    <div>🔍 <strong>Maintenance:</strong> Oct–Nov — survey, gap-filling, desilt drains</div>
+    <div>🔍 <strong>Maintenance:</strong> September–Nov — survey/monitoring, gap-filling, desilt drains</div>
     <div class="nb earth" style="margin-top:.5rem"><strong>Context${isCut?' (FS='+((ST.FS_cut>0)?ST.FS_cut.toFixed(2):'—')+')':''}:</strong> ${cal}</div>
-    <div style="margin-top:.5rem">📏 Spacing: grass 20–30 cm · shrubs 1.0–1.5 m · trees 1.5–2.0 m. Mix species.</div>
-    ${isCut?'<div style="margin-top:.3rem">✂ <strong>Cut slope:</strong> no brush layers; use palisades/fascines/grass lines.</div>':'<div style="margin-top:.3rem">🏔 <strong>Fill slope:</strong> brush layers and diagonal brush layers are permitted and effective for soil reinforcement.</div>'}</div>`;
+    <div style="margin-top:.5rem">📏 Spacing: grass 100 cm · Bamboo 1.0m · Nigalo: 50cm· shrubs 0.5-1.0 m · trees 1.0–2.0 m. Mix species.</div>
+    ${isCut?'<div style="margin-top:.3rem">✂ <strong>Cut slope:</strong> Prefer palisade over brush layers.</div>':'<div style="margin-top:.3rem">🏔 <strong>Fill slope:</strong> brush layers and diagonal brush layers are permitted and effective for soil reinforcement.</div>'}</div>`;
 
   document.getElementById('p4-output').classList.remove('hidden');
 }
