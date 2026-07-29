@@ -78,7 +78,23 @@
 
   // ── REPLACE WITH YOUR FIREBASE PROJECT CONFIG (from Firebase Console → Project settings) ──
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
+    apiKey: // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyC_U6hZBGSryHFwwQRFV2ktCDTAimQ51Bw",
+  authDomain: "usernamepassword-ccbac.firebaseapp.com",
+  projectId: "usernamepassword-ccbac",
+  storageBucket: "usernamepassword-ccbac.firebasestorage.app",
+  messagingSenderId: "782537478055",
+  appId: "1:782537478055:web:6e94fc0ff53152fe8fb082"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);,
     authDomain: "YOUR_PROJECT.firebaseapp.com",
     projectId: "YOUR_PROJECT_ID",
   };
