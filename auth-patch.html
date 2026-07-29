@@ -1,0 +1,129 @@
+<!-- ═══════════════════════════════════════════════════════════════
+  FIREBASE AUTH LOGIN GATE — Slope-checker
+  Restricted access for TID / PCTMCDB / authorized field staff
+
+  HOW TO APPLY (two edits to your existing index.html):
+
+  1) PASTE BLOCK "A" immediately after the opening <body> tag,
+     i.e. right BEFORE <header class="app-header">.
+
+  2) Wrap your existing app content: add id="app-shell" to the
+     immediate parent that contains <header>, <nav>, and <main>.
+     Simplest way: change
+         <body>
+     to just keep <body> as-is, and instead wrap everything that
+     is currently inside <body> (header + nav + main) in a new div:
+
+         <body>
+         <!-- BLOCK A goes here -->
+         <div id="app-shell" style="display:none">
+           <header class="app-header">...your existing header...</header>
+           <nav class="step-nav">...your existing nav...</nav>
+           <main class="main">...your existing main...</main>
+         </div>
+         <!-- BLOCK B goes here, then close </body> -->
+         </body>
+
+  3) PASTE BLOCK "B" immediately before the closing </body> tag,
+     i.e. right AFTER your existing </main>.
+
+  Nothing else in your file changes. Your calculation logic,
+  Taylor chart, Rankine wall design, bioengineering matrix, and
+  drainage design script are untouched.
+═══════════════════════════════════════════════════════════════ -->
+
+
+<!-- ═══════════════ BLOCK A — LOGIN SCREEN (paste after <body>) ═══════════════ -->
+<div id="login-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f5f3ee;font-family:'DM Sans',sans-serif;padding:1.5rem">
+  <div style="width:100%;max-width:380px;background:#fff;border:1px solid #d0cec8;border-radius:14px;padding:2rem 1.75rem;box-shadow:0 2px 8px rgba(44,62,45,.10)">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem">
+      <div style="width:40px;height:40px;border-radius:50%;background:#d4e8d6;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#2C3E2D"><path d="M3 20l6-12 4 6 3-4 5 10H3z"/><circle cx="20" cy="6" r="2" opacity=".6"/></svg>
+      </div>
+      <div>
+        <div style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:#1a1f1a">Roadside Slope Stabilization</div>
+        <div style="font-size:10px;color:#7a8c7c;letter-spacing:.03em">AUTHORIZED ACCESS ONLY · BAGMATI PROVINCE</div>
+      </div>
+    </div>
+
+    <div id="login-error" style="display:none;background:#fdecea;color:#a03020;border-left:3px solid #a03020;border-radius:8px;padding:.6rem .8rem;font-size:12px;margin-bottom:1rem;line-height:1.6"></div>
+
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:11px;font-weight:600;color:#4a5a4c;text-transform:uppercase;letter-spacing:.04em">Email</label>
+        <input type="email" id="login-email" placeholder="name@agency.gov.np" style="height:38px;border:1px solid #d0cec8;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:11px;font-weight:600;color:#4a5a4c;text-transform:uppercase;letter-spacing:.04em">Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" style="height:38px;border:1px solid #d0cec8;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit">
+      </div>
+      <button id="login-btn" onclick="doLogin()" style="height:40px;border:none;border-radius:8px;background:#2C3E2D;color:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;margin-top:6px">Sign in</button>
+    </div>
+
+    <div style="font-size:11px;color:#7a8c7c;margin-top:1.25rem;line-height:1.7;text-align:center">
+      Access is limited to authorized field staff and students.<br>
+      Contact the CDS/TID team administrator for an account.
+    </div>
+  </div>
+</div>
+<!-- ═══════════════ END BLOCK A ═══════════════ -->
+
+
+<!-- ═══════════════ BLOCK B — FIREBASE SDK + AUTH LOGIC (paste before </body>) ═══════════════ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+  // ── REPLACE WITH YOUR FIREBASE PROJECT CONFIG (from Firebase Console → Project settings) ──
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const loginScreen = document.getElementById('login-screen');
+  const appShell = document.getElementById('app-shell');
+  const errBox = document.getElementById('login-error');
+
+  window.doLogin = function () {
+    const email = document.getElementById('login-email').value.trim();
+    const pw = document.getElementById('login-password').value;
+    errBox.style.display = 'none';
+    if (!email || !pw) {
+      errBox.textContent = 'Enter both email and password.';
+      errBox.style.display = 'block';
+      return;
+    }
+    signInWithEmailAndPassword(auth, email, pw)
+      .catch((err) => {
+        errBox.textContent = 'Sign-in failed — check your email and password, or contact the administrator to confirm your account is active.';
+        errBox.style.display = 'block';
+      });
+  };
+
+  window.doLogout = function () {
+    signOut(auth);
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginScreen.style.display = 'none';
+      appShell.style.display = 'block';
+      // Optional: show who's logged in + a sign-out control in the header badge area
+      const badge = document.querySelector('.header-badge');
+      if (badge) {
+        badge.innerHTML = (user.email || 'signed in') +
+          ' &nbsp;·&nbsp; <a href="#" onclick="doLogout();return false;" style="color:#fff;text-decoration:underline">sign out</a>';
+      }
+    } else {
+      loginScreen.style.display = 'flex';
+      appShell.style.display = 'none';
+    }
+  });
+</script>
+<!-- ═══════════════ END BLOCK B ═══════════════ -->
