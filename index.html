@@ -163,6 +163,8 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
 </style>
 </head>
 <body>
+
+<!-- ═══════════════ LOGIN SCREEN (Firebase Auth) ═══════════════ -->
 <div id="login-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:#f5f3ee;font-family:'DM Sans',sans-serif;padding:1.5rem">
   <div style="width:100%;max-width:380px;background:#fff;border:1px solid #d0cec8;border-radius:14px;padding:2rem 1.75rem;box-shadow:0 2px 8px rgba(44,62,45,.10)">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem">
@@ -180,11 +182,11 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
     <div style="display:flex;flex-direction:column;gap:10px">
       <div style="display:flex;flex-direction:column;gap:4px">
         <label style="font-size:11px;font-weight:600;color:#4a5a4c;text-transform:uppercase;letter-spacing:.04em">Email</label>
-        <input type="email" id="login-email" placeholder="name@agency.gov.np" style="height:38px;border:1px solid #d0cec8;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit">
+        <input type="email" id="login-email" placeholder="name@agency.gov.np" style="height:38px;border:1px solid #d0cec8;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <div style="display:flex;flex-direction:column;gap:4px">
         <label style="font-size:11px;font-weight:600;color:#4a5a4c;text-transform:uppercase;letter-spacing:.04em">Password</label>
-        <input type="password" id="login-password" placeholder="••••••••" style="height:38px;border:1px solid #d0cec8;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit">
+        <input type="password" id="login-password" placeholder="••••••••" style="height:38px;border:1px solid #d0cec8;border-radius:8px;padding:0 10px;font-size:13px;font-family:inherit" onkeydown="if(event.key==='Enter')doLogin()">
       </div>
       <button id="login-btn" onclick="doLogin()" style="height:40px;border:none;border-radius:8px;background:#2C3E2D;color:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;margin-top:6px">Sign in</button>
     </div>
@@ -195,91 +197,9 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
     </div>
   </div>
 </div>
+<!-- ═══════════════ END LOGIN SCREEN ═══════════════ -->
+
 <div id="app-shell" style="display:none">
-           <header class="app-header">...your existing header...</header>
-           <nav class="step-nav">...your existing nav...</nav>
-           <main class="main">...your existing main...</main>
-         </div>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-  import {
-    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
-  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-
-  // ── REPLACE WITH YOUR FIREBASE PROJECT CONFIG (from Firebase Console → Project settings) ──
-  const firebaseConfig = {
-    apiKey: <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyB3ZhRBuB1cORSr31WwmMCq_TjKbetW2kw",
-    authDomain: "geoslopenepal-416d0.firebaseapp.com",
-    projectId: "geoslopenepal-416d0",
-    storageBucket: "geoslopenepal-416d0.firebasestorage.app",
-    messagingSenderId: "1022019357986",
-    appId: "1:1022019357986:web:21c9a86d807d7caf65297b",
-    measurementId: "G-T1NG1HVKVD"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>,
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  const loginScreen = document.getElementById('login-screen');
-  const appShell = document.getElementById('app-shell');
-  const errBox = document.getElementById('login-error');
-
-  window.doLogin = function () {
-    const email = document.getElementById('login-email').value.trim();
-    const pw = document.getElementById('login-password').value;
-    errBox.style.display = 'none';
-    if (!email || !pw) {
-      errBox.textContent = 'Enter both email and password.';
-      errBox.style.display = 'block';
-      return;
-    }
-    signInWithEmailAndPassword(auth, email, pw)
-      .catch((err) => {
-        errBox.textContent = 'Sign-in failed — check your email and password, or contact the administrator to confirm your account is active.';
-        errBox.style.display = 'block';
-      });
-  };
-
-  window.doLogout = function () {
-    signOut(auth);
-  };
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      loginScreen.style.display = 'none';
-      appShell.style.display = 'block';
-      // Optional: show who's logged in + a sign-out control in the header badge area
-      const badge = document.querySelector('.header-badge');
-      if (badge) {
-        badge.innerHTML = (user.email || 'signed in') +
-          ' &nbsp;·&nbsp; <a href="#" onclick="doLogout();return false;" style="color:#fff;text-decoration:underline">sign out</a>';
-      }
-    } else {
-      loginScreen.style.display = 'flex';
-      appShell.style.display = 'none';
-    }
-  });
-</script>
-  </body>
 <header class="app-header">
   <div class="header-inner">
     <div class="header-logo"><svg viewBox="0 0 24 24"><path d="M3 20l6-12 4 6 3-4 5 10H3z"/><circle cx="20" cy="6" r="2" opacity=".6"/></svg></div>
@@ -287,7 +207,7 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
       <h1>Roadside Slope Stabilization</h1>
       <p>FIELD ASSESSMENT &amp; DESIGN TOOL · BAGMATI PROVINCE, NEPAL</p>
     </div>
-    <div class="header-badge">TID 2083</div>
+    <div class="header-badge" id="header-badge">TID 2083</div>
   </div>
 </header>
 <nav class="step-nav">
@@ -609,6 +529,8 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
   <div class="page-nav"><button class="btn btn-nav btn-sm" onclick="goPage(4)">← Back</button><button class="btn btn-primary" style="width:auto;padding:0 28px" onclick="window.print()">🖨 Print / Save Report</button></div>
 </div>
 </main>
+</div>
+<!-- ═══════════════ END app-shell ═══════════════ -->
 <script>
 // ════ STATE ════
 let ST={ alt:'',aspect:'',land:'',moist:'',rain:'',mat:'',
@@ -1146,7 +1068,6 @@ function runWall(){
   <div class="nb earth"><strong>Ref:</strong> Rankine inclined backfill Das (2021); IS:456; IS:1904-1986. ${h>0?'Free cut FS by Taylor (1937).':''}</div>`;
 }
 
-
 // ════ PAGE 4: BIOENGINEERING ════
 const BIORULES=[
 {aMin:45,aMax:90,lMin:15,lMax:999,drain:'Good',moist:'Damp',prob:['Erosion','Slumping'],fn:'Armour, reinforce, drain',tech:['Diagonal grass lines: Row spacing 300mm; slip to slip spacing 100mm']},
@@ -1657,5 +1578,67 @@ function setupDrainPage(){
   if(zoneTxt){ note.classList.remove('hidden'); note.innerHTML=(note.innerHTML?note.innerHTML+'<br>':'')+'<em>'+zoneTxt+' If you have DHM station IDF data, switch the source to “DHM / measured IDF (manual)”.</em>'; }
 }
 </script>
+
+<!-- ═══════════════ FIREBASE AUTH — LOGIN GATE ═══════════════ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+  import {
+    getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+  } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB3ZhRBuB1cORSr31WwmMCq_TjKbetW2kw",
+    authDomain: "geoslopenepal-416d0.firebaseapp.com",
+    projectId: "geoslopenepal-416d0",
+    storageBucket: "geoslopenepal-416d0.firebasestorage.app",
+    messagingSenderId: "1022019357986",
+    appId: "1:1022019357986:web:21c9a86d807d7caf65297b",
+    measurementId: "G-T1NG1HVKVD"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const auth = getAuth(fbApp);
+
+  const loginScreen = document.getElementById('login-screen');
+  const appShell = document.getElementById('app-shell');
+  const errBox = document.getElementById('login-error');
+
+  window.doLogin = function () {
+    const email = document.getElementById('login-email').value.trim();
+    const pw = document.getElementById('login-password').value;
+    errBox.style.display = 'none';
+    if (!email || !pw) {
+      errBox.textContent = 'Enter both email and password.';
+      errBox.style.display = 'block';
+      return;
+    }
+    signInWithEmailAndPassword(auth, email, pw)
+      .catch(() => {
+        errBox.textContent = 'Sign-in failed — check your email and password, or contact the administrator to confirm your account is active.';
+        errBox.style.display = 'block';
+      });
+  };
+
+  window.doLogout = function () {
+    signOut(auth);
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      loginScreen.style.display = 'none';
+      appShell.style.display = 'block';
+      const badge = document.getElementById('header-badge');
+      if (badge) {
+        badge.innerHTML = (user.email || 'signed in') +
+          ' &nbsp;·&nbsp; <a href="#" onclick="doLogout();return false;" style="color:#fff;text-decoration:underline">Sign Out</a>';
+      }
+    } else {
+      loginScreen.style.display = 'flex';
+      appShell.style.display = 'none';
+    }
+  });
+</script>
+<!-- ═══════════════ END FIREBASE AUTH ═══════════════ -->
+
 </body>
 </html>
