@@ -346,13 +346,13 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
       <div class="card-hdr"><div class="card-icon red">🧱</div><div><div class="card-title">Wall Type &amp; Foundation</div></div></div>
       <div class="sub-title">Wall type</div>
       <div class="wall-grid" id="wall-opts">
-        <div class="wopt sel" onclick="selWall('dry',this)"><div class="wn">Dry Stone</div><div class="wg">γ18 μ0.65</div></div>
-        <div class="wopt" onclick="selWall('banded',this)"><div class="wn">Banded Stone</div><div class="wg">γ19 μ0.65</div></div>
-        <div class="wopt" onclick="selWall('cement',this)"><div class="wn">Cement (1:4)</div><div class="wg">γ23 μ0.55</div></div>
-        <div class="wopt" onclick="selWall('gabion',this)"><div class="wn">Gabion</div><div class="wg">γ17 μ0.50</div></div>
+        <div class="wopt sel" onclick="selWall('dry',this)"><div class="wn">Dry Stone</div><div class="wg">γ18 · top 0.6–1.0</div></div>
+        <div class="wopt" onclick="selWall('banded',this)"><div class="wn">Banded Stone</div><div class="wg">γ19 · top 0.6–1.0</div></div>
+        <div class="wopt" onclick="selWall('cement',this)"><div class="wn">Cement (1:4)</div><div class="wg">γ23 · top 0.5–1.0</div></div>
+        <div class="wopt" onclick="selWall('gabion',this)"><div class="wn">Gabion</div><div class="wg">γ17 · top 1.0–2.0</div></div>
       </div>
       <div class="g3" style="margin-top:12px">
-        <div class="fld"><label>Road / surcharge q (kPa)</label><input type="number" id="p3-q" value="0"></div>
+        <div class="fld"><label>Road / surcharge q (kPa)</label><input type="number" id="p3-q" value="10"></div>
         <div class="fld"><label>Wall height Hw (m) ≤ H</label><input type="number" id="p3-Hw" placeholder="e.g. 4" min="0.5">
           <span style="font-size:10px;color:var(--c-text3)">Leave blank to use full H. Free cut h = H − Hw above wall.</span>
         </div>
@@ -364,7 +364,9 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
         <div class="fld"><label>Override base width B (m) — optional</label><input type="number" id="p3-B-ov" placeholder="Blank = auto" step="0.1" min="0.5">
           <span style="font-size:10px;color:var(--c-text3)">Auto: max(0.5+Hw/10+Hw/36, 0.6·Hw). Enter to override for redesign.</span>
         </div>
-        <div></div>
+        <div class="fld"><label>Top width b_top (m) — optional</label><input type="number" id="p3-btop-ov" placeholder="Blank = wall default" step="0.1" min="0.3">
+          <span style="font-size:10px;color:var(--c-text3)" id="p3-btop-hint">Default from wall type. Enter to override.</span>
+        </div>
       </div>
       <div id="p3-sbc-disp" class="nb info hidden"></div>
       <button class="btn btn-danger" style="margin-top:1rem" onclick="runWall()">🧱 Design Wall &amp; Check Stability</button>
@@ -544,10 +546,10 @@ let tcDesignMin=null; // design time of concentration (min) shared with the Ramb
 // ════ SOIL DATA ════
 const SD={
   CG:{c:{L:0,I:1,H:2},phi:{L:35,I:40,H:45},g:{L:19,I:19.5,H:20},hint:'No plasticity, granular feel, no ribbon.',safe:'0.5–1.0 m'},
-  CGNPF:{c:{L:2,I:4,H:6},phi:{L:29,I:35,H:40},g:{L:19,I:20,H:21},hint:'Silty non-plastic fines, slight palm stain.',safe:'1.0–1.5 m'},
-  CGPF:{c:{L:3,I:5.5,H:8},phi:{L:25,I:32,H:40},g:{L:19,I:20,H:21},hint:'Plastic fines, coarse skeleton, weak ribbon.',safe:'1.2–2.0 m'},
-  ML:{c:{L:3,I:10,H:17},phi:{L:20,I:26,H:32},g:{L:15,I:17,H:19},hint:'Silky feel, dilatant, erosion-prone.',safe:'1.0–1.5 m'},
-  CL:{c:{L:5,I:12,H:20},phi:{L:15,I:20,H:25},g:{L:18,I:19,H:20},hint:'Ribbon <25 mm, medium plasticity.',safe:'2.0–4.0 m'},
+  CGNPF:{c:{L:2,I:4,H:6},phi:{L:29,I:35,H:40},g:{L:19,I:20,H:21},hint:'Silty non-plastic fines, slight palm stain.',safe:'1.0–2.0 m'},
+  CGPF:{c:{L:3,I:5.5,H:8},phi:{L:25,I:32,H:40},g:{L:19,I:20,H:21},hint:'Plastic fines, coarse skeleton, weak ribbon.',safe:'1.5–2.5 m'},
+  ML:{c:{L:3,I:10,H:17},phi:{L:20,I:26,H:32},g:{L:15,I:17,H:19},hint:'Silky feel, dilatant, erosion-prone.',safe:'0.5–1.5 m'},
+  CL:{c:{L:5,I:12,H:20},phi:{L:15,I:20,H:25},g:{L:18,I:19,H:20},hint:'Ribbon <25 mm, medium plasticity.',safe:'2.0–4.5 m'},
   CH:{c:{L:10,I:25,H:40},phi:{L:5,I:12,H:20},g:{L:17,I:18,H:19},hint:'Ribbon >25 mm, sticky, high swell.',safe:'2.0–4.0 m'}
 };
 
@@ -852,7 +854,7 @@ function drawTaylor(cutAngle,FS_cut,phi,natAngle,FS_nat){
 }
 
 // ════ PAGE 3: WALL ════
-const WALLS={dry:{name:'Dry Stone Masonry',gamma:18,mu:0.65},banded:{name:'Banded Stone Masonry',gamma:19,mu:0.65},cement:{name:'Cement Stone (1:4)',gamma:23,mu:0.55},gabion:{name:'Gabion Wall',gamma:17,mu:0.50}};
+const WALLS={dry:{name:'Dry Stone Masonry',gamma:18,btop:[0.6,1.0]},banded:{name:'Banded Stone Masonry',gamma:19,btop:[0.6,1.0]},cement:{name:'Cement Stone (1:4)',gamma:23,btop:[0.5,1.0]},gabion:{name:'Gabion Wall',gamma:17,btop:[1.0,2.0]}};
 // SBC auto-selected from USCS soil type (simplified IS:1904-1986)
 const SBC_BY_SOIL={CG:600,CGNPF:250,CGPF:300,ML:150,CL:150,CH:200};
 const SBC_LABELS={CG:'Coarse-grained (GW,SW,GP,SP) — medium to compact',CGNPF:'Non-plastic fines (SM,GM) — medium to compact',CGPF:'Plastic fines (GC,SC) — medium to compact',ML:'Inorganic silt (ML/MH) — medium to stiff',CL:'Low-plasticity clay (CL) — medium to stiff',CH:'High-plasticity clay (CH) — medium to stiff'};
@@ -870,6 +872,7 @@ function autoSetSBC(){
 function setupWallPage(){
   buildSummaryBar('p3-summary');
   autoSetSBC();
+  updateBtopHint();
   const nn=document.getElementById('p3-not-needed'), mg=document.getElementById('p3-marginal-section'), ds=document.getElementById('p3-design-section');
   nn.classList.add('hidden'); mg.classList.add('hidden'); ds.classList.add('hidden');
   if(!ST.needsWall&&!ST.needsMarginal){ nn.classList.remove('hidden'); }
@@ -927,6 +930,14 @@ function selWall(key,el){
   ST.wallKey=key;
   document.querySelectorAll('.wopt').forEach(o=>o.classList.remove('sel'));
   el.classList.add('sel');
+  updateBtopHint();
+}
+function updateBtopHint(){
+  const W=WALLS[ST.wallKey]; if(!W)return;
+  const h=document.getElementById('p3-btop-hint');
+  if(h) h.innerHTML='Recommended for '+W.name+': <strong>'+W.btop[0].toFixed(1)+'–'+W.btop[1].toFixed(1)+' m</strong>. Blank uses '+W.btop[0].toFixed(1)+' m.';
+  const inp=document.getElementById('p3-btop-ov');
+  if(inp) inp.placeholder='Blank = '+W.btop[0].toFixed(1)+' m (default)';
 }
 function runWall(){
   const W=WALLS[ST.wallKey], {c,phi,gamma,H}=ST;
@@ -955,16 +966,28 @@ function runWall(){
   }
   const Kp=Math.tan(Math.PI/4+pr/2)**2;
   // Geometry
-  const D=Math.min(0.5,Math.round((0.1*Hw_wall+0.3)*10)/10);
+  const D=Math.min(0.5,Math.round((0.1*Hw_wall+0.2)*10)/10);
   const Hw=Hw_wall+D;
-  const B_auto=Math.max(Math.round((0.5+Hw_wall/10+Hw_wall/36)*100)/100, Math.round(0.6*Hw_wall*100)/100);
+  const btop_ov=parseFloat(document.getElementById('p3-btop-ov').value)||0;
+  const b_top=btop_ov>0?btop_ov:W.btop[0];
+  const b_top_source=btop_ov>0?'user override':W.name+' default';
+  // Stem base width b_bot — wall-type-specific (Hw here = entered wall height Hw_wall)
+  let b_bot_raw;
+  if(ST.wallKey==='dry')         b_bot_raw=b_top+Hw_wall/3;                                   // dry stone
+  else if(ST.wallKey==='banded') b_bot_raw=b_top+Hw_wall/4;                                   // banded masonry
+  else if(ST.wallKey==='cement') b_bot_raw=Math.max(b_top+Hw_wall/10+Hw_wall/36,0.55*Hw_wall); // cement stone masonry
+  else if(ST.wallKey==='gabion') b_bot_raw=b_top+Hw_wall/2;                                   // gabion
+  else                           b_bot_raw=b_top+Hw_wall/3;
+  const b_bot=Math.max(b_top,Math.round(b_bot_raw*100)/100);
+  const b_bot_formula={dry:'b_top + Hw/3',banded:'b_top + Hw/4',cement:'max(b_top + Hw/10 + Hw/36, 0.55·Hw)',gabion:'b_top + Hw/2'}[ST.wallKey]||'b_top + Hw/3';
+  // Base slab: auto formula, but never narrower than the stem base b_bot
+  const B_auto=Math.max(Math.round(b_bot, Math.round(0.6*Hw_wall*100)/100);
   const B_ov=parseFloat(document.getElementById('p3-B-ov').value)||0;
-  const B=B_ov>0?B_ov:B_auto;
-  const B_source=B_ov>0?'user override':'auto formula';
-  const b_top=Math.max(0.3,Math.round(0.2*Hw_wall*10)/10);
-  const b_bot=Math.min(B*0.55,Math.round((b_top+0.25*Hw_wall)*10)/10);
+  const B_base=B_ov>0?B_ov:B_auto;
+  const B=Math.max(B_base,b_bot);
+  const B_source=(B>B_base+1e-9)?((B_ov>0?'override':'auto')+', widened to b_bot'):(B_ov>0?'user override':'auto formula');
   // Active pressure with free-cut surcharge
-  const q_eff=q+gamma*(H-Hw_wall);
+  const q_eff=q+gamma*h;
   const Pa_soil=0.5*Ka*gamma*Hw*Hw;
   const Pa_q=Ka*q_eff*Hw;
   const Pa_c=2*c*Math.sqrt(Ka)*Hw;
@@ -972,7 +995,7 @@ function runWall(){
   const Pa_h=Pa_total*Math.cos(ir);
   const Pa_v=Pa_total*Math.sin(ir);
   // Moments
-  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2)-2*c*Math.sqrt(Ka)*Hw*Math.cos(ir)*(Hw/2);
+  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2)-2*c*Math.sqrt(Ka)*Hw*Hw/2;
   const Pp=0.5*Kp*gamma*D*D+2*c*Math.sqrt(Kp)*D;
   const W_stem=W.gamma*((b_top+b_bot)/2)*Hw;
   const W_base=W.gamma*B*0.3;
@@ -984,7 +1007,9 @@ function runWall(){
   const q_max=V_total/B*(1+6*e/B);
   const q_min=V_total/B*(1-6*e/B);
   // Checks
-  const FOS_SL=(W.mu*V_total+Pp)/Pa_h;
+  const delta=(2/3)*phi;                 // base interface friction angle = 2/3 phi
+  const mu=Math.tan(delta*Math.PI/180);  // friction coefficient tan(delta)
+  const FOS_SL=(mu*V_total+Pp)/Pa_h;
   const FOS_OT=M_res/Math.max(0.01,M_ot);
   const BC_ok=SBC?q_max<=SBC:null;
   const e_ok=e<=B/6;
@@ -1001,31 +1026,66 @@ function runWall(){
       :'Free cut h='+h.toFixed(1)+'m UNSTABLE: FS='+FS_fc.toFixed(2)+'. Increase Hw or bench.';
   }
   const all=sl&&ot&&(BC_ok!==false)&&e_ok&&ov&&(h<=0.5||FS_fc>=1.1);
-  // SVG
-  const sc=24,ox=100,oy=260;
-  const Bpx=B*sc,Hwpx=Hw*sc,Dpx=D*sc,btpx=b_top*sc,bbpx=b_bot*sc,tbpx=0.3*sc,hpx=h*sc;
-  const svgW=ox+Bpx+200,svgH=oy+Dpx+50;
-  const bfDy=160*Math.tan(ir);
+  // ===== SVG (scaled to fit; toe/exposed face left, backfill right) =====
+  const svgW=560, svgH=360, mL=94, mR=150, mT=44, mB=56;
+  const worldH=Hw + (h>0?h:0) + 0.6;
+  const worldW=B + 2.4;
+  const sc=Math.max(9, Math.min((svgW-mL-mR)/worldW, (svgH-mT-mB)/worldH));
+  const foundY=svgH-mB, toeX=mL, tb=0.3;
+  const slabTopY=foundY - tb*sc;
+  const crestY=slabTopY - Hw*sc;
+  const toeGroundY=foundY - D*sc;           // original grade in front of toe (embedment D)
+  const cx=toeX + B*sc/2;                    // base-slab centre (symmetric stem axis)
+  const isGabion=ST.wallKey==='gabion';
+  // symmetric masonry stem corners (centred on base)
+  const xTL=cx - b_top*sc/2, xTR=cx + b_top*sc/2, xBL=cx - b_bot*sc/2, xBR=cx + b_bot*sc/2;
+  // gabion: back vertical at slab back edge, stepped toward the exposed (left) face
+  const xRg=toeX + B*sc;
+  const nStep=Math.max(2,Math.min(6,Math.round(Hw/0.8)));
+  const gBoxes=Array.from({length:nStep}).map((_,k)=>{
+    const frac=nStep>1?k/(nStep-1):0;                 // 0 top .. 1 bottom
+    const wk=b_top+(b_bot-b_top)*frac;
+    const hc=Hw*sc/nStep, yTop=crestY+k*hc, xL=xRg - wk*sc;
+    return `<rect x="${xL}" y="${yTop}" width="${wk*sc}" height="${hc}" fill="#8a9ba0" stroke="#3a4a4f" stroke-width="1"/><line x1="${xL+wk*sc/2}" y1="${yTop}" x2="${xL+wk*sc/2}" y2="${yTop+hc}" stroke="#3a4a4f" stroke-width="0.4" opacity="0.5"/>`;
+  }).join('');
+  const xContact=isGabion?xRg:xTR;           // where backfill meets the wall (pressure face)
+  const stemMidX=isGabion?(xRg-b_bot*sc*0.5):cx, midY=(crestY+slabTopY)/2;
+  const xBackR=svgW-mR+70;
+  const bfTopR_y=crestY - (xBackR-xContact)*Math.tan(ir);
+  const paY=foundY - Hw/3*sc;
+  const paLen=Math.min(46,Math.max(16,Pa_h*0.35));
+  const triX=Math.min(40,Pa_h*0.3);
   document.getElementById('p3-wall-out').classList.remove('hidden');
   document.getElementById('p3-wall-content').innerHTML=`
   <div class="xs-wrap"><svg width="100%" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
-    <defs><marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#7a8c7c" stroke-width="1.5"/></marker></defs>
-    <line x1="10" y1="${oy}" x2="${ox+Bpx+120}" y2="${oy}" stroke="#b8b5ad" stroke-width="1" stroke-dasharray="5 4"/>
-    <rect x="${ox}" y="${oy-tbpx}" width="${Bpx}" height="${tbpx}" fill="#B4B2A9" stroke="#7a8c7c" stroke-width="0.5"/>
-    <polygon points="${ox+Bpx-btpx},${oy-tbpx-Hwpx} ${ox+Bpx},${oy-tbpx-Hwpx} ${ox+Bpx},${oy-tbpx} ${ox+Bpx-bbpx},${oy-tbpx}" fill="#7a9e7e" stroke="#4a5a4c" stroke-width="0.5"/>
-    <polygon points="${ox},${oy-tbpx-Hwpx-bfDy} ${ox+Bpx-btpx},${oy-tbpx-Hwpx} ${ox+Bpx-bbpx},${oy-tbpx} ${ox},${oy-tbpx}" fill="#C0DD97" fill-opacity="0.5"/>
-    ${h>0.1?`<rect x="${ox+Bpx}" y="${oy-tbpx-Hwpx-hpx}" width="40" height="${hpx}" fill="#e8d4a0" fill-opacity="0.5" stroke="#b07020" stroke-width="0.5" stroke-dasharray="3 2"/><text x="${ox+Bpx+20}" y="${oy-tbpx-Hwpx-hpx/2+4}" font-size="9" fill="#b07020" text-anchor="middle" font-family="DM Sans">h=${h.toFixed(1)}m</text>`:''}
-    ${i_deg>0?`<line x1="${ox+Bpx-btpx}" y1="${oy-tbpx-Hwpx}" x2="${ox-20}" y2="${oy-tbpx-Hwpx-bfDy*1.2}" stroke="#2d7a4f" stroke-width="1.5" stroke-dasharray="6 3"/><text x="${ox+20}" y="${oy-tbpx-Hwpx-bfDy*0.5-6}" font-size="10" fill="#2d7a4f" font-family="DM Sans">i=${i_deg}deg</text>`:''}
-    <polygon points="${ox-5},${oy-tbpx} ${ox-5},${oy-tbpx-Hwpx} ${ox-5-Math.min(40,Pa_h*0.4)},${oy-tbpx}" fill="#c0603a" fill-opacity="0.2" stroke="#c0603a" stroke-width="0.5"/>
-    <line x1="${ox-8}" y1="${oy-tbpx-Hw/3*sc}" x2="${ox+18}" y2="${oy-tbpx-Hw/3*sc}" stroke="#c0603a" stroke-width="2" marker-end="url(#arw)"/>
-    <text x="${ox-10}" y="${oy-tbpx-Hw/3*sc-5}" font-size="9" fill="#c0603a" text-anchor="end" font-family="DM Sans">Pa_h=${Pa_h.toFixed(1)}</text>
-    ${Pa_v>0.1?`<line x1="${ox+Bpx-btpx}" y1="${oy-tbpx-Hwpx-15}" x2="${ox+Bpx-btpx}" y2="${oy-tbpx-Hwpx+10}" stroke="#2a5f8a" stroke-width="1.5" marker-end="url(#arw)"/><text x="${ox+Bpx-btpx+5}" y="${oy-tbpx-Hwpx-18}" font-size="9" fill="#2a5f8a" font-family="DM Sans">Pa_v=${Pa_v.toFixed(1)}</text>`:''}
-    <line x1="${ox-25}" y1="${oy-tbpx}" x2="${ox-25}" y2="${oy-tbpx-Hwpx}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#arw)" marker-start="url(#arw)"/>
-    <text x="${ox-38}" y="${oy-tbpx-Hwpx/2}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">Hw=${Hw.toFixed(1)}</text>
-    <line x1="${ox}" y1="${oy+Dpx+14}" x2="${ox+Bpx}" y2="${oy+Dpx+14}" stroke="#7a8c7c" stroke-width="0.5" marker-end="url(#arw)" marker-start="url(#arw)"/>
-    <text x="${ox+Bpx/2}" y="${oy+Dpx+25}" font-size="10" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans">B=${B.toFixed(2)}m</text>
-    <text x="${ox+Bpx-bbpx*0.5}" y="${oy-tbpx-Hwpx/2}" font-size="10" fill="#fff" text-anchor="middle" font-family="DM Sans" font-weight="600">${W.name}</text>
-    ${q_eff>0?`<rect x="${ox}" y="${oy-tbpx-Hwpx-12}" width="${Math.max(10,Bpx-btpx)}" height="12" fill="#e8a03c" fill-opacity="0.5"/><text x="${ox+(Bpx-btpx)/2}" y="${oy-tbpx-Hwpx-3}" font-size="9" fill="#b07020" text-anchor="middle" font-family="DM Sans">q_eff=${q_eff.toFixed(0)} (q=${q}+yh=${(gamma*h).toFixed(0)})</text>`:''}
+    <defs><marker id="arw" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#7a8c7c" stroke-width="1.5"/></marker>
+    <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#b07020" stroke-width="1" opacity="0.5"/></pattern></defs>
+    <rect x="0" y="0" width="${svgW}" height="${svgH}" fill="#f5f3ee"/>
+    <polygon points="${xContact},${crestY} ${xBackR},${bfTopR_y} ${xBackR},${foundY} ${xContact},${foundY}" fill="#C0DD97" fill-opacity="0.45" stroke="#7a9e7e" stroke-width="0.5"/>
+    ${i_deg>0?`<line x1="${xContact}" y1="${crestY}" x2="${xBackR}" y2="${bfTopR_y}" stroke="#2d7a4f" stroke-width="1.5"/><text x="${xContact+80}" y="${crestY-80*Math.tan(ir)-6}" font-size="10" fill="#2d7a4f" font-family="DM Sans">i=${i_deg}&#176;</text>`:`<line x1="${xContact}" y1="${crestY}" x2="${xBackR}" y2="${crestY}" stroke="#2d7a4f" stroke-width="1.2"/>`}
+    ${h>0.05?`<rect x="${xContact}" y="${crestY-h*sc}" width="46" height="${h*sc}" fill="url(#hatch)" stroke="#b07020" stroke-width="0.6" stroke-dasharray="3 2"/><line x1="${xContact+56}" y1="${crestY-h*sc}" x2="${xContact+56}" y2="${crestY}" stroke="#b07020" stroke-width="0.8" marker-start="url(#arw)" marker-end="url(#arw)"/><text x="${xContact+60}" y="${crestY-h*sc/2+3}" font-size="9" fill="#b07020" font-family="DM Sans">free cut h=${h.toFixed(1)}m</text>`:''}
+    ${q>0?`<g>${Array.from({length:5}).map((_,k)=>{const xx=xContact+16+k*22;const yy=crestY-(xx-xContact)*Math.tan(ir);return `<line x1="${xx}" y1="${yy-15}" x2="${xx}" y2="${yy-2}" stroke="#e8a03c" stroke-width="1.4" marker-end="url(#arw)"/>`;}).join('')}<text x="${xContact+72}" y="${crestY-72*Math.tan(ir)-18}" font-size="9" fill="#b07020" font-family="DM Sans">q=${q.toFixed(0)} kPa (input)</text></g>`:''}
+    <line x1="10" y1="${toeGroundY}" x2="${toeX}" y2="${toeGroundY}" stroke="#b8b5ad" stroke-width="1" stroke-dasharray="5 4"/>
+    <line x1="10" y1="${foundY}" x2="${xBackR}" y2="${foundY}" stroke="#8a8880" stroke-width="1.3"/>
+    <rect x="${toeX}" y="${slabTopY}" width="${B*sc}" height="${tb*sc}" fill="#B4B2A9" stroke="#7a8c7c" stroke-width="0.6"/>
+    ${isGabion?gBoxes:`<polygon points="${xTL},${crestY} ${xTR},${crestY} ${xBR},${slabTopY} ${xBL},${slabTopY}" fill="#7a9e7e" stroke="#2C3E2D" stroke-width="1.2" stroke-linejoin="round"/>`}
+    <text x="${stemMidX}" y="${midY}" font-size="10" fill="#fff" text-anchor="middle" font-family="DM Sans" font-weight="600" transform="rotate(-90 ${stemMidX} ${midY})">${W.name}</text>
+    <polygon points="${xContact},${crestY} ${xContact+triX},${foundY} ${xContact},${foundY}" fill="#c0603a" fill-opacity="0.15" stroke="#c0603a" stroke-width="0.5"/>
+    <line x1="${xContact+paLen}" y1="${paY}" x2="${xContact-6}" y2="${paY}" stroke="#c0603a" stroke-width="2" marker-end="url(#arw)"/>
+    <text x="${xContact+paLen+3}" y="${paY-4}" font-size="9" fill="#c0603a" font-family="DM Sans">Pa_h=${Pa_h.toFixed(1)}</text>
+    ${Pa_v>0.1?`<line x1="${xContact}" y1="${crestY-16}" x2="${xContact}" y2="${crestY+2}" stroke="#2a5f8a" stroke-width="1.6" marker-end="url(#arw)"/><text x="${xContact+4}" y="${crestY-18}" font-size="9" fill="#2a5f8a" font-family="DM Sans">Pa_v=${Pa_v.toFixed(1)}</text>`:''}
+    <line x1="${toeX+6}" y1="${foundY-3}" x2="${toeX+B*sc-6}" y2="${foundY-3}" stroke="#7a5da0" stroke-width="1.4" stroke-dasharray="4 2"/>
+    <text x="${cx}" y="${foundY+40}" font-size="9" fill="#7a5da0" text-anchor="middle" font-family="DM Sans">&#956; = tan(2/3&#966;) = tan(${delta.toFixed(1)}&#176;) = ${mu.toFixed(3)}</text>
+    <line x1="${isGabion?xRg-b_top*sc:xTL}" y1="${crestY-16}" x2="${isGabion?xRg:xTR}" y2="${crestY-16}" stroke="#4a5a4c" stroke-width="0.7" marker-start="url(#arw)" marker-end="url(#arw)"/>
+    <text x="${isGabion?xRg-b_top*sc/2:cx}" y="${crestY-20}" font-size="9.5" fill="#2C3E2D" text-anchor="middle" font-family="DM Sans" font-weight="600">b_top=${b_top.toFixed(2)}m</text>
+    <line x1="${isGabion?xRg-b_bot*sc:xBL}" y1="${slabTopY-2}" x2="${isGabion?xRg:xBR}" y2="${slabTopY-2}" stroke="#4a5a4c" stroke-width="0.7" marker-start="url(#arw)" marker-end="url(#arw)"/>
+    <text x="${isGabion?xRg-b_bot*sc/2:cx}" y="${slabTopY-5}" font-size="9" fill="#2C3E2D" text-anchor="middle" font-family="DM Sans">b_bot=${b_bot.toFixed(2)}m</text>
+    <line x1="${toeX}" y1="${foundY+16}" x2="${toeX+B*sc}" y2="${foundY+16}" stroke="#4a5a4c" stroke-width="0.7" marker-start="url(#arw)" marker-end="url(#arw)"/>
+    <text x="${cx}" y="${foundY+27}" font-size="9.5" fill="#2C3E2D" text-anchor="middle" font-family="DM Sans" font-weight="600">B=${B.toFixed(2)}m</text>
+    <line x1="${toeX-28}" y1="${slabTopY}" x2="${toeX-28}" y2="${crestY}" stroke="#7a8c7c" stroke-width="0.7" marker-start="url(#arw)" marker-end="url(#arw)"/>
+    <text x="${toeX-32}" y="${(slabTopY+crestY)/2}" font-size="9.5" fill="#4a5a4c" text-anchor="middle" font-family="DM Sans" transform="rotate(-90 ${toeX-32} ${(slabTopY+crestY)/2})">Hw+D=${Hw.toFixed(2)}m</text>
+    ${D>0.05?`<line x1="${toeX-10}" y1="${toeGroundY}" x2="${toeX-10}" y2="${foundY}" stroke="#8a8880" stroke-width="0.7" marker-start="url(#arw)" marker-end="url(#arw)"/><text x="${toeX-13}" y="${(toeGroundY+foundY)/2+3}" font-size="8.5" fill="#8a8880" text-anchor="end" font-family="DM Sans">D=${D.toFixed(2)}</text>`:''}
+    <text x="${svgW/2}" y="16" font-size="11" fill="#2C3E2D" text-anchor="middle" font-family="DM Sans" font-weight="600">${W.name}${isGabion?' — stepped (exposed face left)':' — symmetric section'}, backfill right</text>
   </svg></div>
   ${h>0.5?`<div class="nb ${fcC==='ok'?'success':fcC==='warn'?'warn':'danger'}"><strong>Free cut stability (h=${h.toFixed(1)}m, alpha=${ST.alpha} deg):</strong> ${fcN}</div>`:''}
   ${i_deg>0||h>0?`<div class="nb info">${i_deg>0?'<strong>Inclined backfill i=beta='+i_deg+'deg.</strong> ':''}${h>0?'Free cut h='+h.toFixed(1)+'m adds surcharge yh='+(gamma*h).toFixed(1)+' kPa at wall top.':''}</div>`:''}
@@ -1040,8 +1100,11 @@ function runWall(){
     <div class="mc"><div class="mc-lbl">Pa total</div><div class="mc-val">${Pa_total.toFixed(1)}</div><div class="mc-unit">kN/m</div></div>
     <div class="mc"><div class="mc-lbl">Pa_h</div><div class="mc-val">${Pa_h.toFixed(1)}</div><div class="mc-unit">kN/m</div></div>
     <div class="mc"><div class="mc-lbl">Pa_v</div><div class="mc-val">${Pa_v.toFixed(1)}</div><div class="mc-unit">kN/m</div></div>
-    <div class="mc"><div class="mc-lbl">Width B</div><div class="mc-val">${B.toFixed(2)}</div><div class="mc-unit">m</div></div>
+    <div class="mc"><div class="mc-lbl">Top width b_top</div><div class="mc-val">${b_top.toFixed(2)}</div><div class="mc-unit">m · ${b_top_source}</div></div>
+    <div class="mc"><div class="mc-lbl">Stem base b_bot</div><div class="mc-val">${b_bot.toFixed(2)}</div><div class="mc-unit">m · ${b_bot_formula}</div></div>
+    <div class="mc"><div class="mc-lbl">Width B</div><div class="mc-val">${B.toFixed(2)}</div><div class="mc-unit">m · ${B_source}</div></div>
     <div class="mc"><div class="mc-lbl">Embedment D</div><div class="mc-val">${D.toFixed(2)}</div><div class="mc-unit">m</div></div>
+    <div class="mc"><div class="mc-lbl">&#956;=tan(2/3&#966;)</div><div class="mc-val">${mu.toFixed(3)}</div><div class="mc-unit">&#948;=${delta.toFixed(1)}&#176;</div></div>
     <div class="mc ${e_ok?'ok':'bad'}"><div class="mc-lbl">Eccentricity e</div><div class="mc-val">${e.toFixed(3)}</div><div class="mc-unit">le ${(B/6).toFixed(3)}</div></div>
   </div></div>
   <div class="sub"><div class="sub-title">Force Summary</div><div style="font-size:12px;line-height:2">
@@ -1052,11 +1115,11 @@ function runWall(){
   </div></div>
   <div class="sub"><div class="sub-title">Stability Checks</div>
   <table class="chk-table"><thead><tr><th>Check</th><th>Formula</th><th>Required</th><th>Computed</th><th>Status</th></tr></thead><tbody>
-    <tr><td><strong>Sliding</strong></td><td style="font-size:11px">mu(W+Pa_v)+Pp/Pa_h</td><td>ge 1.5</td><td>${Math.min(FOS_SL,9.99).toFixed(2)}</td><td><span class="${sl?'bpass':'bfail'}">${sl?'pass':'fail'}</span></td></tr>
+    <tr><td><strong>Sliding</strong></td><td style="font-size:11px">[&#956;(W+Pa_v)+Pp]/Pa_h, &#956;=tan(2/3&#966;)</td><td>ge 1.5</td><td>${Math.min(FOS_SL,9.99).toFixed(2)}</td><td><span class="${sl?'bpass':'bfail'}">${sl?'pass':'fail'}</span></td></tr>
     <tr><td><strong>Overturning</strong></td><td style="font-size:11px">M_res/M_ot</td><td>ge 2.0</td><td>${Math.min(FOS_OT,9.99).toFixed(2)}</td><td><span class="${ot?'bpass':'bfail'}">${ot?'pass':'fail'}</span></td></tr>
     <tr><td><strong>Bearing</strong></td><td style="font-size:11px">q_max le SBC</td><td>${SBC?'le '+SBC:'--'}</td><td>${q_max.toFixed(1)}</td><td><span class="${BC_ok===null?'bfail':BC_ok?'bpass':'bfail'}">${BC_ok===null?'warn':BC_ok?'pass':'fail'}</span></td></tr>
     <tr><td><strong>Eccentricity</strong></td><td style="font-size:11px">e le B/6</td><td>le ${(B/6).toFixed(3)}</td><td>${e.toFixed(3)}</td><td><span class="${e_ok?'bpass':'bfail'}">${e_ok?'pass':'fail'}</span></td></tr>
-    <tr><td><strong>Overall FS</strong></td><td style="font-size:11px">FS_post</td><td>ge 1.3</td><td>${FS_post.toFixed(2)}</td><td><span class="${ov?'bpass':'bfail'}">${ov?'pass':'fail'}</span></td></tr>
+    <tr><td><strong>Overall FS</strong></td><td style="font-size:11px">Overall stability analysis is recommended for wall height >6.0m </td></tr>
     ${h>0.5?`<tr><td><strong>Free cut FS</strong></td><td style="font-size:11px">Taylor h=${h.toFixed(1)}m</td><td>ge 1.1</td><td>${FS_fc.toFixed(2)}</td><td><span class="${FS_fc>=1.1?'bpass':'bfail'}">${FS_fc>=1.1?'pass':'fail'}</span></td></tr>`:''}
   </tbody></table>
   ${!sl?'<div class="nb danger">Sliding fails. Add shear key or widen base.</div>':''}
@@ -1065,7 +1128,7 @@ function runWall(){
   ${h>0.5&&FS_fc<1.1?'<div class="nb danger">Free cut UNSTABLE. Increase Hw or bench the cut.</div>':''}
   </div>
   <div class="nb ${all?'success':'warn'}">${all?'<strong>All checks pass.</strong> Proceed to bioengineering.':'<strong>Checks fail.</strong> Revise and re-run.'}</div>
-  <div class="nb earth"><strong>Ref:</strong> Rankine inclined backfill Das (2021); IS:456; IS:1904-1986. ${h>0?'Free cut FS by Taylor (1937).':''}</div>`;
+  <div class="nb earth"><strong>Ref:</strong> Rankine inclined backfill Das (2021); IS:456; IS:1904-1986. Base friction &#948;=2/3&#966;, &#956;=tan&#948;=${mu.toFixed(3)}. ${h>0?'Free cut FS by Taylor (1937).':''}</div>`;
 }
 
 // ════ PAGE 4: BIOENGINEERING ════
@@ -1630,7 +1693,7 @@ function setupDrainPage(){
       const badge = document.getElementById('header-badge');
       if (badge) {
         badge.innerHTML = (user.email || 'signed in') +
-          ' &nbsp;·&nbsp; <a href="#" onclick="doLogout();return false;" style="color:#fff;text-decoration:underline">Sign Out</a>';
+          ' &nbsp;·&nbsp; <a href="#" onclick="doLogout();return false;" style="color:#fff;text-decoration:underline">sign out</a>';
       }
     } else {
       loginScreen.style.display = 'flex';
