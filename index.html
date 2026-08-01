@@ -544,10 +544,10 @@ let tcDesignMin=null; // design time of concentration (min) shared with the Ramb
 // ════ SOIL DATA ════
 const SD={
   CG:{c:{L:0,I:1,H:2},phi:{L:35,I:40,H:45},g:{L:19,I:19.5,H:20},hint:'No plasticity, granular feel, no ribbon.',safe:'0.5–1.0 m'},
-  CGNPF:{c:{L:2,I:4,H:6},phi:{L:29,I:35,H:40},g:{L:19,I:20,H:21},hint:'Silty non-plastic fines, slight palm stain.',safe:'1.0–2.0 m'},
-  CGPF:{c:{L:3,I:5.5,H:8},phi:{L:25,I:32,H:40},g:{L:19,I:20,H:21},hint:'Plastic fines, coarse skeleton, weak ribbon.',safe:'1.5–2.5 m'},
-  ML:{c:{L:3,I:10,H:17},phi:{L:20,I:26,H:32},g:{L:15,I:17,H:19},hint:'Silky feel, dilatant, erosion-prone.',safe:'0.5–1.5 m'},
-  CL:{c:{L:5,I:12,H:20},phi:{L:15,I:20,H:25},g:{L:18,I:19,H:20},hint:'Ribbon <25 mm, medium plasticity.',safe:'2.0–4.5 m'},
+  CGNPF:{c:{L:2,I:4,H:6},phi:{L:29,I:35,H:40},g:{L:19,I:20,H:21},hint:'Silty non-plastic fines, slight palm stain.',safe:'1.0–1.5 m'},
+  CGPF:{c:{L:3,I:5.5,H:8},phi:{L:25,I:32,H:40},g:{L:19,I:20,H:21},hint:'Plastic fines, coarse skeleton, weak ribbon.',safe:'1.2–2.0 m'},
+  ML:{c:{L:3,I:10,H:17},phi:{L:20,I:26,H:32},g:{L:15,I:17,H:19},hint:'Silky feel, dilatant, erosion-prone.',safe:'1.0–1.5 m'},
+  CL:{c:{L:5,I:12,H:20},phi:{L:15,I:20,H:25},g:{L:18,I:19,H:20},hint:'Ribbon <25 mm, medium plasticity.',safe:'2.0–4.0 m'},
   CH:{c:{L:10,I:25,H:40},phi:{L:5,I:12,H:20},g:{L:17,I:18,H:19},hint:'Ribbon >25 mm, sticky, high swell.',safe:'2.0–4.0 m'}
 };
 
@@ -962,7 +962,7 @@ function runWall(){
   const B=B_ov>0?B_ov:B_auto;
   const B_source=B_ov>0?'user override':'auto formula';
   const b_top=Math.max(0.3,Math.round(0.2*Hw_wall*10)/10);
-  const b_bot=Math.min(B*0.55,Math.round((b_top+0.1*Hw_wall)*10)/10);
+  const b_bot=Math.min(B*0.55,Math.round((b_top+0.25*Hw_wall)*10)/10);
   // Active pressure with free-cut surcharge
   const q_eff=q+gamma*h;
   const Pa_soil=0.5*Ka*gamma*Hw*Hw;
@@ -972,12 +972,12 @@ function runWall(){
   const Pa_h=Pa_total*Math.cos(ir);
   const Pa_v=Pa_total*Math.sin(ir);
   // Moments
-  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2);
+  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2)-2*c*Math.sqrt(Ka)*Hw*Math.cos(ir)*(Hw/2);
   const Pp=0.5*Kp*gamma*D*D+2*c*Math.sqrt(Kp)*D;
   const W_stem=W.gamma*((b_top+b_bot)/2)*Hw;
   const W_base=W.gamma*B*0.3;
   const W_total=W_stem+W_base;
-  const M_res=W_stem*(B-(b_top+b_bot)/4)+W_base*(B/2)+Pa_v*B+Pp*(D/3);
+  const M_res=W_stem*(B/2)+W_base*(B/2)+Pa_v*B+Pp*(D/3);
   const V_total=W_total+Pa_v;
   const x_bar=(M_res-M_ot)/V_total;
   const e=Math.abs(B/2-x_bar);
