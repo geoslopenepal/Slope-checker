@@ -352,7 +352,7 @@ canvas{display:block;width:100%;border-radius:var(--r);border:1px solid var(--c-
         <div class="wopt" onclick="selWall('gabion',this)"><div class="wn">Gabion</div><div class="wg">γ17 μ0.50</div></div>
       </div>
       <div class="g3" style="margin-top:12px">
-        <div class="fld"><label>Road / surcharge q (kPa)</label><input type="number" id="p3-q" value="10"></div>
+        <div class="fld"><label>Road / surcharge q (kPa)</label><input type="number" id="p3-q" value="0"></div>
         <div class="fld"><label>Wall height Hw (m) ≤ H</label><input type="number" id="p3-Hw" placeholder="e.g. 4" min="0.5">
           <span style="font-size:10px;color:var(--c-text3)">Leave blank to use full H. Free cut h = H − Hw above wall.</span>
         </div>
@@ -930,7 +930,7 @@ function selWall(key,el){
 }
 function runWall(){
   const W=WALLS[ST.wallKey], {c,phi,gamma,H}=ST;
-  ST.q=parseFloat(document.getElementById('p3-q').value)||10;
+  ST.q=parseFloat(document.getElementById('p3-q').value)||0;
   const q=ST.q, SBC=ST.SBC;
   // Wall height and free cut
   const Hw_in=parseFloat(document.getElementById('p3-Hw').value)||H;
