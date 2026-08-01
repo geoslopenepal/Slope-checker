@@ -955,7 +955,7 @@ function runWall(){
   }
   const Kp=Math.tan(Math.PI/4+pr/2)**2;
   // Geometry
-  const D=Math.max(0.5,Math.round((0.1*Hw_wall+0.3)*10)/10);
+  const D=Math.min(0.5,Math.round((0.1*Hw_wall+0.3)*10)/10);
   const Hw=Hw_wall+D;
   const B_auto=Math.max(Math.round((0.5+Hw_wall/10+Hw_wall/36)*100)/100, Math.round(0.6*Hw_wall*100)/100);
   const B_ov=parseFloat(document.getElementById('p3-B-ov').value)||0;
