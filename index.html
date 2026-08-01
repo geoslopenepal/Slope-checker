@@ -964,7 +964,7 @@ function runWall(){
   const b_top=Math.max(0.3,Math.round(0.2*Hw_wall*10)/10);
   const b_bot=Math.min(B*0.55,Math.round((b_top+0.25*Hw_wall)*10)/10);
   // Active pressure with free-cut surcharge
-  const q_eff=q+gamma*h;
+  const q_eff=q+gamma*(H-Hw_wall);
   const Pa_soil=0.5*Ka*gamma*Hw*Hw;
   const Pa_q=Ka*q_eff*Hw;
   const Pa_c=2*c*Math.sqrt(Ka)*Hw;
