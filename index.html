@@ -966,7 +966,7 @@ function runWall(){
   }
   const Kp=Math.tan(Math.PI/4+pr/2)**2;
   // Geometry
-  const D=Math.min(0.5,Math.round((0.1*Hw_wall+0.2)*10)/10);
+  const D=Math.max(0.5,Math.round((0.1*Hw_wall+0.3)*10)/10);
   const Hw=Hw_wall+D;
   const btop_ov=parseFloat(document.getElementById('p3-btop-ov').value)||0;
   const b_top=btop_ov>0?btop_ov:W.btop[0];
@@ -981,7 +981,7 @@ function runWall(){
   const b_bot=Math.max(b_top,Math.round(b_bot_raw*100)/100);
   const b_bot_formula={dry:'b_top + Hw/3',banded:'b_top + Hw/4',cement:'max(b_top + Hw/10 + Hw/36, 0.6·Hw)',gabion:'b_top + Hw/2'}[ST.wallKey]||'b_top + Hw/3';
   // Base slab: auto formula, but never narrower than the stem base b_bot
-  const B_auto=Math.max(Math.round(b_bot, Math.round(0.6*Hw_wall*100)/100);
+  const B_auto=Math.max(Math.round((0.5+Hw_wall/10+Hw_wall/36)*100)/100, Math.round(0.6*Hw_wall*100)/100);
   const B_ov=parseFloat(document.getElementById('p3-B-ov').value)||0;
   const B_base=B_ov>0?B_ov:B_auto;
   const B=Math.max(B_base,b_bot);
@@ -995,12 +995,12 @@ function runWall(){
   const Pa_h=Pa_total*Math.cos(ir);
   const Pa_v=Pa_total*Math.sin(ir);
   // Moments
-  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2)-2*c*Math.sqrt(Ka)*Hw*(Hw/2);
+  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2);
   const Pp=0.5*Kp*gamma*D*D+2*c*Math.sqrt(Kp)*D;
   const W_stem=W.gamma*((b_top+b_bot)/2)*Hw;
   const W_base=W.gamma*B*0.3;
   const W_total=W_stem+W_base;
-  const M_res=W_stem*(B/2)+W_base*(B/2)+Pa_v*B+Pp*(D/3);
+  const M_res=W_stem*(B-(b_top+b_bot)/4)+W_base*(B/2)+Pa_v*B+Pp*(D/3);
   const V_total=W_total+Pa_v;
   const x_bar=(M_res-M_ot)/V_total;
   const e=Math.abs(B/2-x_bar);
@@ -1013,8 +1013,7 @@ function runWall(){
   const FOS_OT=M_res/Math.max(0.01,M_ot);
   const BC_ok=SBC?q_max<=SBC:null;
   const e_ok=e<=B/6;
-  const FS_post=Math.min(9.99,ST.FS_cut+0.35);
-  const sl=FOS_SL>=1.5,ot=FOS_OT>=2.0,ov=FS_post>=1.3;
+  const sl=FOS_SL>=1.5,ot=FOS_OT>=2.0;
   // Free cut stability
   let FS_fc=9.99,fcC='ok',fcN='';
   if(h>0.5){
@@ -1025,7 +1024,7 @@ function runWall(){
       :FS_fc>=1.1?'Free cut h='+h.toFixed(1)+'m marginal: FS='+FS_fc.toFixed(2)+'. Drainage+bioengineering above wall.'
       :'Free cut h='+h.toFixed(1)+'m UNSTABLE: FS='+FS_fc.toFixed(2)+'. Increase Hw or bench.';
   }
-  const all=sl&&ot&&(BC_ok!==false)&&e_ok&&ov&&(h<=0.5||FS_fc>=1.1);
+  const all=sl&&ot&&(BC_ok!==false)&&e_ok&&(h<=0.5||FS_fc>=1.1);
   // ===== SVG (scaled to fit; toe/exposed face left, backfill right) =====
   const svgW=560, svgH=360, mL=94, mR=150, mT=44, mB=56;
   const worldH=Hw + (h>0?h:0) + 0.6;
@@ -1119,7 +1118,6 @@ function runWall(){
     <tr><td><strong>Overturning</strong></td><td style="font-size:11px">M_res/M_ot</td><td>ge 2.0</td><td>${Math.min(FOS_OT,9.99).toFixed(2)}</td><td><span class="${ot?'bpass':'bfail'}">${ot?'pass':'fail'}</span></td></tr>
     <tr><td><strong>Bearing</strong></td><td style="font-size:11px">q_max le SBC</td><td>${SBC?'le '+SBC:'--'}</td><td>${q_max.toFixed(1)}</td><td><span class="${BC_ok===null?'bfail':BC_ok?'bpass':'bfail'}">${BC_ok===null?'warn':BC_ok?'pass':'fail'}</span></td></tr>
     <tr><td><strong>Eccentricity</strong></td><td style="font-size:11px">e le B/6</td><td>le ${(B/6).toFixed(3)}</td><td>${e.toFixed(3)}</td><td><span class="${e_ok?'bpass':'bfail'}">${e_ok?'pass':'fail'}</span></td></tr>
-    <tr><td><strong>Overall FS</strong></td><td style="font-size:11px">FS_post</td><td>ge 1.3</td><td>${FS_post.toFixed(2)}</td><td><span class="${ov?'bpass':'bfail'}">${ov?'pass':'fail'}</span></td></tr>
     ${h>0.5?`<tr><td><strong>Free cut FS</strong></td><td style="font-size:11px">Taylor h=${h.toFixed(1)}m</td><td>ge 1.1</td><td>${FS_fc.toFixed(2)}</td><td><span class="${FS_fc>=1.1?'bpass':'bfail'}">${FS_fc>=1.1?'pass':'fail'}</span></td></tr>`:''}
   </tbody></table>
   ${!sl?'<div class="nb danger">Sliding fails. Add shear key or widen base.</div>':''}
@@ -1307,7 +1305,7 @@ function runBio(mode){
         • Wall type: Dry stone masonry (no mortar; free-draining)<br>
         • Wall height: <strong>${twH} m</strong> (1.0 m for fill height ≤12 m; 1.5 m for fill height &gt;12 m)<br>
         • Top width: 0.6 m minimum<br>
-        • Bottom width: Max(Tw+twH/3, 0.6 × twH) = <strong>${(0.6*parseFloat(twH)).toFixed(2)} m</strong><br>
+        • Bottom width: 0.6 × wall height = <strong>${(0.6*parseFloat(twH)).toFixed(2)} m</strong><br>
         • Foundation embedment: ≥300 mm into firm undisturbed ground<br>
         • Through-stones at every 3rd course; coping of flat stone<br><br>
         <strong>Purpose:</strong> Prevents progressive toe erosion and base undermining of the fill slope. The wall supports the toe and allows bioengineering above to establish root reinforcement without being undermined from below.<br><br>
@@ -1390,8 +1388,8 @@ function runBio(mode){
     <div>🌳 <strong>Tree/shrub seedlings:</strong> July–September</div>
     <div>🔍 <strong>Maintenance:</strong> September–Nov — survey/monitoring, gap-filling, desilt drains</div>
     <div class="nb earth" style="margin-top:.5rem"><strong>Context${isCut?' (FS='+((ST.FS_cut>0)?ST.FS_cut.toFixed(2):'—')+')':''}:</strong> ${cal}</div>
-    <div style="margin-top:.5rem">📏 Spacing: grass 0.1m · Bamboo 1.0m · Nigalo: 50cm· shrubs 0.5-1.0 m · trees 1.0–2.0 m. Mix species.</div>
-    ${isCut?'<div style="margin-top:.3rem">✂ <strong>Cut slope:</strong> Prefer palisade, fascines over brush layers.</div>':'<div style="margin-top:.3rem">🏔 <strong>Fill slope:</strong> brush layers and diagonal brush layers are permitted and effective for soil reinforcement.</div>'}</div>`;
+    <div style="margin-top:.5rem">📏 Spacing: grass 100 cm · Bamboo 1.0m · Nigalo: 50cm· shrubs 0.5-1.0 m · trees 1.0–2.0 m. Mix species.</div>
+    ${isCut?'<div style="margin-top:.3rem">✂ <strong>Cut slope:</strong> Prefer palisade over brush layers.</div>':'<div style="margin-top:.3rem">🏔 <strong>Fill slope:</strong> brush layers and diagonal brush layers are permitted and effective for soil reinforcement.</div>'}</div>`;
 
   document.getElementById('p4-output').classList.remove('hidden');
 }
@@ -1624,10 +1622,10 @@ function runChannelDesign(){
   </div></div>
   <div class="sub"><div class="sub-title">Construction Notes</div><div style="font-size:12px;line-height:1.9">
     <div>🏗 Lining: ${L.label} — n=${n.toFixed(3)}, Vmax=${L.vmax[0]}–${L.vmax[1]} m/s</div>
-    <div>📏 Freeboard 0.20 m </div>
+    <div>📏 Freeboard 0.20 m (DoR standard)</div>
     ${shape==='trap'?'<div>📐 Side slopes 1V:1.5H — do not steepen</div>':''}
     <div>🔧 Bed slope ${S} m/m — uniform; drop structure at change >0.05 m/m</div>
-    <div>🌿 Seed turf/bare-earth drains with dubo after construction</div>
+    <div>🌿 Seed turf/bare-earth drains with vetiver/durva after construction</div>
     <div>🔍 Desilt annually before monsoon</div></div></div>
   <div class="nb info"><strong>References:</strong> Rational formula; Kirpich (1940); Manning (1891); IS:10430-2000; MRE-ICIMOD.</div>`;
 }
