@@ -966,7 +966,7 @@ function runWall(){
   }
   const Kp=Math.tan(Math.PI/4+pr/2)**2;
   // Geometry
-  const D=Math.max(0.5,Math.round((Hw_wall/10+0.2)*100)/100);
+  const D=Math.min(0.5,Math.round((Hw_wall/10+0.2)*100)/100);
   const Hw=Hw_wall+D;
   const btop_ov=parseFloat(document.getElementById('p3-btop-ov').value)||0;
   const b_top=btop_ov>0?btop_ov:W.btop[0];
@@ -996,7 +996,7 @@ function runWall(){
   const Pa_v=Pa_total*Math.sin(ir);
   const Pp=0.5*Kp*gamma*D*D+2*c*Math.sqrt(Kp)*D;      // passive resistance at toe
   // ---- Overturning moment about toe (cohesion component subtracted) ----
-  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2)-2*c*Math.sqrt(Ka)*Hw*(Hw/2);
+  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2)-2*c*Math.sqrt(Ka)*Hw*(Hw/2)*Math.cos(ir);
   // ---- Wall self-weight & resisting moment (Tw = top width, gW = wall unit weight, hs = stem height; base = 0.3 m) ----
   const Tw=b_top, gW=W.gamma, hs=Hw-0.3;
   let W_total, M_res, wDesc;
