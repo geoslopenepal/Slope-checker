@@ -941,7 +941,7 @@ function updateBtopHint(){
 }
 function runWall(){
   const W=WALLS[ST.wallKey], {c,phi,gamma,H}=ST;
-  ST.q=parseFloat(document.getElementById('p3-q').value)||10;
+  ST.q=parseFloat(document.getElementById('p3-q').value)||0;
   const q=ST.q, SBC=ST.SBC;
   // Wall height and free cut
   const Hw_in=parseFloat(document.getElementById('p3-Hw').value)||H;
@@ -966,7 +966,7 @@ function runWall(){
   }
   const Kp=Math.tan(Math.PI/4+pr/2)**2;
   // Geometry
-  const D=Math.max(0.5,Math.round((0.1*Hw_wall+0.3)*10)/10);
+  const D=Math.max(0.5,Math.round((0.1*Hw_wall+0.2)*10)/10);
   const Hw=Hw_wall+D;
   const btop_ov=parseFloat(document.getElementById('p3-btop-ov').value)||0;
   const b_top=btop_ov>0?btop_ov:W.btop[0];
@@ -995,12 +995,12 @@ function runWall(){
   const Pa_h=Pa_total*Math.cos(ir);
   const Pa_v=Pa_total*Math.sin(ir);
   // Moments
-  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2);
+  const M_ot=0.5*Ka*gamma*Hw*Hw*Math.cos(ir)*(Hw/3)+Ka*q_eff*Hw*Math.cos(ir)*(Hw/2)-2*c*Math.sqrt(Ka)*Hw*(Hw/2);
   const Pp=0.5*Kp*gamma*D*D+2*c*Math.sqrt(Kp)*D;
   const W_stem=W.gamma*((b_top+b_bot)/2)*Hw;
   const W_base=W.gamma*B*0.3;
   const W_total=W_stem+W_base;
-  const M_res=W_stem*(B-(b_top+b_bot)/4)+W_base*(B/2)+Pa_v*B+Pp*(D/3);
+  const M_res=W_stem*(B/2)+W_base*(B/2)+Pa_v*B+Pp*(D/3);
   const V_total=W_total+Pa_v;
   const x_bar=(M_res-M_ot)/V_total;
   const e=Math.abs(B/2-x_bar);
@@ -1009,7 +1009,7 @@ function runWall(){
   // Checks
   const delta=(2/3)*phi;                 // base interface friction angle = 2/3 phi
   const mu=Math.tan(delta*Math.PI/180);  // friction coefficient tan(delta)
-  const FOS_SL=(mu*V_total+Pp)/Pa_h;
+  const FOS_SL=(mu*V_total+Pp+c*B*0.67)/Pa_h;
   const FOS_OT=M_res/Math.max(0.01,M_ot);
   const BC_ok=SBC?q_max<=SBC:null;
   const e_ok=e<=B/6;
